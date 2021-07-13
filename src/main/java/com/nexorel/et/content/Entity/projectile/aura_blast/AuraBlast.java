@@ -31,6 +31,11 @@ public class AuraBlast extends DamagingProjectileEntity {
     }
 
     @Override
+    protected float getInertia() {
+        return 0.98F;
+    }
+
+    @Override
     protected void onHit(RayTraceResult result) {
         super.onHit(result);
         this.remove();

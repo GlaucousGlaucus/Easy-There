@@ -111,7 +111,7 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
             if (this.getHealth() > 0.5 * this.getMaxHealth()) {
                 this.goalSelector.addGoal(2, auraImpactGoal);
             } else if (this.getHealth() < 0.5 * this.getMaxHealth()) {
-                this.goalSelector.removeGoal(rag);
+//                this.goalSelector.removeGoal(rag);
 //                this.goalSelector.addGoal(2, shieldAndMinionsGoal);
             } else if (this.getHealth() <= 0.35 * this.getMaxHealth()) {
 //                this.goalSelector.removeGoal(shieldAndMinionsGoal);
@@ -165,30 +165,32 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
 
     @Override
     public void performRangedAttack(LivingEntity target, float v) {
-
-        if (target instanceof PlayerEntity) {
-            double d0 = this.getHeadX((int) v);
-            double d1 = this.getHeadY((int) v);
-            double d2 = this.getHeadZ((int) v);
-            double d3 = target.getX() - d0;
-            double d4 = target.getY() - d1;
-            double d5 = target.getZ() - d2;
-            AuraBlast auraBlast = new AuraBlast(this.level, this, d3, d4, d5);
-            auraBlast.setOwner(this);
-            auraBlast.setPosRaw(d0, d1, d2);
-            this.level.addFreshEntity(auraBlast);
+        int chance = random.nextInt(10 - 1 + 1) + 1;
+        if (chance < 11) {
+            if (target instanceof PlayerEntity) {
+                double d0 = this.getHeadX((int) v);
+                double d1 = this.getHeadY((int) v);
+                double d2 = this.getHeadZ((int) v);
+                double d3 = target.getX() - d0;
+                double d4 = target.getY() - d1;
+                double d5 = target.getZ() - d2;
+                AuraBlast auraBlast = new AuraBlast(this.level, this, d3, d4, d5);
+                auraBlast.setOwner(this);
+                auraBlast.setPosRaw(d0, d1, d2);
+                this.level.addFreshEntity(auraBlast);
+            }
+        } else {
+//            if (target instanceof PlayerEntity) {
+//                double x = target.getX();
+//                double y = target.getY();
+//                double z = target.getZ();
+//                LightningBoltEntity le = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, this.level);
+//                le.setPos(x, y, z);
+//                this.level.addFreshEntity(le);
+//                target.hurt(DamageSource.GENERIC, 2);
+//                target.addEffect(new EffectInstance(Effects.WEAKNESS, 10, 2));
+//            }
         }
-
-//        if (target instanceof PlayerEntity) {
-//            double x = target.getX();
-//            double y = target.getY();
-//            double z = target.getZ();
-//            LightningBoltEntity le = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, this.level);
-//            le.setPos(x, y, z);
-//            this.level.addFreshEntity(le);
-//            target.hurt(DamageSource.GENERIC, 2);
-//            target.addEffect(new EffectInstance(Effects.WEAKNESS, 10, 2));
-//        }
     }
 
     private double getHeadX(int p_82214_1_) {
@@ -257,6 +259,7 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
         @Override
         public void tick() {
             super.tick();
+            World world = this.ae.level;
             if (!this.ae.level.isClientSide) {
                 int i = 0;
                 do {
@@ -305,18 +308,12 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
 
         }
 
+
         @Override
         public void tick() {
-            World world = this.ae.level;
-            if (world instanceof ServerWorld) {
-                ServerWorld serverWorld = (ServerWorld) world;
-                Vector3d epos = this.ae.getPosition(1);
-                serverWorld.addParticle(ParticleTypes.EXPLOSION, epos.x, epos.y + 2.5D, epos.z, 0.1D, 0.1D, 0.1D);
-            }
-
             if (uses > 0) {
                 uses--;
-            } else if (uses == 0) {
+            } else if (uses == 0 && !AuraEntity.this.level.isClientSide) {
                 LivingEntity target = this.ae.getTarget();
                 if (target != null) {
                     this.ae.moveTo(target.getX(), target.getY(), target.getZ());
@@ -326,9 +323,15 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
                         target.hurt(DamageSource.MAGIC, 3.0F);
                         this.ae.heal(6.0F);
                     } else {
-                        target.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 100));
+//                        target.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 100));
                         target.addEffect(new EffectInstance(Effects.HUNGER, 100, 100));
                         target.addEffect(new EffectInstance(Effects.POISON, 100, 100));
+                    }
+                    World world = AuraEntity.this.level;
+                    if (world instanceof ServerWorld) {
+                        ServerWorld serverWorld = (ServerWorld) world;
+                        Vector3d epos = AuraEntity.this.position();
+                        serverWorld.sendParticles(ParticleTypes.EXPLOSION, epos.x, epos.y, epos.z, 20, 0.5, 0.5, 0.5, 0);
                     }
                 }
                 uses = 100;
