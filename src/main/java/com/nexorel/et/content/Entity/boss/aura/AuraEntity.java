@@ -1,35 +1,25 @@
 package com.nexorel.et.content.Entity.boss.aura;
 
 import com.nexorel.et.content.Entity.projectile.aura_blast.AuraBlast;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.monster.SkeletonEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -38,14 +28,11 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.Region;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerBossInfo;
 import net.minecraft.world.server.ServerWorld;
-import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Random;
 
 import static com.nexorel.et.Reference.MOD_ID;
@@ -107,15 +94,14 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
     @Override
     public void tick() {
         if (this.isAlive()) {
-//             AuraEntity.this.level.addParticle(ParticleTypes.EXPLOSION, AuraEntity.this.getX(), AuraEntity.this.getY() + 2.5D, AuraEntity.this.getZ(), 0.1D, 0.1D, 0.1D);
             if (this.getHealth() > 0.5 * this.getMaxHealth()) {
-                this.goalSelector.addGoal(2, auraImpactGoal);
+                this.goalSelector.addGoal(2,  rag);
             } else if (this.getHealth() < 0.5 * this.getMaxHealth()) {
-//                this.goalSelector.removeGoal(rag);
-//                this.goalSelector.addGoal(2, shieldAndMinionsGoal);
+                this.goalSelector.removeGoal(rag);
+                this.goalSelector.addGoal(2, shieldAndMinionsGoal);
             } else if (this.getHealth() <= 0.35 * this.getMaxHealth()) {
-//                this.goalSelector.removeGoal(shieldAndMinionsGoal);
-//                this.goalSelector.addGoal(2, auraImpactGoal);
+                this.goalSelector.removeGoal(shieldAndMinionsGoal);
+                this.goalSelector.addGoal(2, auraImpactGoal);
             }
         }
         super.tick();
@@ -145,16 +131,6 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
     @Override
     public void aiStep() {
         super.aiStep();
-//        if (counter > 0) {
-//            counter--;
-//        } else {
-//            for (int x = 0; x < 1; x += 0.1) {
-//                for (int z = 0; z < 1; z += 0.1) {
-//                    this.level.addParticle(ParticleTypes.CLOUD, this.getX() + x, this.getY() + 2.5D, this.getZ() + z, 0.0, 0.1D, 0.0);
-//                }
-//            }
-//            counter = 10;
-//        }
     }
 
     @Override
@@ -180,16 +156,16 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
                 this.level.addFreshEntity(auraBlast);
             }
         } else {
-//            if (target instanceof PlayerEntity) {
-//                double x = target.getX();
-//                double y = target.getY();
-//                double z = target.getZ();
-//                LightningBoltEntity le = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, this.level);
-//                le.setPos(x, y, z);
-//                this.level.addFreshEntity(le);
-//                target.hurt(DamageSource.GENERIC, 2);
-//                target.addEffect(new EffectInstance(Effects.WEAKNESS, 10, 2));
-//            }
+            if (target instanceof PlayerEntity) {
+                double x = target.getX();
+                double y = target.getY();
+                double z = target.getZ();
+                LightningBoltEntity le = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, this.level);
+                le.setPos(x, y, z);
+                this.level.addFreshEntity(le);
+                target.hurt(DamageSource.GENERIC, 2);
+                target.addEffect(new EffectInstance(Effects.WEAKNESS, 10, 2));
+            }
         }
     }
 
@@ -293,19 +269,10 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
     class AuraImpactGoal extends Goal {
 
         AuraEntity ae;
-        boolean impact_shield = false;
         int uses = 100;
-        private int use_ticks = 0;
-        Entity e;
 
         public AuraImpactGoal(AuraEntity auraEntity) {
             this.ae = auraEntity;
-        }
-
-        @Override
-        public void start() {
-            this.use_ticks = 0;
-
         }
 
 
@@ -323,7 +290,7 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
                         target.hurt(DamageSource.MAGIC, 3.0F);
                         this.ae.heal(6.0F);
                     } else {
-//                        target.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 100));
+                        target.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 100));
                         target.addEffect(new EffectInstance(Effects.HUNGER, 100, 100));
                         target.addEffect(new EffectInstance(Effects.POISON, 100, 100));
                     }
@@ -339,14 +306,8 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
         }
 
         @Override
-        public void stop() {
-//            AuraEntity.this.level.addParticle(ParticleTypes.HEART, AuraEntity.this.getX(), AuraEntity.this.getY() + 2.5D, AuraEntity.this.getZ(), 0.1D, 0.1D, 0.1D);
-        }
-
-        @Override
         public boolean canUse() {
-//            return this.ae.getHealth() <= this.ae.getMaxHealth() * 0.35;
-            return true;
+            return this.ae.getHealth() <= this.ae.getMaxHealth() * 0.25;
         }
     }
 }
