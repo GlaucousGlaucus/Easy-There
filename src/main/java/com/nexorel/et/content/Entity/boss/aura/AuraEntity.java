@@ -20,6 +20,7 @@ import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -33,6 +34,7 @@ import net.minecraft.world.server.ServerBossInfo;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 
 import static com.nexorel.et.Reference.MOD_ID;
@@ -43,9 +45,6 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
 
     private int shield_time = 200;
     boolean flag = true;
-
-    private int counter = 10;
-
     private Entity e;
 
     RangedAttackGoal rag = new RangedAttackGoal(this, 1.0D, 40, 20.0F);
@@ -54,7 +53,9 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
 
     public AuraEntity(EntityType<? extends MonsterEntity> type, World world) {
         super(type, world);
+        this.setPersistenceRequired();
     }
+
 
     @Override
     protected void registerGoals() {
@@ -75,8 +76,9 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        Entity entity = source.getDirectEntity();
-        if (this.isInvulnerableTo(source)) {
+        if (this.isInvulnerableTo(source)
+                || source == DamageSource.FALL
+        ) {
             return false;
         } else if (source != DamageSource.DROWN && !(source.getEntity() instanceof AuraEntity)) {
             return super.hurt(source, amount);
@@ -94,8 +96,24 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
     @Override
     public void tick() {
         if (this.isAlive()) {
+
+           // Damages player if it is within a certain range of blocks
+            World EW = this.level;
+            if (EW instanceof ServerWorld) {
+                ServerWorld serverWorld = (ServerWorld) EW;
+                Vector3d epos = AuraEntity.this.position();
+                AxisAlignedBB b = new AxisAlignedBB(epos.x - 5, epos.y - 5, epos.z - 5, epos.x + 5, epos.y + 5, epos.z + 5);
+                List<Entity> entities = serverWorld.getEntities(e, b);
+                for (Entity entity : entities) {
+                    if (entity instanceof PlayerEntity) {
+                        entity.hurt(DamageSource.MAGIC, 1.0F);
+                    }
+                }
+            }
+
+            // Manages the phase of the boss fight
             if (this.getHealth() > 0.5 * this.getMaxHealth()) {
-                this.goalSelector.addGoal(2,  rag);
+                this.goalSelector.addGoal(2, rag);
             } else if (this.getHealth() < 0.5 * this.getMaxHealth()) {
                 this.goalSelector.removeGoal(rag);
                 this.goalSelector.addGoal(2, shieldAndMinionsGoal);
