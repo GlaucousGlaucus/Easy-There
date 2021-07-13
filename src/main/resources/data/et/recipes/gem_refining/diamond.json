@@ -1,0 +1,14 @@
+{
+  "type": "et:gem_refining",
+
+  "a": {
+    "item": "et:delerite_crystal"
+  },
+
+  "b": {
+    "item": "minecraft:iron_ingot"
+  },
+
+  "result": "minecraft:diamond",
+  "count": 1
+}

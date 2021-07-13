@@ -1,0 +1,14 @@
+{
+  "type": "et:gem_refining",
+
+  "a": {
+    "item": "minecraft:lava_bucket"
+  },
+
+  "b": {
+    "item": "minecraft:water_bucket"
+  },
+
+  "result": "minecraft:obsidian",
+  "count": 1
+}
