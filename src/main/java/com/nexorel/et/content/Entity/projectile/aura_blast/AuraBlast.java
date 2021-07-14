@@ -1,8 +1,9 @@
 package com.nexorel.et.content.Entity.projectile.aura_blast;
 
+import com.nexorel.et.Registries.BlockInit;
 import com.nexorel.et.Registries.EntityInit;
+import com.nexorel.et.content.blocks.AuraInfestedBlock.AuraInfestedTile;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -53,9 +54,15 @@ public class AuraBlast extends DamagingProjectileEntity {
             }
         } else if (result.getType() == RayTraceResult.Type.BLOCK) {
             BlockPos pos = ((BlockRayTraceResult) result).getBlockPos();
-            this.level.getBlockState(pos);
-            BlockState newState = Blocks.COAL_BLOCK.defaultBlockState();
+            BlockState old_state = this.level.getBlockState(pos);
+            BlockState newState = BlockInit.AURA_INFESTED_BLOCK.get().defaultBlockState();
             this.level.setBlockAndUpdate(pos, newState);
+            if (this.level.getBlockEntity(pos) instanceof AuraInfestedTile) {
+                AuraInfestedTile te = ((AuraInfestedTile)this.level.getBlockEntity(pos));
+                if (te != null) {
+                    te.setBlockForRender(old_state.getBlock().defaultBlockState());
+                }
+            }
         }
         this.remove();
     }

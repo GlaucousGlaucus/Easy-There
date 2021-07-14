@@ -1,5 +1,6 @@
 package com.nexorel.et.Registries;
 
+import com.nexorel.et.content.blocks.AuraInfestedBlock.AuraInfestedTile;
 import com.nexorel.et.content.blocks.GemRefinery.GemRefineryTile;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
@@ -20,5 +21,6 @@ public class TileInit {
     // Tile Entites
 
     public static final RegistryObject<TileEntityType<GemRefineryTile>> GEM_REFINERY_TILE = TILE_ENTITIES.register("gem_refinery", () -> TileEntityType.Builder.of(GemRefineryTile::new, BlockInit.GEM_REFINERY.get()).build(null));
+    public static final RegistryObject<TileEntityType<AuraInfestedTile>> AURA_INFESTED_TILE = TILE_ENTITIES.register("aura_infested_block", () -> TileEntityType.Builder.of(AuraInfestedTile::new, BlockInit.AURA_INFESTED_BLOCK.get()).build(null));
 
 }

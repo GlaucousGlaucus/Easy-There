@@ -1,8 +1,8 @@
 package com.nexorel.et.Registries;
 
+import com.nexorel.et.content.blocks.AuraInfestedBlock.AuraInfestedBlock;
 import com.nexorel.et.content.blocks.GemRefinery.GemRefineryBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.fml.RegistryObject;
@@ -28,5 +28,6 @@ public class BlockInit {
     ));
 
     public static final RegistryObject<Block> GEM_REFINERY = BLOCKS.register("gem_refinery", GemRefineryBlock::new);
+    public static final RegistryObject<Block> AURA_INFESTED_BLOCK = BLOCKS.register("aura_infested_block", AuraInfestedBlock::new);
 
 }

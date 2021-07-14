@@ -2,20 +2,19 @@ package com.nexorel.et;
 
 import com.nexorel.et.Registries.*;
 import com.nexorel.et.content.Entity.boss.aura.AuraEntity;
-import com.nexorel.et.content.Entity.boss.aura.AuraRenderer;
-import com.nexorel.et.content.Entity.projectile.aura_blast.AuraBlastRenderer;
-import com.nexorel.et.content.blocks.GemRefinery.GRS;
-import net.minecraft.client.gui.ScreenManager;
+import com.nexorel.et.content.blocks.AuraInfestedBlock.AuraInfestedBlockLoader;
+import com.nexorel.et.setup.ClientSetup;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
@@ -25,6 +24,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.stream.Collectors;
+
+import static com.nexorel.et.Reference.MOD_ID;
 
 @Mod("et")
 public class EasyThere
@@ -48,7 +49,7 @@ public class EasyThere
         // Register the processIMC method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         // Register the doClientStuff method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -70,14 +71,13 @@ public class EasyThere
         }
     };
 
-    private void doClientStuff(final FMLClientSetupEvent event) {
-        // do something that can only be done on the client
 
-        ScreenManager.register(ContainerInit.GRC.get(), GRS::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityInit.AURA.get(), AuraRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityInit.AURA_BLAST.get(), AuraBlastRenderer::new);
+//    private void doClientStuff(final FMLClientSetupEvent event) {
+//        }
 
-        LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().options);
+    @SubscribeEvent
+    public static void onModelRegistryEvent(ModelRegistryEvent event) {
+        ModelLoaderRegistry.registerLoader(new ResourceLocation(MOD_ID,"aura_infested_block"), new AuraInfestedBlockLoader());
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event)
