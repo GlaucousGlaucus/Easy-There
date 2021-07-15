@@ -1,15 +1,18 @@
 package com.nexorel.et.content.blocks.AuraInfestedBlock;
 
+import com.nexorel.et.content.items.Weapons.AuraWand;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
@@ -30,9 +33,18 @@ public class AuraInfestedBlock extends Block {
     @Override
     public void stepOn(World world, BlockPos pos, Entity entity) {
         if (entity instanceof LivingEntity) {
-            LivingEntity target = (LivingEntity) entity;
-            target.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 20, 2));
-            target.addEffect(new EffectInstance(Effects.DIG_SLOWDOWN, 200, 2));
+            if (entity instanceof PlayerEntity) {
+                PlayerEntity player = (PlayerEntity) entity;
+                if (!(player.getItemInHand(Hand.MAIN_HAND).getItem() instanceof AuraWand)) {
+                    LivingEntity target = (LivingEntity) entity;
+                    target.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 20, 2));
+                    target.addEffect(new EffectInstance(Effects.DIG_SLOWDOWN, 200, 2));
+                }
+            } else {
+                LivingEntity target = (LivingEntity) entity;
+                target.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 20, 2));
+                target.addEffect(new EffectInstance(Effects.DIG_SLOWDOWN, 200, 2));
+            }
         }
     }
 

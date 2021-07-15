@@ -1,6 +1,7 @@
 package com.nexorel.et.Registries;
 
 import com.nexorel.et.content.items.ModSpawnEggItem;
+import com.nexorel.et.content.items.Weapons.AuraWand;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.RegistryObject;
@@ -24,6 +25,7 @@ public class ItemInit {
     // Items
 
     public static final RegistryObject<Item> DELERITE_CRYSTAL = ITEMS.register("delerite_crystal", () -> new Item(properties));
+    public static final RegistryObject<Item> AURA_WAND = ITEMS.register("aura_wand", AuraWand::new);
 
     // BlockItems
 
