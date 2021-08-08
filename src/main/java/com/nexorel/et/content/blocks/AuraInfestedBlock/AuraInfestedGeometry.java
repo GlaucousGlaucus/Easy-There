@@ -1,4 +1,5 @@
 package com.nexorel.et.content.blocks.AuraInfestedBlock;
+/*
 
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.AtlasTexture;
@@ -22,3 +23,4 @@ public class AuraInfestedGeometry implements IModelGeometry<AuraInfestedGeometry
         return Collections.singletonList(new RenderMaterial(AtlasTexture.LOCATION_BLOCKS, AuraInfestedModel.TEXTURE));
     }
 }
+*/

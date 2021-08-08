@@ -1,5 +1,6 @@
 package com.nexorel.et.content.blocks.AuraInfestedBlock;
 
+/*
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -167,4 +168,5 @@ public class AuraInfestedModel implements IDynamicBakedModel {
     }
 
 }
+*/
 

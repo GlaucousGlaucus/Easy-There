@@ -1,13 +1,13 @@
 {
   "itemGroup.easy_there": "Easy There Mod",
-
   "item.et.delerite_crystal": "Delerite Crystal",
   "item.et.delerite_crystal_block": "Delerite Crystal Block",
   "item.et.aura_infested_block": "Aura Infested Block",
-
+  "item.et.talisman_bag": "Talisman Bag",
   "block.et.delerite_crystal_block": "Delerite Crystal Block",
   "block.et.gem_refinery": "Gem Refinery",
   "block.et.aura_infested_block": "Aura Infested Block",
-
-  "screen.et.gem_refinery": "Gem Refinery"
+  "container.et.talisman_bag": "Talismans",
+  "screen.et.gem_refinery": "Gem Refinery",
+  "key.talis_bag": "Open Talisman Bag"
 }

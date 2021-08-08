@@ -2,6 +2,7 @@ package com.nexorel.et.Registries;
 
 import com.nexorel.et.content.items.ModSpawnEggItem;
 import com.nexorel.et.content.items.Weapons.AuraWand;
+import com.nexorel.et.content.items.talisBag.TalismanBagItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.RegistryObject;
@@ -26,12 +27,13 @@ public class ItemInit {
 
     public static final RegistryObject<Item> DELERITE_CRYSTAL = ITEMS.register("delerite_crystal", () -> new Item(properties));
     public static final RegistryObject<Item> AURA_WAND = ITEMS.register("aura_wand", AuraWand::new);
+    public static final RegistryObject<Item> TALIS_BAG_ITEM = ITEMS.register("talisman_bag", TalismanBagItem::new);
 
     // BlockItems
 
     public static final RegistryObject<Item> DELERITE_CRYSTAL_BLOCK_ITEM = ITEMS.register("delerite_crystal_block", () -> new BlockItem(BlockInit.DELERITE_CRYSTAL_BLOCK.get(), properties));
     public static final RegistryObject<Item> GEM_REFINERY = ITEMS.register("gem_refinery", () -> new BlockItem(BlockInit.GEM_REFINERY.get(), properties));
-    public static final RegistryObject<Item> AURA_INFESTED_BLOCK = ITEMS.register("aura_infested_block", () -> new BlockItem(BlockInit.AURA_INFESTED_BLOCK.get(), properties));
+//    public static final RegistryObject<Item> AURA_INFESTED_BLOCK = ITEMS.register("aura_infested_block", () -> new BlockItem(BlockInit.AURA_INFESTED_BLOCK.get(), properties));
 
     // Spawn Eggs
 

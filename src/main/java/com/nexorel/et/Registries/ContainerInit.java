@@ -2,6 +2,7 @@ package com.nexorel.et.Registries;
 
 import com.nexorel.et.content.blocks.GemRefinery.GRC;
 import com.nexorel.et.content.blocks.GemRefinery.GemRefineryTile;
+import com.nexorel.et.content.items.talisBag.TalismanBagContainer;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -27,4 +28,6 @@ public class ContainerInit {
         World world = inv.player.getCommandSenderWorld();
         return new GRC(windowId, inv, inv.player, (GemRefineryTile) world.getBlockEntity(pos));
     }));
+
+    public static final RegistryObject<ContainerType<TalismanBagContainer>> TBC = CONTAINERS.register("talisman_bag", () -> IForgeContainerType.create((windowId, inv, data) -> new TalismanBagContainer(windowId, inv, inv.player)));
 }

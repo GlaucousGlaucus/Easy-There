@@ -47,10 +47,6 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
     boolean flag = true;
     private Entity e;
 
-    RangedAttackGoal rag = new RangedAttackGoal(this, 1.0D, 40, 20.0F);
-    MinionsGoal shieldAndMinionsGoal = new MinionsGoal(this, this.shield_time);
-    AuraImpactGoal auraImpactGoal = new AuraImpactGoal(this);
-
     public AuraEntity(EntityType<? extends MonsterEntity> type, World world) {
         super(type, world);
         this.setPersistenceRequired();
@@ -59,8 +55,11 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(3, new LookRandomlyGoal(this));
-        this.goalSelector.addGoal(1, new WaterAvoidingRandomWalkingGoal(this, 0.6));
+        this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+//        this.goalSelector.addGoal(2, new WaterAvoidingRandomWalkingGoal(this, 0.6));
+        this.goalSelector.addGoal(3, new RangedAttackGoal(this, 1.0D, 40, 20.0F));
+        this.goalSelector.addGoal(2, new MinionsGoal(this, this.shield_time));
+        this.goalSelector.addGoal(1, new AuraImpactGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true/**check sight*/));
         super.registerGoals();
@@ -97,7 +96,7 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
     public void tick() {
         if (this.isAlive()) {
 
-           // Damages player if it is within a certain range of blocks
+            // Damages player if it is within a certain range of blocks
             World EW = this.level;
             if (EW instanceof ServerWorld) {
                 ServerWorld serverWorld = (ServerWorld) EW;
@@ -109,17 +108,6 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
                         entity.hurt(DamageSource.MAGIC, 1.0F);
                     }
                 }
-            }
-
-            // Manages the phase of the boss fight
-            if (this.getHealth() > 0.5 * this.getMaxHealth()) {
-                this.goalSelector.addGoal(2, rag);
-            } else if (this.getHealth() < 0.5 * this.getMaxHealth()) {
-                this.goalSelector.removeGoal(rag);
-                this.goalSelector.addGoal(2, shieldAndMinionsGoal);
-            } else if (this.getHealth() <= 0.35 * this.getMaxHealth()) {
-                this.goalSelector.removeGoal(shieldAndMinionsGoal);
-                this.goalSelector.addGoal(2, auraImpactGoal);
             }
         }
         super.tick();
@@ -251,9 +239,13 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
         }
 
         @Override
+        public boolean canContinueToUse() {
+            return false;
+        }
+
+        @Override
         public void tick() {
             super.tick();
-            World world = this.ae.level;
             if (!this.ae.level.isClientSide) {
                 int i = 0;
                 do {
@@ -293,39 +285,42 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
             this.ae = auraEntity;
         }
 
-
         @Override
         public void tick() {
-            if (uses > 0) {
-                uses--;
-            } else if (uses == 0 && !AuraEntity.this.level.isClientSide) {
-                LivingEntity target = this.ae.getTarget();
-                if (target != null) {
-                    this.ae.moveTo(target.getX(), target.getY(), target.getZ());
-                    Random rand = new Random();
-                    int a = rand.nextInt(10 - 1 + 1) + 1;
-                    if (a < 8) {
-                        target.hurt(DamageSource.MAGIC, 3.0F);
-                        this.ae.heal(6.0F);
-                    } else {
-                        target.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 100));
-                        target.addEffect(new EffectInstance(Effects.HUNGER, 100, 100));
-                        target.addEffect(new EffectInstance(Effects.POISON, 100, 100));
+            super.tick();
+            if (!this.ae.level.isClientSide) {
+                if (uses > 0) {
+                    uses--;
+                } else if (uses == 0) {
+                    LivingEntity target = this.ae.getTarget();
+                    if (target != null) {
+                        this.ae.moveTo(target.getX(), target.getY(), target.getZ());
+                        Random rand = new Random();
+                        int a = rand.nextInt(10 - 1 + 1) + 1;
+                        if (a < 8) {
+                            target.hurt(DamageSource.MAGIC, 10.0F);
+                            this.ae.heal(6.0F);
+                        } else {
+                            target.hurt(DamageSource.MAGIC, 5.0F);
+                            target.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 1));
+                            target.addEffect(new EffectInstance(Effects.HUNGER, 100, 1));
+                            target.addEffect(new EffectInstance(Effects.POISON, 100, 1));
+                        }
+                        World world = AuraEntity.this.level;
+                        if (world instanceof ServerWorld) {
+                            ServerWorld serverWorld = (ServerWorld) world;
+                            Vector3d epos = AuraEntity.this.position();
+                            serverWorld.sendParticles(ParticleTypes.EXPLOSION, epos.x, epos.y, epos.z, 20, 0.5, 0.5, 0.5, 0);
+                        }
                     }
-                    World world = AuraEntity.this.level;
-                    if (world instanceof ServerWorld) {
-                        ServerWorld serverWorld = (ServerWorld) world;
-                        Vector3d epos = AuraEntity.this.position();
-                        serverWorld.sendParticles(ParticleTypes.EXPLOSION, epos.x, epos.y, epos.z, 20, 0.5, 0.5, 0.5, 0);
-                    }
+                    uses = 100;
                 }
-                uses = 100;
             }
         }
 
         @Override
         public boolean canUse() {
-            return this.ae.getHealth() <= this.ae.getMaxHealth() * 0.25;
+            return this.ae.getHealth() <= (this.ae.getMaxHealth() * 0.25);
         }
     }
 }

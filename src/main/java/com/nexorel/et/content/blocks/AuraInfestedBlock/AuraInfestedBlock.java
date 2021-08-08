@@ -1,16 +1,17 @@
 package com.nexorel.et.content.blocks.AuraInfestedBlock;
 
-import com.nexorel.et.content.items.Weapons.AuraWand;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+/**
+ *  import com.nexorel.et.content.items.Weapons.AuraWand;
+ import net.minecraft.block.Block;
+ import net.minecraft.block.BlockRenderType;
+ import net.minecraft.block.BlockState;
+ import net.minecraft.block.material.Material;
+ import net.minecraft.entity.Entity;
+ import net.minecraft.entity.LivingEntity;
+ import net.minecraft.entity.player.PlayerEntity;
+ import net.minecraft.particles.ParticleTypes;
+ import net.minecraft.potion.EffectInstance;
+ import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -66,14 +67,13 @@ public class AuraInfestedBlock extends Block {
 
     @Override
     public BlockRenderType getRenderShape(BlockState state) {
-        return BlockRenderType.MODEL;
+    return BlockRenderType.MODEL;
     }
 
-    @Override
-    public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
-        world.addParticle(
-                ParticleTypes.PORTAL,
-                pos.getX(), pos.getY() + 0.5, pos.getZ(),
-                0.1, 0.1, 0.1);
-    }
-}
+ @Override public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
+ world.addParticle(
+ ParticleTypes.PORTAL,
+ pos.getX(), pos.getY() + 0.5, pos.getZ(),
+ 0.1, 0.1, 0.1);
+ }
+ }*/

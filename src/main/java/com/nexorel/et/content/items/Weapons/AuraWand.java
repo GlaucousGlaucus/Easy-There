@@ -1,6 +1,7 @@
 package com.nexorel.et.content.items.Weapons;
 
 import com.nexorel.et.content.items.IWandTiers;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -105,6 +106,8 @@ public class AuraWand extends Item {
         } else {
             textComponents.add(new StringTextComponent(TextFormatting.GOLD + "RIP"));
         }
-        textComponents.add(new StringTextComponent(TextFormatting.GOLD + "Wanted to make the hyperion ability from Hypixel Skyblock. This is my version"));
+        if (Screen.hasShiftDown()) {
+            textComponents.add(new StringTextComponent(TextFormatting.GOLD + "Wanted to make the hyperion ability from Hypixel Skyblock. This is my version"));
+        }
     }
 }

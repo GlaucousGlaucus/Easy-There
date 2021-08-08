@@ -19,6 +19,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
@@ -26,7 +27,12 @@ import javax.annotation.Nullable;
 public class GemRefineryBlock extends Block {
 
     public GemRefineryBlock() {
-        super(Properties.of(Material.METAL));
+        super(
+                Properties.of(Material.METAL)
+                        .instabreak()
+                        .harvestLevel(2)
+                        .harvestTool(ToolType.PICKAXE)
+        );
     }
 
     @Override
