@@ -6,7 +6,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -26,7 +25,6 @@ public class TalismanBagContainer extends Container {
         });
         final int rowCount = 54 / 9;
         final int yOffset = (rowCount - 4) * 18;
-        CompoundNBT compoundNBT = this.itemStack.getTag();
         ((ItemStackHandler) this.inventory).deserializeNBT(this.itemStack.getOrCreateTag().getCompound("inv"));
 
         for (int i = 0; i < 54; ++i) {
@@ -91,17 +89,13 @@ public class TalismanBagContainer extends Container {
         if (slot != null && slot.hasItem()) {
             ItemStack stack = slot.getItem();
             itemstack = stack.copy();
-            if (index == 0) {
-                if (!this.moveItemStackTo(stack, 1, 37, true)) {
+            if (index < 54) {
+                if (!this.moveItemStackTo(stack, 54, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
                 slot.onQuickCraft(stack, itemstack);
             } else {
-                if (index < 55) {
-                    if (!this.moveItemStackTo(stack, 28, 37, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (index < 64 && !this.moveItemStackTo(stack, 1, 28, false)) {
+                if (!this.moveItemStackTo(stack, 0, 54, false)) {
                     return ItemStack.EMPTY;
                 }
             }
