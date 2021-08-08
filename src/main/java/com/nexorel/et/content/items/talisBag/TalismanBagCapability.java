@@ -17,6 +17,11 @@ public class TalismanBagCapability extends CapabilityProvider implements ICapabi
 
     private ItemStackHandler inventory = new ItemStackHandler(54) {
         @Override
+        protected void onContentsChanged(int slot) {
+            this.serializeNBT();
+        }
+
+        @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
             return !(stack.getItem() instanceof TalismanBagItem);
         }

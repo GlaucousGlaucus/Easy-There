@@ -1,5 +1,7 @@
 package com.nexorel.et.content.items.talisBag;
 
+import com.nexorel.et.content.items.Talismans.TalismanItem;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.Item;
@@ -11,6 +13,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
 
@@ -34,5 +37,21 @@ public class TalismanBagItem extends Item {
             player.openMenu(new SimpleNamedContainerProvider(TalismanBagContainer::new, new TranslationTextComponent("container.et.talisman_bag")));
         }
         return new ActionResult<>(ActionResultType.SUCCESS, player.getItemInHand(hand));
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean isSelected) {
+        super.inventoryTick(stack, world, entity, slot, isSelected);
+        if (stack.getItem() instanceof TalismanBagItem) {
+            stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+                int slots = h.getSlots();
+                for (int i = 0; i < slots; i++) {
+                    ItemStack search_stack = h.getStackInSlot(i);
+                    if (search_stack.getItem() instanceof TalismanItem) {
+                        ((TalismanItem) search_stack.getItem()).getSpecialBuffs(world, entity);
+                    }
+                }
+            });
+        }
     }
 }

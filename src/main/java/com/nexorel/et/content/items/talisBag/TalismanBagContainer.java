@@ -6,25 +6,34 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class TalismanBagContainer extends Container {
 
     private int blocked = -1;
+    private ItemStack itemStack;
+    private IItemHandler inventory;
 
     public TalismanBagContainer(int id, PlayerInventory playerInventory, PlayerEntity player) {
         super(ContainerInit.TBC.get(), id);
-        ItemStack itemStack = getHeldItem(player);
-        itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-            for (int i = 0; i < 54; ++i) {
-                int x = 8 + 18 * (i % 9);
-                int y = 18 + 18 * (i / 9);
-                addSlot(new SlotItemHandler(h, i, x, y));
-            }
+        this.itemStack = getHeldItem(player);
+        this.itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+            this.inventory = h;
         });
         final int rowCount = 54 / 9;
         final int yOffset = (rowCount - 4) * 18;
+        CompoundNBT compoundNBT = this.itemStack.getTag();
+        ((ItemStackHandler) this.inventory).deserializeNBT(this.itemStack.getOrCreateTag().getCompound("inv"));
+
+        for (int i = 0; i < 54; ++i) {
+            int x = 8 + 18 * (i % 9);
+            int y = 18 + 18 * (i / 9);
+            addSlot(new SlotItemHandler(this.inventory, i, x, y));
+        }
 
         // Player inventory
         for (int y = 0; y < 3; ++y) {
@@ -68,6 +77,14 @@ public class TalismanBagContainer extends Container {
     }
 
     @Override
+    public void removed(PlayerEntity playerEntity) {
+        super.removed(playerEntity);
+        this.itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+            this.itemStack.getOrCreateTag().put("inv", ((ItemStackHandler) h).serializeNBT());
+        });
+    }
+
+    @Override
     public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
@@ -80,11 +97,11 @@ public class TalismanBagContainer extends Container {
                 }
                 slot.onQuickCraft(stack, itemstack);
             } else {
-                if (index < 28) {
+                if (index < 55) {
                     if (!this.moveItemStackTo(stack, 28, 37, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index < 37 && !this.moveItemStackTo(stack, 1, 28, false)) {
+                } else if (index < 64 && !this.moveItemStackTo(stack, 1, 28, false)) {
                     return ItemStack.EMPTY;
                 }
             }
