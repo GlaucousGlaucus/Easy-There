@@ -56,34 +56,35 @@ public class AuraEntityModel extends EntityModel<AuraEntity> {
         /** Copied Animation from BlazeEntity
          * @see net.minecraft.client.renderer.entity.model.BlazeModel
          * */
+
         float thingies_rot_angle = 0.05F;
         float r = 2.0F;
-        float age = ageInTicks * 3.1415927F * -0.035F;
+        float aNumber = ageInTicks * 3.1415927F * -0.035F;
         float increment = 1.65F;
         this.A.yRot += thingies_rot_angle;
-        this.A.x = r * MathHelper.sin(age) * 9.0F;
-        this.A.z = r * MathHelper.cos(age) * 9.0F;
+        this.A.x = r * MathHelper.sin(aNumber) * 9.0F;
+        this.A.z = r * MathHelper.cos(aNumber) * 9.0F;
         this.A.y = -2.0F + MathHelper.cos(((float) (2) + ageInTicks) * 0.25F);
 
-        age += increment;
+        aNumber += increment;
 
         this.B.yRot += thingies_rot_angle;
-        this.B.x = r * MathHelper.sin(age) * 9.0F;
-        this.B.z = r * MathHelper.cos(age) * 9.0F;
+        this.B.x = r * MathHelper.sin(aNumber) * 9.0F;
+        this.B.z = r * MathHelper.cos(aNumber) * 9.0F;
         this.B.y = -2.0F + MathHelper.cos(((float) (4) + ageInTicks) * 0.25F);
 
-        age += increment;
+        aNumber += increment;
 
         this.C.yRot += thingies_rot_angle;
-        this.C.x = r * MathHelper.sin(age) * 9.0F;
-        this.C.z = r * MathHelper.cos(age) * 9.0F;
+        this.C.x = r * MathHelper.sin(aNumber) * 9.0F;
+        this.C.z = r * MathHelper.cos(aNumber) * 9.0F;
         this.C.y = -2.0F + MathHelper.cos(((float) (6) + ageInTicks) * 0.25F);
 
-        age += increment;
+        aNumber += increment;
 
         this.D.yRot += thingies_rot_angle;
-        this.D.x = r * MathHelper.sin(age) * 9.0F;
-        this.D.z = r * MathHelper.cos(age) * 9.0F;
+        this.D.x = r * MathHelper.sin(aNumber) * 9.0F;
+        this.D.z = r * MathHelper.cos(aNumber) * 9.0F;
         this.D.y = -2.0F + MathHelper.cos(((float) (8) + ageInTicks) * 0.25F);
 
         this.Head.xRot = headPitch * ((float) Math.PI / 180);
