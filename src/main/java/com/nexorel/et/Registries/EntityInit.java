@@ -21,7 +21,7 @@ public class EntityInit {
     public static final RegistryObject<EntityType<AuraEntity>> AURA = ENTITIES.register("aura",
             () -> EntityType.Builder.of(AuraEntity::new, EntityClassification.MISC)
                     .fireImmune()
-                    .sized(0.9F, 3.5F)
+                    .sized(2F, 2.5F)
                     .clientTrackingRange(10)
                     .build("necron"));
 

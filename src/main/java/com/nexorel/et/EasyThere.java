@@ -15,6 +15,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import software.bernie.geckolib3.GeckoLib;
 
 @Mod("et")
 public class EasyThere {
@@ -22,6 +23,8 @@ public class EasyThere {
     private static final Logger LOGGER = LogManager.getLogger();
 
     public EasyThere() {
+
+        GeckoLib.initialize();
 
         EntityInit.initialization();
         ItemInit.init();

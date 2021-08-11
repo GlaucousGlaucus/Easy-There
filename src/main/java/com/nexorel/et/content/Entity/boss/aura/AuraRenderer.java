@@ -2,17 +2,16 @@ package com.nexorel.et.content.Entity.boss.aura;
 
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 
-public class AuraRenderer extends MobRenderer<AuraEntity, AuraModel> {
+public class AuraRenderer extends MobRenderer<AuraEntity, AuraEntityModel> {
 
     private static final ResourceLocation LOC = new ResourceLocation("et:textures/entity/aura.png");
 
     public AuraRenderer(EntityRendererManager manager) {
-        super(manager, new AuraModel(), 0.5f);
+        super(manager, new AuraEntityModel(), 0.5f);
     }
 
     @Nullable

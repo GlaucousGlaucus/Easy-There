@@ -47,6 +47,8 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
     boolean flag = true;
     private Entity e;
 
+    private int attackAnimTick;
+
     public AuraEntity(EntityType<? extends MonsterEntity> type, World world) {
         super(type, world);
         this.setPersistenceRequired();
@@ -91,6 +93,7 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
         super.startSeenByPlayer(entity);
         this.bossEvent.addPlayer(entity);
     }
+
 
     @Override
     public void tick() {
@@ -137,6 +140,9 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.attackAnimTick > 0) {
+            this.attackAnimTick--;
+        }
     }
 
     @Override
@@ -147,6 +153,7 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
 
     @Override
     public void performRangedAttack(LivingEntity target, float v) {
+        this.attackAnimTick = 10;
         int chance = random.nextInt(10 - 1 + 1) + 1;
         if (chance < 11) {
             if (target instanceof PlayerEntity) {
@@ -158,7 +165,7 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
                 double d5 = target.getZ() - d2;
                 AuraBlast auraBlast = new AuraBlast(this.level, this, d3, d4, d5);
                 auraBlast.setOwner(this);
-                auraBlast.setPosRaw(d0, d1, d2);
+                auraBlast.setPosRaw(d0, d1 + 1, d2);
                 this.level.addFreshEntity(auraBlast);
             }
         } else {
