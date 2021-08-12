@@ -20,7 +20,7 @@ import software.bernie.geckolib3.GeckoLib;
 @Mod("et")
 public class EasyThere {
     // Directly reference a log4j logger.
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
 
     public EasyThere() {
 

@@ -47,8 +47,6 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
     boolean flag = true;
     private Entity e;
 
-    private int attackAnimTick;
-
     public AuraEntity(EntityType<? extends MonsterEntity> type, World world) {
         super(type, world);
         this.setPersistenceRequired();
@@ -58,8 +56,19 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
-//        this.goalSelector.addGoal(2, new WaterAvoidingRandomWalkingGoal(this, 0.6));
-        this.goalSelector.addGoal(3, new RangedAttackGoal(this, 1.0D, 40, 20.0F));
+        this.goalSelector.addGoal(3, new RangedAttackGoal(this, 1.0D, 40, 20.0F) {
+            @Override
+            public void stop() {
+                super.stop();
+                AuraEntity.this.setAggressive(false);
+            }
+
+            @Override
+            public void start() {
+                super.start();
+                AuraEntity.this.setAggressive(true);
+            }
+        });
         this.goalSelector.addGoal(2, new MinionsGoal(this, this.shield_time));
         this.goalSelector.addGoal(1, new AuraImpactGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
@@ -140,9 +149,6 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
     @Override
     public void aiStep() {
         super.aiStep();
-        if (this.attackAnimTick > 0) {
-            this.attackAnimTick--;
-        }
     }
 
     @Override
@@ -152,14 +158,13 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
     }
 
     @Override
-    public void performRangedAttack(LivingEntity target, float v) {
-        this.attackAnimTick = 10;
+    public void performRangedAttack(LivingEntity target, float distanceFactor) {
         int chance = random.nextInt(10 - 1 + 1) + 1;
         if (chance < 11) {
             if (target instanceof PlayerEntity) {
-                double d0 = this.getHeadX((int) v);
-                double d1 = this.getHeadY((int) v);
-                double d2 = this.getHeadZ((int) v);
+                double d0 = this.getHeadX((int) distanceFactor);
+                double d1 = this.getHeadY((int) distanceFactor);
+                double d2 = this.getHeadZ((int) distanceFactor);
                 double d3 = target.getX() - d0;
                 double d4 = target.getY() - d1;
                 double d5 = target.getZ() - d2;
@@ -271,14 +276,17 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
 
         private SkeletonEntity createMinion(DifficultyInstance instance, AuraEntity entity) {
             SkeletonEntity minion = EntityType.SKELETON.create(entity.level);
-            minion.finalizeSpawn((ServerWorld) entity.level, instance, SpawnReason.REINFORCEMENT, null, null);
-            minion.setPos(entity.getX(), entity.getY(), entity.getZ());
-            minion.invulnerableTime = 100;
-            minion.isInvulnerableTo(DamageSource.WITHER);
-            minion.isInvulnerableTo(DamageSource.CRAMMING);
-            minion.isInvulnerableTo(DamageSource.LIGHTNING_BOLT);
-            minion.isInvulnerableTo(DamageSource.LAVA);
-            minion.setPersistenceRequired();
+            if (minion != null) {
+                minion.finalizeSpawn((ServerWorld) entity.level, instance, SpawnReason.REINFORCEMENT, null, null);
+                minion.setPos(entity.getX(), entity.getY(), entity.getZ());
+                minion.isInvulnerableTo(DamageSource.WITHER);
+                minion.isInvulnerableTo(DamageSource.CRAMMING);
+                minion.isInvulnerableTo(DamageSource.LIGHTNING_BOLT);
+                minion.isInvulnerableTo(DamageSource.LAVA);
+                minion.isInvulnerableTo(DamageSource.IN_FIRE);
+                minion.isInvulnerableTo(DamageSource.ON_FIRE);
+                minion.setPersistenceRequired();
+            }
             return minion;
         }
     }
@@ -327,7 +335,7 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
 
         @Override
         public boolean canUse() {
-            return this.ae.getHealth() <= (this.ae.getMaxHealth() * 0.25);
+            return this.ae.getHealth() <= (this.ae.getMaxHealth() * 0.40);
         }
     }
 }
