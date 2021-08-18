@@ -1,0 +1,102 @@
+a thing :
+Aura is a blaze creature that is very hostile to a creature called players in the world of minecraft. Aura lives in a dungeon called 'Labyrinthe du gardien inconnu' which means 'Maze of the Unknown Guardian' which has insane amount of traps and monsters. After the Aura is defeated it drops a certain item that leads to a mysterious place called 'The Necrotic Dimension' which no one has ever seen....
+
+another thing:
+
+eature that is very hostile to a creature called players in the world of minecraft. Aura lives in a dungeon called 'Labyrinthe du gardien inconnu' which means 'Maze of the Unknown Guardian' which has insane amount of traps and monsters. After the Aura is defeated it drops a certain item that leads to a mysterious place called 'The Necrotic Dimension' which no one has ever seen.... so this is a unique and deadly threat. If you are not near the dungeon it will say 'Otous! oOoOoOoOoooohooohooohooohooohoooohoooohOOOOOOOHOOHOOOHOOOOOOHOOOHOOHOAOOOHO' before moving on to the next level.
+
+edit] Boss
+
+The Boss must be found near the Labyrinth of the Dead using a hidden treasure chest. Enemies spawned from this are:
+
+Sneak Spot - one of the boss spawns with a few arrows, a few water arrows, arrows, and some kind of water spell
+
+- one of the boss spawns with a few arrows, a few water arrows, arrows, and some kind of water spell Bomb Trap - One of the boss spawns with arrows and water, but one can also be found with magic. One can also be found with fire.
+
+- One of the boss spawns with arrows and water, but one can also be found with magic.
+
+what?????????
+
+Gem names  {
+       Agriyelite
+       Aquomite
+       Gold Almao
+       Orange-Red Temarelite
+       Cryophanite
+       Peach Ekanesia
+       Crimson Pectene
+       Blue-Violet Aegidonyx
+       Electric Blue Cypberite
+       Twinkling Breadite
+       Salmon Linadingerite
+       Blue Rapmony
+       Violet Tunoradoite
+       Magenta Rose Lollnic
+       Jade Petaogopite
+}
+
+artifact names ?? {
+    Triumph Fountain
+    Longevity Mask
+    Flame Horn
+    Thunder Gem
+    Equinox Stone
+    Tome of Runes
+    Canopic Chest of Pestilence
+    Seal of Lunacy
+    Goblet of Rebirth
+    Grail of Venom
+}
+
+riddles {
+    I drape the hills in gentle white and from the heavens I will glide. What am I?
+    The answer is: Snow.
+
+    What am I?
+    The answer is: A question.
+
+    What is orange and sounds like a parrot?
+    The answer is: A carrot.
+
+    When one does not know what it is, then it is something. When one knows what it is, then it is nothing.
+    The answer is: A riddle.
+
+    I can go in a block what am i ?
+    The answer is : Bee
+
+    How do you solve this question ?
+    The answer is : By answering it
+
+    What will you get if you subtract Your xp level from the
+    number of experience points in your xp level.
+    The answer is : A Number
+
+    What is the question ?
+    The answer is : What is the question ?
+
+    Do you think this question in Unfair ?
+    The answer is : Do you think this answer is UNFAIR ?
+
+    What is first step to the solve this math problem ?
+    -> (1 + π^1 + π^2 + π^3 ... π^100) / (π^100 * (1 + π^1 + π^2 + π^3 ... π^100))
+
+    The answer is: read it
+
+    What is the value of π upto 0 decimal places ?
+    The answer is : 3
+
+    How many errors are there in this question if
+    there is at least one error in this question?
+    The answer is : 1
+
+    Will you answer this question ?
+    The answer is : yes
+
+    Rearrange and answer:
+    !!!ti, rewsna ,neht ,os ,fi ,? ,noitseuq ,siht ,degnarraer ,uoy,evaH
+    The answer is : ok
+
+    How much time did it take me to write this question ?
+    The answer is: 10 sec
+
+}

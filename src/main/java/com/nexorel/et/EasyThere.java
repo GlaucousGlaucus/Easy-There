@@ -1,6 +1,9 @@
 package com.nexorel.et;
 
 import com.nexorel.et.Registries.*;
+import com.nexorel.et.capabilities.AttachCap;
+import com.nexorel.et.capabilities.CombatSkillCapability;
+import com.nexorel.et.capabilities.SkillInteractions;
 import com.nexorel.et.content.Entity.boss.aura.AuraEntity;
 import com.nexorel.et.setup.ClientSetup;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
@@ -16,6 +19,11 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
+
+/**
+ * TODO: Add a gui interface to my skills
+ * oh yeah and add more skills
+ */
 
 @Mod("et")
 public class EasyThere {
@@ -42,6 +50,12 @@ public class EasyThere {
 
     private void setup(final FMLCommonSetupEvent event) {
         // some preinit code
+
+        CombatSkillCapability.register();
+
+        MinecraftForge.EVENT_BUS.register(AttachCap.class);
+        MinecraftForge.EVENT_BUS.register(SkillInteractions.class);
+        MinecraftForge.EVENT_BUS.register(CommandInit.class);
 
         event.enqueueWork(() -> {
             GlobalEntityTypeAttributes.put(EntityInit.AURA.get(), AuraEntity.prepareAttributes().build());
