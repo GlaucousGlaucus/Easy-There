@@ -3,6 +3,7 @@ package com.nexorel.et.content.skills;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.nexorel.et.content.skills.widget.SkillButtonWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.util.ResourceLocation;
@@ -16,24 +17,28 @@ public class SkillTabGUI extends AbstractGui {
 
     public double scrollX;
     public double scrollY;
-    private int minX = Integer.MAX_VALUE;
-    private int minY = Integer.MAX_VALUE;
-    private int maxX = Integer.MIN_VALUE;
-    private int maxY = Integer.MIN_VALUE;
+    private int a = 234;
+    private int b = 160;
+    private int w = 234;
+    private int h = 113;
+    private int screen_width;
+    private int screen_height;
     private boolean centered;
-    public final List<SkillScreen.SkillButtonWidget> widgets = Lists.newArrayList();
+    public final List<SkillButtonWidget> widgets = Lists.newArrayList();
+    private SkillScreen skillScreen;
 
-    public SkillTabGUI() {
-
+    public SkillTabGUI(SkillScreen skillScreen, int w, int h) {
+        this.skillScreen = skillScreen;
+        this.screen_width = w;
+        this.screen_height = h;
     }
 
     public void drawContents(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if (!this.centered) {
-            this.scrollX = (double) (117 - (this.maxX + this.minX) / 2);
-            this.scrollY = (double) (56 - (this.maxY + this.minY) / 2);
+            this.scrollX = (double) ((w / 2) - (a) / 2);
+            this.scrollY = (double) ((h / 2) - (b) / 2);
             this.centered = true;
         }
-
         matrixStack.pushPose();
         RenderSystem.enableDepthTest();
         matrixStack.translate(0.0F, 0.0F, 950.0F);
@@ -47,6 +52,7 @@ public class SkillTabGUI extends AbstractGui {
         ResourceLocation resourcelocation = new ResourceLocation(MOD_ID, "textures/gui/skill_bg.png");
         Minecraft.getInstance().getTextureManager().bind(resourcelocation);
 
+
         int i = MathHelper.floor(this.scrollX);
         int j = MathHelper.floor(this.scrollY);
         int k = i % 16;
@@ -57,6 +63,21 @@ public class SkillTabGUI extends AbstractGui {
                 blit(matrixStack, k + 16 * i1, l + 16 * j1, 0.0F, 0.0F, 16, 16, 16, 16);
             }
         }
+
+        int x = (this.skillScreen.width - 252) / 2;
+        int y = (this.skillScreen.height - 139) / 2;
+
+        matrixStack.translate(-(float) (x + 9), -(float) (y + 18), 0.0F);
+
+        this.widgets.clear();
+        for (int m = 0; m < SkillScreen.Skills.VALUES.length; m++) {
+            SkillScreen.Skills skill = SkillScreen.Skills.VALUES[m];
+            addWidget(new SkillButtonWidget(this.skillScreen, skill, (this.skillScreen.width - 252) / 2 + i + 75, ((this.skillScreen.height - 139) / 2) + (j + (m * 35) + 30)));
+        }
+        this.widgets.forEach((widget) -> widget.renderButton(matrixStack, mouseX, mouseY, partialTicks));
+
+        matrixStack.translate(-(float) (x + 9), -(float) (y + 18), 0.0F);
+
         RenderSystem.depthFunc(518);
         matrixStack.translate(0.0F, 0.0F, -950.0F);
         RenderSystem.colorMask(false, false, false, false);
@@ -68,25 +89,12 @@ public class SkillTabGUI extends AbstractGui {
     }
 
     public void scroll(double x, double y) {
-        if (this.maxX - this.minX > 234) {
-            this.scrollX = MathHelper.clamp(this.scrollX + x, (double) (-(this.maxX - 234)), 0.0D);
-        }
-
-        if (this.maxY - this.minY > 113) {
-            this.scrollY = MathHelper.clamp(this.scrollY + y, (double) (-(this.maxY - 113)), 0.0D);
-        }
+        this.scrollX = MathHelper.clamp(this.scrollX + x, (double) (-(a - w)), 0.0D);
+        this.scrollY = MathHelper.clamp(this.scrollY + y, (double) (-(b - h)), 0.0D);
 
     }
 
-    public void addWidget(SkillScreen.SkillButtonWidget widget) {
+    public void addWidget(SkillButtonWidget widget) {
         this.widgets.add(widget);
-        int i = widget.getX();
-        int j = i + 28;
-        int k = widget.getY();
-        int l = k + 27;
-        this.minX = Math.min(this.minX, i);
-        this.maxX = Math.max(this.maxX, j);
-        this.minY = Math.min(this.minY, k);
-        this.maxY = Math.max(this.maxY, l);
     }
 }

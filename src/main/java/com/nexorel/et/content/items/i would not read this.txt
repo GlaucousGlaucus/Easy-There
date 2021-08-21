@@ -89,7 +89,7 @@ riddles {
     there is at least one error in this question?
     The answer is : 1
 
-    Will you answer this question ?
+    Have you answer this question ?
     The answer is : yes
 
     Rearrange and answer:
