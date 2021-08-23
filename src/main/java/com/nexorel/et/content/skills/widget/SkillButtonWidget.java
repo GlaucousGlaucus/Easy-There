@@ -31,11 +31,16 @@ public class SkillButtonWidget extends AbstractGui {
         Minecraft.getInstance().getTextureManager().bind(SkillScreen.SKILL_ASSETS_LOC);
         this.isSelected = mouseX >= this.X && mouseY >= this.Y && mouseX < this.X + 25 && mouseY < this.Y + 25;
         if (this.isSelected) {
-            this.blit(matrixStack, (this.X), (this.Y), 25, 143, 25, 25);
+            this.renderHoverGUI(matrixStack);
         } else {
             this.blit(matrixStack, (this.X), (this.Y), 0, 143, 25, 25);
         }
         this.icon.drawIcon(Minecraft.getInstance().getItemRenderer(), this.X + 3, this.Y + 3);
+    }
+
+    private void renderHoverGUI(MatrixStack matrixStack) {
+        this.blit(matrixStack, (this.X), (this.Y), 25, 143, 25, 25);
+        String DCtion = "Test";
     }
 
     public int getX() {

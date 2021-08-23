@@ -1,5 +1,6 @@
 package com.nexorel.et.capabilities;
 
+import net.minecraft.nbt.DoubleNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.IntNBT;
 import net.minecraft.util.Direction;
@@ -13,8 +14,8 @@ public class CombatSkill {
         this(0);
     }
 
-    public CombatSkill(int level) {
-        this.xp = level;
+    public CombatSkill(double points) {
+        this.xp = points;
     }
 
     public int getLevel() {
@@ -23,9 +24,11 @@ public class CombatSkill {
 
     public static double calculateXpForLevel(int level) {
         // formula: base_xp + (base_xp * level ^ exponent)
-        double exponent = 1.04;
+        double exponent = 3.8;
         double base_xp = 500;
-        return base_xp + (base_xp * Math.pow(level, exponent));
+        double alpha_xp = (60 * Math.pow(level, 2)) + level + base_xp + Math.pow(level, exponent);
+        //base_xp + (base_xp * Math.pow(level, exponent))
+        return alpha_xp;
     }
 
     public static double calculateFullTargetXp(int level) {
@@ -38,29 +41,38 @@ public class CombatSkill {
 
     public static int calculateLvlFromXp(double xp) {
         int level = 0;
-        double maxXp = calculateXpForLevel(0);
+        double maxXp = 500;
+        if (xp < maxXp) return 0;
         do {
-            maxXp += calculateXpForLevel(level++);
+            level += 1;
+            maxXp += calculateXpForLevel(level);
         } while (maxXp < xp);
         return level;
     }
 
     public void addXp(double points) {
-        xp += points;
+        double cap = 482028;
+        if (xp != cap) {
+            if (xp + points <= cap) {
+                xp += points;
+            } else if (xp + points > cap) {
+                xp = cap;
+            }
+        }
     }
 
-    private void setXp(int points) {
+    public void setXp(double points) {
         xp = points;
     }
 
-    private int xp;
+    private double xp;
 
     public static class CombatSkillNBTStorage implements Capability.IStorage<CombatSkill> {
 
         @Nullable
         @Override
         public INBT writeNBT(Capability<CombatSkill> capability, CombatSkill instance, Direction side) {
-            IntNBT intNBT = IntNBT.valueOf(instance.xp);
+            DoubleNBT intNBT = DoubleNBT.valueOf(instance.xp);
             return intNBT;
         }
 

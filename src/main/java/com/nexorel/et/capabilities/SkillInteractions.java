@@ -9,10 +9,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.glfw.GLFW;
@@ -40,6 +43,32 @@ public class SkillInteractions {
     }
 
     @SubscribeEvent
+    public static void onEntityKill(LivingDeathEvent event) {
+        if (event.getSource().getEntity() instanceof PlayerEntity) {
+            if (event.getSource().getEntity() != null) {
+                LivingEntity target = event.getEntityLiving();
+                PlayerEntity player = (PlayerEntity) event.getSource().getEntity();
+                World world = player.level;
+                if (world instanceof ServerWorld) {
+                    ServerWorld serverWorld = (ServerWorld) world;
+                    Vector3d epos = target.position();
+                    serverWorld.sendParticles(ParticleTypes.EXPLOSION, epos.x, epos.y, epos.z, 20, 0.5, 0.5, 0.5, 0);
+                }
+                CombatSkill combatSkill = player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
+                if (combatSkill == null) {
+                    EasyThere.LOGGER.error("COMBAT SKILL IS NULL");
+                    return;
+                } else {
+                    combatSkill.addXp(25000);
+                    EasyThere.LOGGER.info("----------------");
+                    EasyThere.LOGGER.info(combatSkill.getLevel());
+                    EasyThere.LOGGER.info("----------------");
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
     public static void onAttackMob(AttackEntityEvent entityEvent) {
         PlayerEntity player = entityEvent.getPlayer();
         CombatSkill combatSkill = player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
@@ -48,7 +77,7 @@ public class SkillInteractions {
             return;
         }
         if (combatSkill.getLevel() == 0) {
-            combatSkill.addXp(1100);
+//            combatSkill.addXp(1100);
             EasyThere.LOGGER.info("ADDED XP");
         }
         EasyThere.LOGGER.info(combatSkill.getLevel());
@@ -62,11 +91,18 @@ public class SkillInteractions {
             LivingEntity livingTarget = (LivingEntity) target;
             int defence = ((LivingEntity) target).getArmorValue();
             float player_strength = player.getAttackStrengthScale(0.5F);
-            EasyThere.LOGGER.info(player_strength);
             float player_damage = (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE);
-//            float final_damage = combat_skill_level * player_damage * player_damage / player_damage + defence;
-            float wip_dmg = ((float) ((0.015 * (combat_skill_level ^ 2)) * (player_damage * player_damage)) / (player_damage + defence) + 1);
-            livingTarget.hurt(DamageSource.playerAttack(player), wip_dmg);
+            float wip_dmg_2 = (float) ((0.015 * (combat_skill_level * combat_skill_level) * (player_damage * player_damage)) / (player_damage + defence + 0.001) + 1);
+            livingTarget.hurt(DamageSource.playerAttack(player), wip_dmg_2);
+            /*EasyThere.LOGGER.info("DMG: ");
+            EasyThere.LOGGER.info(wip_dmg_2);
+            EasyThere.LOGGER.info("Skill: ");
+            EasyThere.LOGGER.info(combat_skill_level);
+            EasyThere.LOGGER.info(CombatSkill.calculateFullTargetXp(combat_skill_level));
+            EasyThere.LOGGER.info("Defence: ");
+            EasyThere.LOGGER.info(defence);
+            EasyThere.LOGGER.info("Strength: ");
+            EasyThere.LOGGER.info(player_strength);*/
             entityEvent.setCanceled(true);
         }
     }
