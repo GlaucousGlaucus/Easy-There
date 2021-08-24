@@ -5,10 +5,10 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import static com.nexorel.et.Reference.MOD_ID;
@@ -17,18 +17,15 @@ public class SkillScreen extends Screen {
 
     public static final int WIDTH = 252;
     public static final int HEIGHT = 139;
-    public final int W = this.width;
-    public final int H = this.height;
-    SkillTabGUI skillTabGUI = new SkillTabGUI(this, this.width, this.height);
+    SkillTabGUI skillTabGUI = new SkillTabGUI(this);
     private boolean isScrolling;
     private ResourceLocation GUI = new ResourceLocation(MOD_ID, "textures/gui/skill_window.png");
     public static ResourceLocation SKILL_ASSETS_LOC = new ResourceLocation(MOD_ID, "textures/gui/skill_window.png");
-
-    public int RX = (this.width - WIDTH) / 2;
-    public int RY = (this.height - HEIGHT) / 2;
+    private PlayerEntity player;
 
     public SkillScreen() {
         super(new TranslationTextComponent("screen.et.skills"));
+        this.player = Minecraft.getInstance().player;
     }
 
     public static void open() {
@@ -37,7 +34,6 @@ public class SkillScreen extends Screen {
 
     @Override
     protected void init() {
-
     }
 
     @Override
@@ -99,21 +95,17 @@ public class SkillScreen extends Screen {
     }
 
     public enum Skills {
-        COMBAT(new TranslationTextComponent("skill.combat"), new ItemStack(Items.DIAMOND_SWORD)),
-        MINING(new TranslationTextComponent("skill.mining"), new ItemStack(Items.DIAMOND_PICKAXE)),
-        FORAGING(new TranslationTextComponent("skill.foraging"), new ItemStack(Items.GOLDEN_AXE)),
-        FARMING(new TranslationTextComponent("skill.farming"), new ItemStack(Items.NETHERITE_HOE));
-
+        COMBAT("skill.combat", new ItemStack(Items.DIAMOND_SWORD));
         protected static final SkillScreen.Skills[] VALUES = values();
-        final ITextComponent name;
+        final String name;
         final ItemStack renderStack;
 
-        Skills(ITextComponent name, ItemStack renderStack) {
+        Skills(String name, ItemStack renderStack) {
             this.name = name;
             this.renderStack = renderStack;
         }
 
-        public ITextComponent getName() {
+        public String getName() {
             return this.name;
         }
 

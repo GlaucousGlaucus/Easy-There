@@ -1,8 +1,10 @@
 package com.nexorel.et.capabilities;
 
+import com.nexorel.et.Network.EasyTherePacketHandler;
+import com.nexorel.et.Network.SkillPacket;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.DoubleNBT;
 import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.IntNBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 
@@ -65,6 +67,10 @@ public class CombatSkill {
         xp = points;
     }
 
+    public double getXp() {
+        return this.xp;
+    }
+
     private double xp;
 
     public static class CombatSkillNBTStorage implements Capability.IStorage<CombatSkill> {
@@ -72,15 +78,14 @@ public class CombatSkill {
         @Nullable
         @Override
         public INBT writeNBT(Capability<CombatSkill> capability, CombatSkill instance, Direction side) {
-            DoubleNBT intNBT = DoubleNBT.valueOf(instance.xp);
-            return intNBT;
+            return DoubleNBT.valueOf(instance.xp);
         }
 
         @Override
         public void readNBT(Capability<CombatSkill> capability, CombatSkill instance, Direction side, INBT nbt) {
-            int xp = 0;
-            if (nbt.getType() == IntNBT.TYPE) {
-                xp = ((IntNBT) nbt).getAsInt();
+            double xp = 0;
+            if (nbt.getType() == DoubleNBT.TYPE) {
+                xp = ((DoubleNBT) nbt).getAsDouble();
             }
             instance.setXp(xp);
         }
@@ -88,6 +93,10 @@ public class CombatSkill {
 
     public static CombatSkill createDefaultInstance() {
         return new CombatSkill();
+    }
+
+    public void syncData(ServerPlayerEntity playerEntity) {
+        EasyTherePacketHandler.sendDataToClient(new SkillPacket(this.getXp()), playerEntity);
     }
 
 }

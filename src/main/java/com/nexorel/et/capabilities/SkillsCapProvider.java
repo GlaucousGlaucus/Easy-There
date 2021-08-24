@@ -13,7 +13,6 @@ import javax.annotation.Nullable;
 
 public class SkillsCapProvider implements ICapabilitySerializable<INBT> {
 
-
     private CombatSkill combat_skill = new CombatSkill();
     private final static String COMBAT_SKILL_NBT = "combat_skill";
 

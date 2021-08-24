@@ -17,20 +17,16 @@ public class SkillTabGUI extends AbstractGui {
 
     public double scrollX;
     public double scrollY;
-    private int a = 234;
+    private int a = 260;//234
     private int b = 160;
     private int w = 234;
     private int h = 113;
-    private int screen_width;
-    private int screen_height;
     private boolean centered;
     public final List<SkillButtonWidget> widgets = Lists.newArrayList();
     private SkillScreen skillScreen;
 
-    public SkillTabGUI(SkillScreen skillScreen, int w, int h) {
+    public SkillTabGUI(SkillScreen skillScreen) {
         this.skillScreen = skillScreen;
-        this.screen_width = w;
-        this.screen_height = h;
     }
 
     public void drawContents(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
@@ -74,7 +70,7 @@ public class SkillTabGUI extends AbstractGui {
             SkillScreen.Skills skill = SkillScreen.Skills.VALUES[m];
             addWidget(new SkillButtonWidget(this.skillScreen, skill, (this.skillScreen.width - 252) / 2 + i + 75, ((this.skillScreen.height - 139) / 2) + (j + (m * 35) + 30)));
         }
-        this.widgets.forEach((widget) -> widget.renderButton(matrixStack, mouseX, mouseY, partialTicks));
+        this.widgets.forEach((widget) -> widget.renderButton(matrixStack, mouseX, mouseY));
 
         matrixStack.translate(-(float) (x + 9), -(float) (y + 18), 0.0F);
 

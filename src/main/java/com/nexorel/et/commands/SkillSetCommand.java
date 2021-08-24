@@ -13,6 +13,7 @@ import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.*;
 
 
@@ -39,23 +40,19 @@ public class SkillSetCommand {
         if (entity instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) entity;
             CombatSkill combatSkill = player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
-            if (combatSkill == null) {
-                EasyThere.LOGGER.error("COMBAT SKILL IS NULL");
-                return 1;
-            } else {
-                int init_level = combatSkill.getLevel();
-                int target_level = IntegerArgumentType.getInteger(commandContext, "level");
-                if (target_level == 0) {
-                    combatSkill.setXp(0);
-                } else if (target_level < init_level) {
-                    double target_xp = CombatSkill.calculateFullTargetXp(target_level);
-                    combatSkill.setXp(target_xp);
-                } else if (target_level > init_level && target_level <= 20) {
-                    double target_xp = CombatSkill.calculateFullTargetXp(target_level);
-                    combatSkill.setXp(target_xp);
-                }
-                EasyThere.LOGGER.info(combatSkill.getLevel());
+            int init_level = combatSkill.getLevel();
+            int target_level = IntegerArgumentType.getInteger(commandContext, "level");
+            if (target_level == 0) {
+                combatSkill.setXp(0);
+            } else if (target_level < init_level) {
+                double target_xp = CombatSkill.calculateFullTargetXp(target_level);
+                combatSkill.setXp(target_xp);
+            } else if (target_level > init_level && target_level <= 20) {
+                double target_xp = CombatSkill.calculateFullTargetXp(target_level);
+                combatSkill.setXp(target_xp);
             }
+            combatSkill.syncData((ServerPlayerEntity) player);
+            EasyThere.LOGGER.info(combatSkill.getLevel());
             ITextComponent component = new StringTextComponent("Skill Level Set to " + TextFormatting.AQUA + combatSkill.getLevel() + TextFormatting.WHITE + " For: " + TextFormatting.AQUA + "Combat Skill");
             TranslationTextComponent text =
                     new TranslationTextComponent("chat.type.announcement",

@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.vector.Vector3d;
@@ -17,15 +18,35 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.glfw.GLFW;
 
 public class SkillInteractions {
 
-    /*@SubscribeEvent
-    public static void testMethodSmth(PlayerEvent.PlayerLoggedInEvent event) {
-        event.getPlayer();
-    }*/
+    @SubscribeEvent
+    public static void PlayerLogInEvent(PlayerEvent.PlayerLoggedInEvent event) {
+        ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) event.getPlayer();
+        if (!serverPlayerEntity.level.isClientSide) {
+            serverPlayerEntity.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(combatSkill -> combatSkill.syncData(serverPlayerEntity));
+        }
+    }
+
+    @SubscribeEvent
+    public static void PlayerRespawnEvent(PlayerEvent.PlayerRespawnEvent event) {
+        ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) event.getPlayer();
+        if (!serverPlayerEntity.level.isClientSide) {
+            serverPlayerEntity.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(combatSkill -> combatSkill.syncData(serverPlayerEntity));
+        }
+    }
+
+    @SubscribeEvent
+    public static void PlayerDimensionChangeEvent(PlayerEvent.PlayerChangedDimensionEvent event) {
+        ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) event.getPlayer();
+        if (!serverPlayerEntity.level.isClientSide) {
+            serverPlayerEntity.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(combatSkill -> combatSkill.syncData(serverPlayerEntity));
+        }
+    }
 
     @SubscribeEvent
     public static void GUIOpen(InputEvent.KeyInputEvent event) {

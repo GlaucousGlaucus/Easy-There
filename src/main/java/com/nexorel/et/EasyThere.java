@@ -1,5 +1,6 @@
 package com.nexorel.et;
 
+import com.nexorel.et.Network.EasyTherePacketHandler;
 import com.nexorel.et.Registries.*;
 import com.nexorel.et.capabilities.AttachCap;
 import com.nexorel.et.capabilities.CombatSkillCapability;
@@ -34,6 +35,7 @@ public class EasyThere {
 
         GeckoLib.initialize();
 
+        EasyTherePacketHandler.register();
         EntityInit.initialization();
         ItemInit.init();
         BlockInit.init();
