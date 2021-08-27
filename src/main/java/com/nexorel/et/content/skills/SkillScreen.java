@@ -40,12 +40,6 @@ public class SkillScreen extends Screen {
 
     @Override
     public void tick() {
-        /*int i = MathHelper.floor(this.skillTabGUI.scrollX);
-        int j = MathHelper.floor(this.skillTabGUI.scrollY);
-        this.skillTabGUI.widgets.forEach(skillButtonWidget -> {
-            skillButtonWidget.setX(i);
-            skillButtonWidget.setY(j);
-        });*/
     }
 
     @Override

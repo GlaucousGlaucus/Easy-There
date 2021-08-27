@@ -1,6 +1,7 @@
 package com.nexorel.et.content.skills.widget;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.nexorel.et.capabilities.CombatSkill;
 import com.nexorel.et.capabilities.CombatSkillCapability;
 import com.nexorel.et.content.skills.SkillScreen;
@@ -59,10 +60,13 @@ public class SkillButtonWidget extends AbstractGui {
         float c = 0F;
 
         matrixStack.pushPose();
+        RenderSystem.enableBlend();
         this.blit(matrixStack, (this.X), (this.Y), 25, 143, 25, 25);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 0.3F + MathHelper.clamp((getVisibility(Time) * 2), 0F, 0.7F));
         matrixStack.translate(a, b, c);
         renderHoverGUI(matrixStack);
         matrixStack.translate(-a, -b, -c);
+        RenderSystem.disableBlend();
         matrixStack.popPose();
         this.icon.drawIcon(Minecraft.getInstance().getItemRenderer(), this.X + 3, this.Y + 3);
     }
@@ -82,9 +86,21 @@ public class SkillButtonWidget extends AbstractGui {
         return 0;
     }
 
+    private int getXp_percent_color(double xp_percent) {
+        int xp_percent_color = 0;
+        if (xp_percent <= 25) {
+            xp_percent_color = 0xff1500;
+        } else if (xp_percent <= 50) {
+            xp_percent_color = 0xff9100;
+        } else if (xp_percent <= 75) {
+            xp_percent_color = 0xfffb00;
+        } else if (xp_percent <= 100) {
+            xp_percent_color = 0x77ff00;
+        }
+        return xp_percent_color;
+    }
+
     public void renderHoverGUI(MatrixStack matrixStack) {
-        String DCtion = "Test";
-        int len = DCtion.length();
         // 4, 147
         this.blit(matrixStack, (this.X) + 25, (this.Y), 0, 197, 25, 25); // TL
         this.blit(matrixStack, (this.X) + 25, (this.Y) + (3 * 25), 25, 197, 25, 25); // BL
@@ -110,20 +126,20 @@ public class SkillButtonWidget extends AbstractGui {
         if (this.icon.getName().equals("skill.combat")) {
             Minecraft.getInstance().font.draw(matrixStack, "Combat", this.X + 30, this.Y + 5, 0x0fff7); //-5592406
             if (Minecraft.getInstance().player != null) {
-                Minecraft.getInstance().font.draw(matrixStack, "Level:", this.X + 50, this.Y + 25, -5529046); //-5592406
+                Minecraft.getInstance().font.draw(matrixStack, "Level:", this.X + 50, this.Y + 25, 0x0fff7); //-5592406
                 Minecraft.getInstance().font.draw(matrixStack, Integer.toString(CombatSkill.calculateLvlFromXp(this.combatSkill.getXp())), this.X + 80, this.Y + 25, getLevelColor(CombatSkill.calculateLvlFromXp(this.combatSkill.getXp())));
                 int current_lvl = CombatSkill.calculateLvlFromXp(this.combatSkill.getXp());
                 double nxt_lvl_xp = CombatSkill.calculateFullTargetXp(current_lvl - 1);
                 double xp_progress = ((this.combatSkill.getXp() - nxt_lvl_xp) / (CombatSkill.calculateXpForLevel(current_lvl + 1))) * 100;
                 double xp_percent = (double) Math.round(xp_progress * 100) / 100;
-                Minecraft.getInstance().font.draw(matrixStack, Double.toString(xp_percent), this.X + 50, this.Y + 75, -5529046); //-5592406
+                Minecraft.getInstance().font.draw(matrixStack, Double.toString(xp_percent) + " %", this.X + 50, this.Y + 75, getXp_percent_color(xp_percent)); //-5592406
 
                 int bar_no = MathHelper.clamp((int) Math.round(xp_percent / 10), 0, 10);
                 StringBuilder bars = new StringBuilder();
                 for (int i = 0; i < bar_no; i++) {
                     bars.append("-");
                 }
-                Minecraft.getInstance().font.draw(matrixStack, bars.toString(), this.X + 40, this.Y + 45, getLevelColor(CombatSkill.calculateLvlFromXp(this.combatSkill.getXp()))); //-5592406
+                Minecraft.getInstance().font.draw(matrixStack, bars.toString(), this.X + 40, this.Y + 45, getXp_percent_color(xp_percent)); //-5592406
             }
         }
     }
