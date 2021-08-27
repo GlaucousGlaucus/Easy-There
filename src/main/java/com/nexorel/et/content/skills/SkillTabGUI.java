@@ -24,12 +24,22 @@ public class SkillTabGUI extends AbstractGui {
     private boolean centered;
     public final List<SkillButtonWidget> widgets = Lists.newArrayList();
     private SkillScreen skillScreen;
+    private float fade;
 
     public SkillTabGUI(SkillScreen skillScreen) {
         this.skillScreen = skillScreen;
     }
 
-    public void drawContents(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void init() {
+        int i = MathHelper.floor(this.scrollX) * 0;
+        int j = MathHelper.floor(this.scrollY) * 0;
+        for (int m = 0; m < SkillScreen.Skills.VALUES.length; m++) {
+            SkillScreen.Skills skill = SkillScreen.Skills.VALUES[m];
+            addWidget(new SkillButtonWidget(this.skillScreen, skill, (this.skillScreen.width - 252) / 2 + i + 75, ((this.skillScreen.height - 139) / 2) + (j + (m * 35) + 30)));
+        }
+    }
+
+    public void drawContents(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks, long Time) {
         if (!this.centered) {
             this.scrollX = (double) ((w / 2) - (a) / 2);
             this.scrollY = (double) ((h / 2) - (b) / 2);
@@ -65,12 +75,12 @@ public class SkillTabGUI extends AbstractGui {
 
         matrixStack.translate(-(float) (x + 9), -(float) (y + 18), 0.0F);
 
-        this.widgets.clear();
-        for (int m = 0; m < SkillScreen.Skills.VALUES.length; m++) {
-            SkillScreen.Skills skill = SkillScreen.Skills.VALUES[m];
-            addWidget(new SkillButtonWidget(this.skillScreen, skill, (this.skillScreen.width - 252) / 2 + i + 75, ((this.skillScreen.height - 139) / 2) + (j + (m * 35) + 30)));
-        }
-        this.widgets.forEach((widget) -> widget.renderButton(matrixStack, mouseX, mouseY));
+        this.widgets.forEach((widget) -> {
+            int m = this.widgets.indexOf(widget);
+            widget.setX((this.skillScreen.width - 252) / 2 + i + 75);
+            widget.setY(((this.skillScreen.height - 139) / 2) + (j + (m * 35) + 30));
+            widget.renderButton(matrixStack, mouseX, mouseY, partialTicks, Time);
+        });
 
         matrixStack.translate(-(float) (x + 9), -(float) (y + 18), 0.0F);
 
@@ -82,6 +92,30 @@ public class SkillTabGUI extends AbstractGui {
         matrixStack.translate(0.0F, 0.0F, 950.0F);
         RenderSystem.depthFunc(515);
         matrixStack.popPose();
+    }
+
+    public void drawTooltips(MatrixStack matrixStack, int RelX, int RelY, int mouseX, int mouseY, float partialTicks, long Time) {
+        matrixStack.pushPose();
+        matrixStack.translate(0.0F, 0.0F, 200.0F);
+        fill(matrixStack, 0, 0, 234, 113, MathHelper.floor(this.fade * 255.0F) << 24);
+        matrixStack.translate(-(float) (RelX + 9), -(float) (RelY + 18), 0.0F);
+        boolean flag = false;
+        int i = MathHelper.floor(this.scrollX);
+        int j = MathHelper.floor(this.scrollY);
+        for (SkillButtonWidget widget : this.widgets) {
+            if (widget.isSelected) {
+                flag = true;
+                widget.animateAndRender(matrixStack, Time);
+                break;
+            }
+        }
+
+        matrixStack.popPose();
+        if (flag) {
+            this.fade = MathHelper.clamp(this.fade + 0.02F, 0.0F, 0.6F);
+        } else {
+            this.fade = MathHelper.clamp(this.fade - 0.04F, 0.0F, 1.0F);
+        }
     }
 
     public void scroll(double x, double y) {

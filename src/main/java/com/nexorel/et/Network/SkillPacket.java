@@ -38,9 +38,4 @@ public class SkillPacket {
             ctx.get().setPacketHandled(true);
         }
     }
-
-    public static class ClientPacketHandler {
-        public static void handle(final SkillPacket msg, Supplier<NetworkEvent.Context> ctx) {
-        }
-    }
 }

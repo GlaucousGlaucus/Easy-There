@@ -76,15 +76,14 @@ public class SkillInteractions {
                     serverWorld.sendParticles(ParticleTypes.EXPLOSION, epos.x, epos.y, epos.z, 20, 0.5, 0.5, 0.5, 0);
                 }
                 CombatSkill combatSkill = player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
-                if (combatSkill == null) {
-                    EasyThere.LOGGER.error("COMBAT SKILL IS NULL");
-                    return;
-                } else {
-                    combatSkill.addXp(25000);
-                    EasyThere.LOGGER.info("----------------");
-                    EasyThere.LOGGER.info(combatSkill.getLevel());
-                    EasyThere.LOGGER.info("----------------");
+                combatSkill.addXp(10000);
+                ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
+                if (!serverPlayerEntity.level.isClientSide) {
+                    serverPlayerEntity.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(C -> C.syncData(serverPlayerEntity));
                 }
+                EasyThere.LOGGER.info("----------------");
+                EasyThere.LOGGER.info(combatSkill.getLevel());
+                EasyThere.LOGGER.info("----------------");
             }
         }
     }
@@ -98,7 +97,6 @@ public class SkillInteractions {
             return;
         }
         if (combatSkill.getLevel() == 0) {
-//            combatSkill.addXp(1100);
             EasyThere.LOGGER.info("ADDED XP");
         }
         EasyThere.LOGGER.info(combatSkill.getLevel());
