@@ -7,6 +7,7 @@ import com.nexorel.et.capabilities.CombatSkillCapability;
 import com.nexorel.et.capabilities.SkillInteractions;
 import com.nexorel.et.content.Entity.boss.aura.AuraEntity;
 import com.nexorel.et.setup.ClientSetup;
+import com.nexorel.et.setup.ETConfig;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -14,7 +15,9 @@ import net.minecraft.item.Items;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -32,6 +35,8 @@ public class EasyThere {
     public static final Logger LOGGER = LogManager.getLogger();
 
     public EasyThere() {
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ETConfig.CLIENT_CONFIG);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ETConfig.SERVER_CONFIG);
 
         GeckoLib.initialize();
 
@@ -61,6 +66,7 @@ public class EasyThere {
 
         event.enqueueWork(() -> {
             GlobalEntityTypeAttributes.put(EntityInit.AURA.get(), AuraEntity.prepareAttributes().build());
+//            GlobalEntityTypeAttributes.put(EntityInit.DMG_IND.get(), DamageIndicatorEntity.prepareAttributes().build());
         });
     }
 

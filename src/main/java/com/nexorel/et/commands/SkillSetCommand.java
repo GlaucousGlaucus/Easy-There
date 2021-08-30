@@ -25,7 +25,7 @@ public class SkillSetCommand {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         LiteralArgumentBuilder<CommandSource> skill_set_cmd =
-                Commands.literal("set_skill")
+                Commands.literal("setskill")
                         .requires((commandSource -> commandSource.hasPermission(2)))
                         .then(Commands.argument("target", EntityArgument.players())
                                 .then(Commands.literal("combat")
@@ -44,14 +44,16 @@ public class SkillSetCommand {
             int target_level = IntegerArgumentType.getInteger(commandContext, "level");
             if (target_level == 0) {
                 combatSkill.setXp(0);
-            } else if (target_level < init_level) {
-                double target_xp = CombatSkill.calculateFullTargetXp(target_level);
+            } else {
+                double target_xp = ((CombatSkill.calculateFullTargetXp(target_level - 1) + 1));
                 combatSkill.setXp(target_xp);
-            } else if (target_level > init_level && target_level <= 20) {
-                double target_xp = CombatSkill.calculateFullTargetXp(target_level);
-                combatSkill.setXp(target_xp);
+                /*EasyThere.LOGGER.info("XP _ CRR" + CombatSkill.getXPProgress(combatSkill));
+                EasyThere.LOGGER.info("TL " + (CombatSkill.calculateFullTargetXp(2)));
+                EasyThere.LOGGER.info("NL " + (CombatSkill.calculateFullTargetXp(target_level + 1)));
+                EasyThere.LOGGER.info("TARGET " + (target_xp));
+                EasyThere.LOGGER.info("% " + ((target_xp - CombatSkill.calculateFullTargetXp(target_level - 1)) / (CombatSkill.calculateFullTargetXp(target_level + 1)) * 100));*/
             }
-            combatSkill.syncData((ServerPlayerEntity) player);
+            combatSkill.shareData((ServerPlayerEntity) player);
             EasyThere.LOGGER.info(combatSkill.getLevel());
             ITextComponent component = new StringTextComponent("Skill Level Set to " + TextFormatting.AQUA + combatSkill.getLevel() + TextFormatting.WHITE + " For: " + TextFormatting.AQUA + "Combat Skill");
             TranslationTextComponent text =

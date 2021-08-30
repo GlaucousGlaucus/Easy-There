@@ -1,6 +1,7 @@
 package com.nexorel.et.Registries;
 
 import com.nexorel.et.content.Entity.boss.aura.AuraEntity;
+import com.nexorel.et.content.Entity.damage_ind.DamageIndicatorEntity;
 import com.nexorel.et.content.Entity.projectile.aura_blast.AuraBlast;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -34,5 +35,13 @@ public class EntityInit {
                     .sized(0.9F, 3.5F)
                     .clientTrackingRange(10)
                     .build("aura_blast"));
+
+    // DMGIND
+
+    public static final RegistryObject<EntityType<DamageIndicatorEntity>> DMG_IND = ENTITIES.register("damage_indicator",
+            () -> EntityType.Builder.<DamageIndicatorEntity>of(DamageIndicatorEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(0.5F, 0.5F)
+                    .build("damage_indicator"));
 
 }

@@ -29,7 +29,7 @@ import java.util.List;
 import static com.nexorel.et.EasyThere.EASY_THERE;
 
 public class AuraWand extends Item {
-
+    //TODO: improve nbt code
     private Entity e;
     private final IItemTier tier;
 

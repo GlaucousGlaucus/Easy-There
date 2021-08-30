@@ -31,8 +31,8 @@ public class SkillTabGUI extends AbstractGui {
     }
 
     public void init() {
-        int i = MathHelper.floor(this.scrollX) * 0;
-        int j = MathHelper.floor(this.scrollY) * 0;
+        int i = 0;
+        int j = 0;
         for (int m = 0; m < SkillScreen.Skills.VALUES.length; m++) {
             SkillScreen.Skills skill = SkillScreen.Skills.VALUES[m];
             addWidget(new SkillButtonWidget(this.skillScreen, skill, (this.skillScreen.width - 252) / 2 + i + 75, ((this.skillScreen.height - 139) / 2) + (j + (m * 35) + 30)));
@@ -112,7 +112,7 @@ public class SkillTabGUI extends AbstractGui {
 
         matrixStack.popPose();
         if (flag) {
-            this.fade = MathHelper.clamp(this.fade + 0.02F, 0.0F, 0.6F);
+            this.fade = MathHelper.clamp(this.fade + 0.009F, 0.0F, 0.45F);
         } else {
             this.fade = MathHelper.clamp(this.fade - 0.04F, 0.0F, 1.0F);
         }

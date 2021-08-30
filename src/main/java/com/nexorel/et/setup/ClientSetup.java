@@ -4,6 +4,7 @@ package com.nexorel.et.setup;
 import com.nexorel.et.Registries.ContainerInit;
 import com.nexorel.et.Registries.EntityInit;
 import com.nexorel.et.content.Entity.boss.aura.AuraRenderer;
+import com.nexorel.et.content.Entity.damage_ind.DamageIndicatorRenderer;
 import com.nexorel.et.content.Entity.projectile.aura_blast.AuraBlastRenderer;
 import com.nexorel.et.content.blocks.GemRefinery.GRS;
 import com.nexorel.et.content.items.talisBag.TalismanBagScreen;
@@ -32,6 +33,7 @@ public class ClientSetup {
         ScreenManager.register(ContainerInit.TBC.get(), TalismanBagScreen::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.AURA.get(), AuraRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityInit.AURA_BLAST.get(), AuraBlastRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityInit.DMG_IND.get(), DamageIndicatorRenderer::new);
 //        ClientRegistry.bindTileEntityRenderer(TileInit.AURA_INFESTED_TILE.get(), AuraInfestedRender::new);
         ClientRegistry.registerKeyBinding(TALISMAN_BAG_KEY);
 
