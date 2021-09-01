@@ -11,8 +11,11 @@ import static com.nexorel.et.EasyThere.EASY_THERE;
 
 public class TalismanItem extends Item {
 
-    public TalismanItem() {
+    private int cc;
+
+    public TalismanItem(int cc) {
         super(new Item.Properties().stacksTo(1).tab(EASY_THERE));
+        this.cc = cc;
     }
 
     public void getSpecialBuffs(World world, Entity entity) {
@@ -30,5 +33,13 @@ public class TalismanItem extends Item {
             BlockPos pos = entity.blockPosition();
             world.destroyBlock(pos.offset(0, 0, 0), false);
         }
+    }
+
+    public int getCc() {
+        return cc;
+    }
+
+    public void setCc(int cc) {
+        this.cc = cc;
     }
 }

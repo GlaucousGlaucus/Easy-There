@@ -14,6 +14,7 @@ import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.*;
 
 
@@ -31,8 +32,30 @@ public class SkillSetCommand {
                                 .then(Commands.literal("combat")
                                         .then(Commands.argument("level", IntegerArgumentType.integer(0, 20))
                                                 .executes(SkillSetCommand::setCombatSkillLvl)))
+                                .then(Commands.literal("crit_chance")
+                                        .then(Commands.argument("amount", IntegerArgumentType.integer(0, 100))
+                                                .executes(SkillSetCommand::setCritChance)))
                         );
         dispatcher.register(skill_set_cmd);
+    }
+
+    static int setCritChance(CommandContext<CommandSource> commandContext) throws CommandSyntaxException {
+        Entity entity = commandContext.getSource().getEntity();
+        if (entity instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) entity;
+            CombatSkill combatSkill = player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
+            int cc = IntegerArgumentType.getInteger(commandContext, "amount");
+            EasyThere.LOGGER.info("start" + cc);
+            combatSkill.setCrit_chance(MathHelper.clamp(cc, 0, 100));
+            combatSkill.shareData((ServerPlayerEntity) player);
+            EasyThere.LOGGER.info(combatSkill.getCrit_chance());
+            ITextComponent component = new StringTextComponent("Crit Chance Set to " + TextFormatting.AQUA + combatSkill.getCrit_chance());
+            TranslationTextComponent text =
+                    new TranslationTextComponent("chat.type.announcement",
+                            commandContext.getSource().getDisplayName(), component);
+            commandContext.getSource().getServer().getPlayerList().broadcastMessage(text, ChatType.CHAT, entity.getUUID());
+        }
+        return 1;
     }
 
     static int setCombatSkillLvl(CommandContext<CommandSource> commandContext) throws CommandSyntaxException {

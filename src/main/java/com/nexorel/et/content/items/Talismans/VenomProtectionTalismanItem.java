@@ -15,6 +15,16 @@ import java.util.List;
 
 public class VenomProtectionTalismanItem extends TalismanItem {
 
+    boolean flag = false;
+
+    public VenomProtectionTalismanItem() {
+        this(5);
+    }
+
+    public VenomProtectionTalismanItem(int cc) {
+        super(cc);
+    }
+
     @Override
     protected void SpecialBuffs(World world, Entity entity) {
         if (entity instanceof LivingEntity) {

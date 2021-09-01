@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -32,11 +33,12 @@ public class DamageIndicatorRenderer extends EntityRenderer<DamageIndicatorEntit
         FontRenderer fontRenderer = this.entityRenderDispatcher.getFont();
         matrixStack.pushPose();
         double d = Math.sqrt(this.entityRenderDispatcher.distanceToSqr(entity.getX(), entity.getY(), entity.getZ()));
+        d = MathHelper.clamp(d, 0, 2.5);
         float scale = (float) (0.006F * d);
         matrixStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
         matrixStack.scale(-scale, -scale, scale);
         float damage_number = entity.getDamage();
-        StringBuilder text = getDamageText(damage_number, entity.wasCrit());
+        StringBuilder text = getDamageText(damage_number, entity.wasCrit(), entity.getTargetAlive());
         float f1 = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
         int j = (int) (f1 * 255.0F) << 25;
         matrixStack.translate((-fontRenderer.width(text.toString()) / 2f) + 0.5f, 0, 0);
@@ -44,17 +46,18 @@ public class DamageIndicatorRenderer extends EntityRenderer<DamageIndicatorEntit
         matrixStack.popPose();
     }
 
-    private StringBuilder getDamageText(float damage_number, boolean wasCrit) {
+    private StringBuilder getDamageText(float damage_number, boolean wasCrit, boolean isAlive) {
         StringBuilder text = new StringBuilder();
-        TextFormatting dmg_type_txt = TextFormatting.RED;
-        if (wasCrit) dmg_type_txt = TextFormatting.DARK_RED;
+        TextFormatting dmg_type_txt = wasCrit ? TextFormatting.DARK_RED : TextFormatting.RED;
+        TextFormatting dmg_type_dmg = wasCrit ? TextFormatting.GOLD : TextFormatting.YELLOW;
+        String sword_or_skull = isAlive ? "\u2694" : "\u2620";
         text.append(dmg_type_txt);
-        text.append("\u2694 ");
+        text.append(sword_or_skull).append(" ");
         text.append(TextFormatting.RESET);
-        text.append(TextFormatting.GOLD);
+        text.append(dmg_type_dmg);
         text.append(df.format(damage_number));
         text.append(dmg_type_txt);
-        text.append(" \u2694");
+        text.append(" ").append(sword_or_skull);
         return text;
     }
 }

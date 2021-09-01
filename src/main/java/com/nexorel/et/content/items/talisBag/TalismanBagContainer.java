@@ -1,6 +1,7 @@
 package com.nexorel.et.content.items.talisBag;
 
 import com.nexorel.et.Registries.ContainerInit;
+import com.nexorel.et.content.items.Talismans.TalismanItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -10,6 +11,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TalismanBagContainer extends Container {
 
@@ -79,6 +82,14 @@ public class TalismanBagContainer extends Container {
         super.removed(playerEntity);
         this.itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
             this.itemStack.getOrCreateTag().put("inv", ((ItemStackHandler) h).serializeNBT());
+            int slots = this.inventory.getSlots();
+            AtomicInteger cc = new AtomicInteger();
+            for (int i = 0; i < slots; i++) {
+                ItemStack search_stack = h.getStackInSlot(i);
+                if (search_stack.getItem() instanceof TalismanItem)
+                    cc.addAndGet(((TalismanItem) search_stack.getItem()).getCc());
+            }
+            this.itemStack.getOrCreateTag().putInt("cc", cc.get());
         });
     }
 

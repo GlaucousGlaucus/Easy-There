@@ -1,7 +1,6 @@
 package com.nexorel.et.Registries;
 
 import com.nexorel.et.content.items.ModSpawnEggItem;
-import com.nexorel.et.content.items.Talismans.TalismanItem;
 import com.nexorel.et.content.items.Talismans.VenomProtectionTalismanItem;
 import com.nexorel.et.content.items.Weapons.AuraWand;
 import com.nexorel.et.content.items.talisBag.TalismanBagItem;
@@ -42,7 +41,7 @@ public class ItemInit {
     public static final RegistryObject<Item> AURA_SPAWN_EGG = ITEMS.register("aura_spawn_egg", ModSpawnEggItem::new);
 
     // Talismans
-    public static final RegistryObject<Item> TEST_TALISMAN = ITEMS.register("test_talisman", TalismanItem::new);
+//    public static final RegistryObject<Item> TEST_TALISMAN = ITEMS.register("test_talisman", TalismanItem::new);
     public static final RegistryObject<Item> VENOM_TALISMAN = ITEMS.register("venom_talisman", VenomProtectionTalismanItem::new);
 
 }

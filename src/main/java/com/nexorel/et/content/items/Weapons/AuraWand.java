@@ -1,9 +1,14 @@
 package com.nexorel.et.content.items.Weapons;
 
+import com.nexorel.et.EasyThere;
+import com.nexorel.et.capabilities.CombatSkill;
+import com.nexorel.et.capabilities.CombatSkillCapability;
+import com.nexorel.et.capabilities.SkillInteractions;
 import com.nexorel.et.content.items.IWandTiers;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemTier;
@@ -29,7 +34,6 @@ import java.util.List;
 import static com.nexorel.et.EasyThere.EASY_THERE;
 
 public class AuraWand extends Item {
-    //TODO: improve nbt code
     private Entity e;
     private final IItemTier tier;
 
@@ -42,22 +46,35 @@ public class AuraWand extends Item {
     public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         RayTraceResult result = player.pick(15.0, 2, false);
         ItemStack itemInHand = player.getItemInHand(hand);
-        CompoundNBT tag = itemInHand.getOrCreateTag();
+        CompoundNBT tag = itemInHand.getTag();
         if (!world.isClientSide) {
             if (!player.isCrouching()) {
-                if (tag.contains("test_mode")) {
-                    if (tag.getInt("test_mode") == 0) {
+                if (tag != null && tag.contains("test_mode")) {
+                    if (tag.getInt("test_mode") == 1) {
                         AuraBlast(result, player, world, itemInHand);
+                    } else if (tag.getInt("test_mode") == 2) {
+                        player.displayClientMessage(new StringTextComponent("Mode 2"), true);
+                    } else {
+                        player.displayClientMessage(new StringTextComponent(TextFormatting.RED + "PLEASE SELECT MODE"), true);
                     }
+                } else {
+                    player.displayClientMessage(new StringTextComponent(TextFormatting.RED + "PLEASE SELECT MODE"), true);
                 }
             } else {
-                if (!tag.contains("test_mode")) {
-                    tag.putInt("test_mode", 0);
+                if (tag == null) {
+                    tag = new CompoundNBT();
+                    itemInHand.setTag(tag);
                 }
-                if (tag.getInt("test_mode") + 1 < 2) {
-                    tag.putInt("test_mode", tag.getInt("test_mode") + 1);
+                if (tag.contains("test_mode")) {
+                    EasyThere.LOGGER.info("TEST_MODE: " + tag.getInt("test_mode"));
+                    if (tag.getInt("test_mode") == 1) {
+                        tag.putInt("test_mode", 2);
+                    } else {
+                        tag.putInt("test_mode", 1);
+                    }
+                    EasyThere.LOGGER.info("TEST_MODE: " + tag.getInt("test_mode"));
                 } else {
-                    tag.putInt("test_mode", 0);
+                    tag.putInt("test_mode", 1);
                 }
             }
         }
@@ -76,7 +93,15 @@ public class AuraWand extends Item {
             AxisAlignedBB b = new AxisAlignedBB(player.getX() - 5, player.getY() - 5, player.getZ() - 5, player.getX() + 5, player.getY() + 5, player.getZ() + 5);
             List<Entity> entities = world.getEntities(e, b);
             for (Entity target : entities) {
-                target.hurt(DamageSource.MAGIC, this.tier.getAttackDamageBonus());
+                if (target instanceof LivingEntity && !(target instanceof PlayerEntity)) {
+                    CombatSkill combatSkill = player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
+                    float final_dmg = SkillInteractions.calculate_damage_PT((LivingEntity) target, combatSkill, this.tier.getAttackDamageBonus());
+                    boolean flag = combatSkill.canCrit();
+                    final_dmg = flag ? (float) (final_dmg * 1.5) : final_dmg;
+                    target.hurt(DamageSource.MAGIC, final_dmg);
+                    SkillInteractions.summon_damage_indicator((LivingEntity) target, final_dmg, flag);
+                    EasyThere.LOGGER.info(target);
+                }
             }
         } else {
 
@@ -88,7 +113,15 @@ public class AuraWand extends Item {
             AxisAlignedBB b = new AxisAlignedBB(player.getX() - 5, player.getY() - 5, player.getZ() - 5, player.getX() + 5, player.getY() + 5, player.getZ() + 5);
             List<Entity> entities = world.getEntities(e, b);
             for (Entity target : entities) {
-                target.hurt(DamageSource.MAGIC, this.tier.getAttackDamageBonus());
+                if (target instanceof LivingEntity && !(target instanceof PlayerEntity)) {
+                    CombatSkill combatSkill = player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
+                    float final_dmg = SkillInteractions.calculate_damage_PT((LivingEntity) target, combatSkill, this.tier.getAttackDamageBonus());
+                    boolean flag = combatSkill.canCrit();
+                    final_dmg = flag ? (float) (final_dmg * 1.5) : final_dmg;
+                    target.hurt(DamageSource.MAGIC, final_dmg);
+                    SkillInteractions.summon_damage_indicator((LivingEntity) target, final_dmg, flag);
+                    EasyThere.LOGGER.info(target);
+                }
             }
         }
         ServerWorld serverWorld = (ServerWorld) world;
@@ -101,8 +134,12 @@ public class AuraWand extends Item {
     public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> textComponents, ITooltipFlag flag) {
         super.appendHoverText(stack, world, textComponents, flag);
         CompoundNBT tag = stack.getTag();
+        String[] modes = new String[2];
+        modes[0] = "Aura Blast";
+        modes[1] = "Smeth Else";
         if (tag != null) {
-            textComponents.add(new StringTextComponent(TextFormatting.GOLD + String.valueOf(tag.getInt("test_mode"))));
+            int mode_no = tag.getInt("test_mode");
+            textComponents.add(new StringTextComponent(TextFormatting.GOLD + String.valueOf(mode_no == 1 || mode_no == 2 ? modes[mode_no - 1] : "Select Mode")));
         } else {
             textComponents.add(new StringTextComponent(TextFormatting.GOLD + "RIP"));
         }

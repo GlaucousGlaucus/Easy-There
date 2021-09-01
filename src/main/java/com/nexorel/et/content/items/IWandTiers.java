@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.crafting.Ingredient;
 
 public enum IWandTiers implements IItemTier {
-    aura_scale(3, 2000, 1, 1, 10, ItemInit.DELERITE_CRYSTAL.get());
+    aura_scale(3, 2000, 1, 15, 10, ItemInit.DELERITE_CRYSTAL.get());
 
     private final int level;
     private final int uses;

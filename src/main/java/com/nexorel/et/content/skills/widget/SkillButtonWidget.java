@@ -15,6 +15,9 @@ public class SkillButtonWidget extends AbstractGui {
     private final SkillScreen.Skills icon;
     private int X;
     private int Y;
+    private static int r = 255;
+    private static int g = 0;
+    private static int b = 0;
     private SkillScreen skillScreen;
     private CombatSkill combatSkill = Minecraft.getInstance().player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
     public boolean isSelected;
@@ -35,6 +38,9 @@ public class SkillButtonWidget extends AbstractGui {
         if (!isSelected) {
             this.blit(matrixStack, (this.X), (this.Y), 0, 143, 25, 25);
             this.animationTime = -1L;
+            r = 255;
+            g = 0;
+            b = 0;
         }
         this.icon.drawIcon(Minecraft.getInstance().getItemRenderer(), this.X + 3, this.Y + 3);
     }
@@ -70,7 +76,7 @@ public class SkillButtonWidget extends AbstractGui {
         this.icon.drawIcon(Minecraft.getInstance().getItemRenderer(), this.X + 3, this.Y + 3);
     }
 
-    private int getLevelColor(int level) {
+    private static int getLevelColor(int level) {
         if (level == 0) {
             return 0xff0000;
         } else if (level <= 5) {
@@ -85,7 +91,7 @@ public class SkillButtonWidget extends AbstractGui {
         return 0;
     }
 
-    private int getXp_percent_color(double xp_percent) {
+    private static int getXp_percent_color(double xp_percent) {
         if (xp_percent <= 25) {
             return 0xff1500;
         } else if (xp_percent <= 50) {
@@ -124,24 +130,49 @@ public class SkillButtonWidget extends AbstractGui {
         }
 
         if (this.icon.getName().equals("skill.combat") && Minecraft.getInstance().player != null) {
-            Minecraft.getInstance().font.draw(matrixStack, "\u2694 Combat \u2694", this.X + 58, this.Y + 5, 0x0fff7); //-5592406
-            Minecraft.getInstance().font.draw(matrixStack, "Level:", this.X + 68, this.Y + 20, 0x0fff7); //-5592406
-            Minecraft.getInstance().font.draw(matrixStack, Integer.toString(CombatSkill.calculateLvlFromXp(this.combatSkill.getXp())), this.X + 98, this.Y + 20, getLevelColor(CombatSkill.calculateLvlFromXp(this.combatSkill.getXp())));
+            drawForCombat(matrixStack, this.combatSkill, this.X, this.Y);
+        }
+    }
 
-            double xp_percent = CombatSkill.getXPProgress(this.combatSkill);
+    private static void drawForCombat(MatrixStack matrixStack, CombatSkill combatSkill, int X, int Y) {
+        Minecraft.getInstance().font.draw(matrixStack, "\u2694 Combat \u2694", X + 58, Y + 5, 0x0fff7); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, "Level:", X + 68, Y + 20, 0x0fff7); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, Integer.toString(CombatSkill.calculateLvlFromXp(combatSkill.getXp())), X + 98, Y + 20, getLevelColor(CombatSkill.calculateLvlFromXp(combatSkill.getXp())));
 
-            Minecraft.getInstance().font.draw(matrixStack, xp_percent == -1 ? "" : "Progress To Level " + (CombatSkill.calculateLvlFromXp(this.combatSkill.getXp()) + 1), this.X + 35, this.Y + 35, 0x0fff7); //-5592406
-            if (xp_percent != -1)
-                Minecraft.getInstance().font.draw(matrixStack, xp_percent + " %", this.X + 50, this.Y + 53, getXp_percent_color(xp_percent)); //-5592406
+        double xp_percent = CombatSkill.getXPProgress(combatSkill);
 
-            StringBuilder bars = CombatSkill.getProgressBars(xp_percent);
-            if (xp_percent != -1)
-                Minecraft.getInstance().font.draw(matrixStack, "------------------", this.X + 35, this.Y + 45, 0);
-            Minecraft.getInstance().font.draw(matrixStack, bars.toString(), this.X + 35, this.Y + 45, xp_percent != -1 ? getXp_percent_color(xp_percent) : 0x00ff11); //-5592406
-            Minecraft.getInstance().font.draw(matrixStack, "XP: ", this.X + 35, this.Y + 65, 0x0fff7); //-5592406
-            Minecraft.getInstance().font.draw(matrixStack, Double.toString((double) Math.round(combatSkill.getXp() * 100) / 100), this.X + 55, this.Y + 65, 0x00f2ff); //-5592406
-            Minecraft.getInstance().font.draw(matrixStack, "Damage Multiplier: ", this.X + 35, this.Y + 80, 0x0fff7); //-5592406
-            Minecraft.getInstance().font.draw(matrixStack, Double.toString((double) Math.round(0.015 * (combatSkill.getLevel() ^ 2) * 100) / 100), this.X + 35 + Minecraft.getInstance().font.width("Damage Multiplier: "), this.Y + 80, 0x00f2ff); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, xp_percent == -1 ? "" : "Progress To Level " + (CombatSkill.calculateLvlFromXp(combatSkill.getXp()) + 1), X + 35, Y + 35, 0x0fff7); //-5592406
+        if (xp_percent != -1)
+            Minecraft.getInstance().font.draw(matrixStack, xp_percent + " %", X + 50, Y + 53, getXp_percent_color(xp_percent)); //-5592406
+
+        StringBuilder bars = CombatSkill.getProgressBars(xp_percent);
+        if (xp_percent != -1) Minecraft.getInstance().font.draw(matrixStack, "------------------", X + 35, Y + 45, 0);
+        Minecraft.getInstance().font.draw(matrixStack, bars.toString(), X + 35, Y + 45, xp_percent != -1 ? getXp_percent_color(xp_percent) : 0x00ff11); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, "XP: ", X + 35, Y + 65, 0x0fff7); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, Double.toString((double) Math.round(combatSkill.getXp() * 100) / 100), X + 55, Y + 65, 0x77ff00); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, "Crit Chance: ", X + 35, Y + 80, 0x0fff7); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, combatSkill.getCrit_chance() + " %", X + 35 + Minecraft.getInstance().font.width("Crit Chance: "), Y + 80, 0x77ff00); //-5592406
+        if (xp_percent == -1) {
+            rgbINC();
+            String hex = String.format("%02x%02x%02x", r, g, b);
+            int Hex = Integer.parseInt(hex, 16);
+            Minecraft.getInstance().font.draw(matrixStack, "SKILL MAXED", X + (57), Y + 42, Hex);
+        }
+    }
+
+    private static void rgbINC() {
+        if (r > 0 && g < 255 && b == 0) {
+            g += 3;
+        } else if (r > 0 && g == 255 && b == 0) {
+            r -= 3;
+        } else if (r == 0 && g == 255 && b < 255) {
+            b += 3;
+        } else if (r == 0 && g > 0 && b == 255) {
+            g -= 3;
+        } else if (r < 255 && g == 0 && b == 255) {
+            r += 3;
+        } else if (r == 255 && g == 0 && b > 0) {
+            b -= 3;
         }
     }
 

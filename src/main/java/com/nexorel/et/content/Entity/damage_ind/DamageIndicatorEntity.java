@@ -16,16 +16,18 @@ public class DamageIndicatorEntity extends Entity implements IEntityAdditionalSp
     private int age;
     private float damage = 100;
     private boolean wasCrit;
+    private boolean targetAlive;
 
     public DamageIndicatorEntity(EntityType<? extends DamageIndicatorEntity> w, World world) {
         super(w, world);
         this.noPhysics = true;
     }
 
-    public DamageIndicatorEntity(World world, float damage, boolean wasCrit) {
+    public DamageIndicatorEntity(World world, float damage, boolean wasCrit, boolean targetAlive) {
         super(EntityInit.DMG_IND.get(), world);
         this.damage = damage;
         this.wasCrit = wasCrit;
+        this.targetAlive = targetAlive;
     }
 
     @Override
@@ -46,6 +48,10 @@ public class DamageIndicatorEntity extends Entity implements IEntityAdditionalSp
         return this.wasCrit;
     }
 
+    public boolean getTargetAlive() {
+        return this.targetAlive;
+    }
+
     @Override
     protected void defineSynchedData() {
 
@@ -56,6 +62,7 @@ public class DamageIndicatorEntity extends Entity implements IEntityAdditionalSp
         this.age = nbt.getInt("age");
         this.damage = nbt.getFloat("damage");
         this.wasCrit = nbt.getBoolean("was_crit");
+        this.targetAlive = nbt.getBoolean("target_alive");
     }
 
     @Override
@@ -63,6 +70,7 @@ public class DamageIndicatorEntity extends Entity implements IEntityAdditionalSp
         nbt.putInt("age", this.age);
         nbt.putFloat("damage", this.damage);
         nbt.putBoolean("was_crit", this.wasCrit);
+        nbt.putBoolean("target_alive", this.targetAlive);
     }
 
     @Override
@@ -75,6 +83,7 @@ public class DamageIndicatorEntity extends Entity implements IEntityAdditionalSp
         buffer.writeInt(this.age);
         buffer.writeFloat(this.damage);
         buffer.writeBoolean(this.wasCrit);
+        buffer.writeBoolean(this.targetAlive);
     }
 
     @Override
@@ -82,6 +91,7 @@ public class DamageIndicatorEntity extends Entity implements IEntityAdditionalSp
         this.age = additionalData.readInt();
         this.damage = additionalData.readFloat();
         this.wasCrit = additionalData.readBoolean();
+        this.targetAlive = additionalData.readBoolean();
     }
 
     @Override

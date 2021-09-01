@@ -25,8 +25,7 @@ import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
 
 /**
- * TODO: Add a gui interface to my skills
- * oh yeah and add more skills
+ * TODO: oh yeah and add more skills
  */
 
 @Mod("et")
@@ -34,9 +33,10 @@ public class EasyThere {
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
 
+    // TODO: Update to 1.17
+
     public EasyThere() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ETConfig.CLIENT_CONFIG);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ETConfig.SERVER_CONFIG);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ETConfig.commonSpec);
 
         GeckoLib.initialize();
 

@@ -6,7 +6,7 @@ import com.nexorel.et.Network.SkillPacket;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.DoubleNBT;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -18,13 +18,15 @@ import java.util.Map;
 public class CombatSkill {
 
     private double xp;
+    private int crit_chance;
 
     public CombatSkill() {
-        this(0);
+        this(0, 0);
     }
 
-    public CombatSkill(double points) {
+    public CombatSkill(double points, int crit_chance) {
         this.xp = points;
+        this.crit_chance = crit_chance;
     }
 
     public static double calculateXpForLevel(int level) {
@@ -60,6 +62,10 @@ public class CombatSkill {
         return Math.max(mob_level, 1);
     }
 
+    public boolean canCrit() {
+        return Math.random() < ((float) this.crit_chance / 100);
+    }
+
     public static float getCombatXPForMob(int mob_level) {
         return (float) (mob_level * 6.25);
     }
@@ -89,7 +95,7 @@ public class CombatSkill {
             }
             return bars;
         } else {
-            return bars.append("SKILL MAXED");
+            return bars;
         }
     }
 
@@ -185,13 +191,29 @@ public class CombatSkill {
         return this.xp;
     }
 
+    public int getCrit_chance() {
+        return this.crit_chance;
+    }
+
     public void setXp(double points) {
         xp = 0;
         xp = points;
     }
 
+    public void setCrit_chance(int cc) {
+        crit_chance = 0;
+        crit_chance = cc;
+    }
+
+    public void addCC(double amount) {
+        this.crit_chance += amount;
+    }
+
     public void shareData(ServerPlayerEntity playerEntity) {
-        EasyTherePacketHandler.sendDataToClient(new SkillPacket(this.getXp()), playerEntity);
+        CompoundNBT nbt = new CompoundNBT();
+        nbt.putDouble("xp", this.xp);
+        nbt.putInt("crit_chance", this.crit_chance);
+        EasyTherePacketHandler.sendDataToClient(new SkillPacket(nbt), playerEntity);
     }
 
     public static class CombatSkillNBTStorage implements Capability.IStorage<CombatSkill> {
@@ -199,16 +221,18 @@ public class CombatSkill {
         @Nullable
         @Override
         public INBT writeNBT(Capability<CombatSkill> capability, CombatSkill instance, Direction side) {
-            return DoubleNBT.valueOf(instance.xp);
+            CompoundNBT compoundNBT = new CompoundNBT();
+            compoundNBT.putDouble("xp", instance.xp);
+            compoundNBT.putInt("crit_chance", instance.crit_chance);
+            return compoundNBT;
         }
 
         @Override
         public void readNBT(Capability<CombatSkill> capability, CombatSkill instance, Direction side, INBT nbt) {
-            double xp = 0;
-            if (nbt.getType() == DoubleNBT.TYPE) {
-                xp = ((DoubleNBT) nbt).getAsDouble();
-            }
-            instance.setXp(xp);
+            if (!(nbt instanceof CompoundNBT)) return;
+            CompoundNBT compoundNBT = (CompoundNBT) nbt;
+            instance.setXp(compoundNBT.getDouble("xp"));
+            instance.setCrit_chance(compoundNBT.getInt("crit_chance"));
         }
     }
 
