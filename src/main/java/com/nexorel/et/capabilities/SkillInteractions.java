@@ -79,17 +79,23 @@ public class SkillInteractions {
     // TODO: Fix cap on death
     @SubscribeEvent
     public static void PlayerRespawnEvent(PlayerEvent.Clone event) {
-        ServerPlayer serverPlayerEntity = (ServerPlayer) event.getOriginal();
-        if (!serverPlayerEntity.level.isClientSide) {
-            EasyThere.LOGGER.info("test");
-            serverPlayerEntity.reviveCaps();
+        ServerPlayer serverPlayerEntity_original = (ServerPlayer) event.getOriginal();
+        ServerPlayer serverPlayerEntity_new = (ServerPlayer) event.getPlayer();
+        if (!serverPlayerEntity_original.level.isClientSide) {
+            EasyThere.LOGGER.info("test - Z");
+            serverPlayerEntity_original.reviveCaps();
             if (event.isWasDeath()) {
-                serverPlayerEntity.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(combatSkill -> {
-                    combatSkill.shareData(serverPlayerEntity);
-                    EasyThere.LOGGER.info("passed");
+                serverPlayerEntity_original.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(combatSkill -> {
+                    serverPlayerEntity_new.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(combatSkill_new -> {
+                        combatSkill_new.setXp(combatSkill.getXp());
+                        combatSkill_new.setCrit_chance(combatSkill.getCrit_chance());
+                        combatSkill_new.shareData(serverPlayerEntity_new);
+                        EasyThere.LOGGER.info("passed - A");
+                    });
+                    EasyThere.LOGGER.info("passed - B");
                 });
             }
-            serverPlayerEntity.invalidateCaps();
+            serverPlayerEntity_original.invalidateCaps();
         }
     }
 
