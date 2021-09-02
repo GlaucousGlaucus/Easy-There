@@ -2,30 +2,28 @@ package com.nexorel.et.content.blocks.GemRefinery;
 
 import com.google.gson.JsonObject;
 import com.nexorel.et.Registries.RecipeInit;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
-public class GemRefiningRecipe implements IRecipe<IInventory> {
+public class GemRefiningRecipe implements Recipe<Container> {
 
     protected final Ingredient ingredient;
     protected final Ingredient ingredient1;
     protected final ItemStack result;
-    private final IRecipeType<?> type;
-    private final IRecipeSerializer<?> serializer;
+    private final RecipeType<?> type;
+    private final RecipeSerializer<?> serializer;
     protected final ResourceLocation id;
 
 
@@ -39,12 +37,12 @@ public class GemRefiningRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public boolean matches(IInventory inv, World world) {
+    public boolean matches(Container inv, Level world) {
         return this.ingredient.test(inv.getItem(0)) && this.ingredient1.test(inv.getItem(1));
     }
 
     @Override
-    public ItemStack assemble(IInventory inventory) {
+    public ItemStack assemble(Container inventory) {
         return this.result.copy();
     }
 
@@ -68,23 +66,23 @@ public class GemRefiningRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return RecipeInit.GEM_REFINING.get();
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return RecipeInit.GEM_REFINING_TYPE;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<GemRefiningRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<GemRefiningRecipe> {
 
         @Override
         public GemRefiningRecipe fromJson(ResourceLocation RecipeID, JsonObject json) {
             Ingredient ingredient = Ingredient.fromJson(json.get("a"));
             Ingredient ingredient_1 = Ingredient.fromJson(json.get("b"));
-            ResourceLocation itemID = new ResourceLocation(JSONUtils.getAsString(json, "result"));
-            int count= JSONUtils.getAsInt(json, "count", 1);
+            ResourceLocation itemID = new ResourceLocation(GsonHelper.getAsString(json, "result"));
+            int count = GsonHelper.getAsInt(json, "count", 1);
 
             ItemStack result = new ItemStack(ForgeRegistries.ITEMS.getValue(itemID), count);
 
@@ -93,7 +91,7 @@ public class GemRefiningRecipe implements IRecipe<IInventory> {
 
         @Nullable
         @Override
-        public GemRefiningRecipe fromNetwork(ResourceLocation RecipeID, PacketBuffer buffer) {
+        public GemRefiningRecipe fromNetwork(ResourceLocation RecipeID, FriendlyByteBuf buffer) {
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
             Ingredient ingredient1 = Ingredient.fromNetwork(buffer);
             ItemStack result = buffer.readItem();
@@ -101,7 +99,7 @@ public class GemRefiningRecipe implements IRecipe<IInventory> {
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, GemRefiningRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, GemRefiningRecipe recipe) {
             recipe.ingredient.toNetwork(buffer);
             recipe.ingredient1.toNetwork(buffer);
             buffer.writeItem(recipe.result);

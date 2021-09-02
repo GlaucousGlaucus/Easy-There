@@ -1,9 +1,7 @@
 package com.nexorel.et.capabilities;
 
-import com.nexorel.et.EasyThere;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -11,7 +9,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class SkillsCapProvider implements ICapabilitySerializable<INBT> {
+public class SkillsCapProvider implements ICapabilitySerializable<CompoundTag> {
 
     private CombatSkill combat_skill = new CombatSkill();
     private final static String COMBAT_SKILL_NBT = "combat_skill";
@@ -26,22 +24,22 @@ public class SkillsCapProvider implements ICapabilitySerializable<INBT> {
     }
 
     @Override
-    public INBT serializeNBT() {
-        CompoundNBT compoundNBT = new CompoundNBT();
-        INBT combat_skill = CombatSkillCapability.COMBAT_CAP.writeNBT(this.combat_skill, null);
-        compoundNBT.put(COMBAT_SKILL_NBT, combat_skill);
-        return compoundNBT;
+    public CompoundTag serializeNBT() {
+        if (CombatSkillCapability.COMBAT_CAP == null) {
+            return new CompoundTag();
+        } else {
+            CompoundTag tag = new CompoundTag();
+            tag.putDouble("xp", combat_skill.getXp());
+            tag.putInt("crit_chance", combat_skill.getCrit_chance());
+            return tag;
+        }
     }
 
     @Override
-    public void deserializeNBT(INBT nbt) {
-        if (nbt.getId() != new CompoundNBT().getId()) {
-            EasyThere.LOGGER.warn("Unexpected NBT type" + nbt);
-            return;
+    public void deserializeNBT(CompoundTag nbt) {
+        if (CombatSkillCapability.COMBAT_CAP != null) {
+            combat_skill.setCrit_chance(nbt.getInt("crit_chance"));
+            combat_skill.setXp(nbt.getDouble("xp"));
         }
-        CompoundNBT compoundNBT = (CompoundNBT) nbt;
-        INBT combat_skill_nbt = compoundNBT.get(COMBAT_SKILL_NBT);
-
-        CombatSkillCapability.COMBAT_CAP.readNBT(combat_skill, null, combat_skill_nbt);
     }
 }

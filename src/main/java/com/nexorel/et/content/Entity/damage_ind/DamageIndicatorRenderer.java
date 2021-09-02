@@ -1,14 +1,14 @@
 package com.nexorel.et.content.Entity.damage_ind;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -19,8 +19,8 @@ public class DamageIndicatorRenderer extends EntityRenderer<DamageIndicatorEntit
 
     private static final DecimalFormat df = new DecimalFormat("###,###,###,###.##");
 
-    public DamageIndicatorRenderer(EntityRendererManager manager) {
-        super(manager);
+    public DamageIndicatorRenderer(EntityRendererProvider.Context context) {
+        super(context);
     }
 
     @Override
@@ -29,11 +29,11 @@ public class DamageIndicatorRenderer extends EntityRenderer<DamageIndicatorEntit
     }
 
     @Override
-    public void render(DamageIndicatorEntity entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
-        FontRenderer fontRenderer = this.entityRenderDispatcher.getFont();
+    public void render(DamageIndicatorEntity entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
+        Font fontRenderer = this.getFont();
         matrixStack.pushPose();
         double d = Math.sqrt(this.entityRenderDispatcher.distanceToSqr(entity.getX(), entity.getY(), entity.getZ()));
-        d = MathHelper.clamp(d, 0, 2.5);
+        d = Mth.clamp(d, 0, 2.5);
         float scale = (float) (0.006F * d);
         matrixStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
         matrixStack.scale(-scale, -scale, scale);
@@ -48,12 +48,12 @@ public class DamageIndicatorRenderer extends EntityRenderer<DamageIndicatorEntit
 
     private StringBuilder getDamageText(float damage_number, boolean wasCrit, boolean isAlive) {
         StringBuilder text = new StringBuilder();
-        TextFormatting dmg_type_txt = wasCrit ? TextFormatting.DARK_RED : TextFormatting.RED;
-        TextFormatting dmg_type_dmg = wasCrit ? TextFormatting.GOLD : TextFormatting.YELLOW;
+        ChatFormatting dmg_type_txt = wasCrit ? ChatFormatting.DARK_RED : ChatFormatting.RED;
+        ChatFormatting dmg_type_dmg = wasCrit ? ChatFormatting.GOLD : ChatFormatting.YELLOW;
         String sword_or_skull = isAlive ? "\u2694" : "\u2620";
         text.append(dmg_type_txt);
         text.append(sword_or_skull).append(" ");
-        text.append(TextFormatting.RESET);
+        text.append(ChatFormatting.RESET);
         text.append(dmg_type_dmg);
         text.append(df.format(damage_number));
         text.append(dmg_type_txt);

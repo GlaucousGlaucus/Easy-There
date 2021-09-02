@@ -1,11 +1,11 @@
 package com.nexorel.et.Network;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkRegistry;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 
 public class EasyTherePacketHandler {
     private static final String PROTOCOL_VERSION = "1";
@@ -26,7 +26,7 @@ public class EasyTherePacketHandler {
                 SkillPacket.Handler::handle);
     }
 
-    public static void sendDataToClient(Object msg, ServerPlayerEntity player) {
+    public static void sendDataToClient(Object msg, ServerPlayer player) {
         if (!(player instanceof FakePlayer)) {
             INSTANCE.sendTo(msg, player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
         }

@@ -1,16 +1,16 @@
 package com.nexorel.et.content.skills;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import static com.nexorel.et.Reference.MOD_ID;
 
@@ -22,10 +22,10 @@ public class SkillScreen extends Screen {
     private boolean isScrolling;
     private ResourceLocation GUI = new ResourceLocation(MOD_ID, "textures/gui/skill_window.png");
     public static ResourceLocation SKILL_ASSETS_LOC = new ResourceLocation(MOD_ID, "textures/gui/skill_window.png");
-    private PlayerEntity player;
+    private Player player;
 
     public SkillScreen() {
-        super(new TranslationTextComponent("screen.et.skills"));
+        super(new TranslatableComponent("screen.et.skills"));
         this.player = Minecraft.getInstance().player;
     }
 
@@ -48,7 +48,7 @@ public class SkillScreen extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         int relX = (this.width - WIDTH) / 2;
         int relY = (this.height - HEIGHT) / 2;
 //        long time = Util.getMillis();
@@ -61,7 +61,7 @@ public class SkillScreen extends Screen {
         renderTooltips(matrixStack, relX, relY, mouseX, mouseY, partialTicks, Time);
     }
 
-    private void renderInside(MatrixStack matrixStack, int mouseX, int mouseY, int x, int y, float partialTicks, long Time) {
+    private void renderInside(PoseStack matrixStack, int mouseX, int mouseY, int x, int y, float partialTicks, long Time) {
         SkillTabGUI skillTabGUI = this.skillTabGUI;
         if (skillTabGUI == null) {
             fill(matrixStack, x + 9, y + 18, x + 9 + 234, y + 18 + 113, -16777216);
@@ -75,20 +75,17 @@ public class SkillScreen extends Screen {
         }
     }
 
-    public void renderWindow(MatrixStack matrixStack, int p_238695_2_, int p_238695_3_) {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+    public void renderWindow(PoseStack matrixStack, int p_238695_2_, int p_238695_3_) {
         RenderSystem.enableBlend();
-        this.minecraft.getTextureManager().bind(GUI);
+        RenderSystem.setShaderTexture(0, GUI);
         this.blit(matrixStack, p_238695_2_, p_238695_3_, 0, 0, 252, 140);
-
-        RenderSystem.enableRescaleNormal();
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
 
         this.font.draw(matrixStack, "Skills", (float) (p_238695_2_ + 8), (float) (p_238695_3_ + 6), 4210752);
     }
 
-    public void renderTooltips(MatrixStack matrixStack, int x, int y, int mouseX, int mouseY, float partialTicks, long Time) {
+    public void renderTooltips(PoseStack matrixStack, int x, int y, int mouseX, int mouseY, float partialTicks, long Time) {
         matrixStack.translate((float) (x + 9), (float) (y + 18), 0.0F);
         this.skillTabGUI.drawTooltips(matrixStack, x, y, mouseX, mouseY, partialTicks, Time);
     }

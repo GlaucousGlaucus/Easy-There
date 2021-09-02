@@ -5,28 +5,28 @@ import com.nexorel.et.capabilities.CombatSkill;
 import com.nexorel.et.capabilities.CombatSkillCapability;
 import com.nexorel.et.capabilities.SkillInteractions;
 import com.nexorel.et.content.items.IWandTiers;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -35,7 +35,7 @@ import static com.nexorel.et.EasyThere.EASY_THERE;
 
 public class AuraWand extends Item {
     private Entity e;
-    private final IItemTier tier;
+    private final Tier tier;
 
     public AuraWand() {
         super(new Item.Properties().tab(EASY_THERE).defaultDurability(IWandTiers.aura_scale.getUses()));
@@ -43,26 +43,26 @@ public class AuraWand extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
-        RayTraceResult result = player.pick(15.0, 2, false);
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+        HitResult result = player.pick(15.0, 2, false);
         ItemStack itemInHand = player.getItemInHand(hand);
-        CompoundNBT tag = itemInHand.getTag();
+        CompoundTag tag = itemInHand.getTag();
         if (!world.isClientSide) {
             if (!player.isCrouching()) {
                 if (tag != null && tag.contains("test_mode")) {
                     if (tag.getInt("test_mode") == 1) {
                         AuraBlast(result, player, world, itemInHand);
                     } else if (tag.getInt("test_mode") == 2) {
-                        player.displayClientMessage(new StringTextComponent("Mode 2"), true);
+                        player.displayClientMessage(new TextComponent("Mode 2"), true);
                     } else {
-                        player.displayClientMessage(new StringTextComponent(TextFormatting.RED + "PLEASE SELECT MODE"), true);
+                        player.displayClientMessage(new TextComponent(ChatFormatting.RED + "PLEASE SELECT MODE"), true);
                     }
                 } else {
-                    player.displayClientMessage(new StringTextComponent(TextFormatting.RED + "PLEASE SELECT MODE"), true);
+                    player.displayClientMessage(new TextComponent(ChatFormatting.RED + "PLEASE SELECT MODE"), true);
                 }
             } else {
                 if (tag == null) {
-                    tag = new CompoundNBT();
+                    tag = new CompoundTag();
                     itemInHand.setTag(tag);
                 }
                 if (tag.contains("test_mode")) {
@@ -78,7 +78,7 @@ public class AuraWand extends Item {
                 }
             }
         }
-        return ActionResult.success(itemInHand);
+        return InteractionResultHolder.success(itemInHand);
     }
 
     @Override
@@ -86,14 +86,14 @@ public class AuraWand extends Item {
         return false;
     }
 
-    private void AuraBlast(RayTraceResult result, PlayerEntity player, World world, ItemStack itemInHand) {
-        if (result.getType() == RayTraceResult.Type.BLOCK) {
-            Vector3d location = result.getLocation();
+    private void AuraBlast(HitResult result, Player player, Level world, ItemStack itemInHand) {
+        if (result.getType() == HitResult.Type.BLOCK) {
+            Vec3 location = result.getLocation();
             player.moveTo(location.x, location.y, location.z);
-            AxisAlignedBB b = new AxisAlignedBB(player.getX() - 5, player.getY() - 5, player.getZ() - 5, player.getX() + 5, player.getY() + 5, player.getZ() + 5);
+            AABB b = new AABB(player.getX() - 5, player.getY() - 5, player.getZ() - 5, player.getX() + 5, player.getY() + 5, player.getZ() + 5);
             List<Entity> entities = world.getEntities(e, b);
             for (Entity target : entities) {
-                if (target instanceof LivingEntity && !(target instanceof PlayerEntity)) {
+                if (target instanceof LivingEntity && !(target instanceof Player)) {
                     CombatSkill combatSkill = player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
                     float final_dmg = SkillInteractions.calculate_damage_PT((LivingEntity) target, combatSkill, this.tier.getAttackDamageBonus());
                     boolean flag = combatSkill.canCrit();
@@ -106,14 +106,14 @@ public class AuraWand extends Item {
         } else {
 
             int dist = 5;
-            double x = -dist * Math.sin(Math.toRadians(player.yRot)) * Math.cos(Math.toRadians(player.xRot));
-            double y = -dist * Math.sin(Math.toRadians(player.xRot));
-            double z = dist * Math.cos(Math.toRadians(player.yRot)) * Math.cos(Math.toRadians(player.xRot));
+            double x = -dist * Math.sin(Math.toRadians(player.getYRot())) * Math.cos(Math.toRadians(player.getXRot()));
+            double y = -dist * Math.sin(Math.toRadians(player.getXRot()));
+            double z = dist * Math.cos(Math.toRadians(player.getYRot())) * Math.cos(Math.toRadians(player.getXRot()));
             player.moveTo(player.getX() + x, player.getY() + y + 0.5, player.getZ() + z);
-            AxisAlignedBB b = new AxisAlignedBB(player.getX() - 5, player.getY() - 5, player.getZ() - 5, player.getX() + 5, player.getY() + 5, player.getZ() + 5);
+            AABB b = new AABB(player.getX() - 5, player.getY() - 5, player.getZ() - 5, player.getX() + 5, player.getY() + 5, player.getZ() + 5);
             List<Entity> entities = world.getEntities(e, b);
             for (Entity target : entities) {
-                if (target instanceof LivingEntity && !(target instanceof PlayerEntity)) {
+                if (target instanceof LivingEntity && !(target instanceof Player)) {
                     CombatSkill combatSkill = player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
                     float final_dmg = SkillInteractions.calculate_damage_PT((LivingEntity) target, combatSkill, this.tier.getAttackDamageBonus());
                     boolean flag = combatSkill.canCrit();
@@ -124,27 +124,27 @@ public class AuraWand extends Item {
                 }
             }
         }
-        ServerWorld serverWorld = (ServerWorld) world;
-        Vector3d epos = player.position();
+        ServerLevel serverWorld = (ServerLevel) world;
+        Vec3 epos = player.position();
         serverWorld.sendParticles(ParticleTypes.EXPLOSION, epos.x, epos.y, epos.z, 20, 0.5, 0.5, 0.5, 0);
-        itemInHand.hurtAndBreak(1, player, playerEntity -> playerEntity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
+        itemInHand.hurtAndBreak(1, player, playerEntity -> playerEntity.broadcastBreakEvent(EquipmentSlot.MAINHAND));
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> textComponents, ITooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> textComponents, TooltipFlag flag) {
         super.appendHoverText(stack, world, textComponents, flag);
-        CompoundNBT tag = stack.getTag();
+        CompoundTag tag = stack.getTag();
         String[] modes = new String[2];
         modes[0] = "Aura Blast";
         modes[1] = "Smeth Else";
         if (tag != null) {
             int mode_no = tag.getInt("test_mode");
-            textComponents.add(new StringTextComponent(TextFormatting.GOLD + String.valueOf(mode_no == 1 || mode_no == 2 ? modes[mode_no - 1] : "Select Mode")));
+            textComponents.add(new TextComponent(ChatFormatting.GOLD + String.valueOf(mode_no == 1 || mode_no == 2 ? modes[mode_no - 1] : "Select Mode")));
         } else {
-            textComponents.add(new StringTextComponent(TextFormatting.GOLD + "RIP"));
+            textComponents.add(new TextComponent(ChatFormatting.GOLD + "RIP"));
         }
         if (Screen.hasShiftDown()) {
-            textComponents.add(new StringTextComponent(TextFormatting.GOLD + "Wanted to make the hyperion ability from Hypixel Skyblock. This is my version"));
+            textComponents.add(new TextComponent(ChatFormatting.GOLD + "Wanted to make the hyperion ability from Hypixel Skyblock. This is my version"));
         }
     }
 }

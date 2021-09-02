@@ -1,8 +1,8 @@
 package com.nexorel.et.content.items.talisBag;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -13,7 +13,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TalismanBagCapability extends CapabilityProvider implements ICapabilitySerializable<CompoundNBT> {
+public class TalismanBagCapability extends CapabilityProvider implements ICapabilitySerializable<CompoundTag> {
 
     private ItemStackHandler inventory = new ItemStackHandler(54) {
         @Override
@@ -40,14 +40,14 @@ public class TalismanBagCapability extends CapabilityProvider implements ICapabi
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT tag = new CompoundNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag tag = new CompoundTag();
         tag.put("inv", this.inventory.serializeNBT());
         return tag;
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         this.inventory.deserializeNBT(nbt);
     }
 }

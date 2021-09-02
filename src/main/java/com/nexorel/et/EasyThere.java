@@ -8,12 +8,12 @@ import com.nexorel.et.capabilities.SkillInteractions;
 import com.nexorel.et.content.Entity.boss.aura.AuraEntity;
 import com.nexorel.et.setup.ClientSetup;
 import com.nexorel.et.setup.ETConfig;
-import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -22,7 +22,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import software.bernie.geckolib3.GeckoLib;
 
 /**
  * TODO: oh yeah and add more skills
@@ -33,22 +32,19 @@ public class EasyThere {
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
 
-    // TODO: Update to 1.17
-
     public EasyThere() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ETConfig.commonSpec);
-
-        GeckoLib.initialize();
 
         EasyTherePacketHandler.register();
         EntityInit.initialization();
         ItemInit.init();
         BlockInit.init();
-        TileInit.init();
+        BlockEntityInit.init();
         ContainerInit.init();
         RecipeInit.init();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onAttributeCreate);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
 
         // Register ourselves for server and other game events we are interested in
@@ -63,14 +59,13 @@ public class EasyThere {
         MinecraftForge.EVENT_BUS.register(AttachCap.class);
         MinecraftForge.EVENT_BUS.register(SkillInteractions.class);
         MinecraftForge.EVENT_BUS.register(CommandInit.class);
-
-        event.enqueueWork(() -> {
-            GlobalEntityTypeAttributes.put(EntityInit.AURA.get(), AuraEntity.prepareAttributes().build());
-//            GlobalEntityTypeAttributes.put(EntityInit.DMG_IND.get(), DamageIndicatorEntity.prepareAttributes().build());
-        });
     }
 
-    public static final ItemGroup EASY_THERE = new ItemGroup("easy_there") {
+    public void onAttributeCreate(EntityAttributeCreationEvent event) {
+        event.put(EntityInit.AURA.get(), AuraEntity.prepareAttributes().build());
+    }
+
+    public static final CreativeModeTab EASY_THERE = new CreativeModeTab("easy_there") {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(Items.POTION);

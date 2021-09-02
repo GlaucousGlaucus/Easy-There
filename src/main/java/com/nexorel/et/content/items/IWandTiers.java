@@ -1,11 +1,11 @@
 package com.nexorel.et.content.items;
 
 import com.nexorel.et.Registries.ItemInit;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.crafting.Ingredient;
 
-public enum IWandTiers implements IItemTier {
+public enum IWandTiers implements Tier {
     aura_scale(3, 2000, 1, 15, 10, ItemInit.DELERITE_CRYSTAL.get());
 
     private final int level;

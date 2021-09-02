@@ -2,27 +2,27 @@ package com.nexorel.et.Network;
 
 import com.nexorel.et.capabilities.CombatSkillCapability;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
 public class SkillPacket {
 
-    private final CompoundNBT nbt;
+    private final CompoundTag nbt;
 
-    public SkillPacket(CompoundNBT nbt) {
+    public SkillPacket(CompoundTag nbt) {
         this.nbt = nbt;
     }
 
-    public static void encodeMsg(SkillPacket msg, PacketBuffer buffer) {
+    public static void encodeMsg(SkillPacket msg, FriendlyByteBuf buffer) {
         buffer.writeNbt(msg.nbt);
     }
 
-    public static SkillPacket decodeMsg(PacketBuffer buffer) {
+    public static SkillPacket decodeMsg(FriendlyByteBuf buffer) {
         return new SkillPacket(buffer.readNbt());
     }
 

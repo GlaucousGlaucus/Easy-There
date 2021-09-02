@@ -2,11 +2,11 @@ package com.nexorel.et.content.items.talisBag;
 
 import com.nexorel.et.Registries.ContainerInit;
 import com.nexorel.et.content.items.Talismans.TalismanItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -14,13 +14,13 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class TalismanBagContainer extends Container {
+public class TalismanBagContainer extends AbstractContainerMenu {
 
     private int blocked = -1;
     private ItemStack itemStack;
     private IItemHandler inventory;
 
-    public TalismanBagContainer(int id, PlayerInventory playerInventory, PlayerEntity player) {
+    public TalismanBagContainer(int id, Inventory playerInventory, Player player) {
         super(ContainerInit.TBC.get(), id);
         this.itemStack = getHeldItem(player);
         this.itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
@@ -47,7 +47,7 @@ public class TalismanBagContainer extends Container {
         for (int x = 0; x < 9; ++x) {
             Slot slot = addSlot(new Slot(playerInventory, x, 8 + x * 18, 162 + yOffset) {
                 @Override
-                public boolean mayPickup(PlayerEntity playerIn) {
+                public boolean mayPickup(Player playerIn) {
                     return getSlotIndex() != blocked;
                 }
             });
@@ -58,7 +58,7 @@ public class TalismanBagContainer extends Container {
         }
     }
 
-    private static ItemStack getHeldItem(PlayerEntity player) {
+    private static ItemStack getHeldItem(Player player) {
         if (isTalisBag(player.getMainHandItem())) {
             return player.getMainHandItem();
         }
@@ -73,12 +73,12 @@ public class TalismanBagContainer extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerEntity) {
+    public boolean stillValid(Player playerEntity) {
         return true;
     }
 
     @Override
-    public void removed(PlayerEntity playerEntity) {
+    public void removed(Player playerEntity) {
         super.removed(playerEntity);
         this.itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
             this.itemStack.getOrCreateTag().put("inv", ((ItemStackHandler) h).serializeNBT());
@@ -94,7 +94,7 @@ public class TalismanBagContainer extends Container {
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {

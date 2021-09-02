@@ -1,14 +1,14 @@
 package com.nexorel.et.content.items.Talismans;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -26,16 +26,16 @@ public class VenomProtectionTalismanItem extends TalismanItem {
     }
 
     @Override
-    protected void SpecialBuffs(World world, Entity entity) {
+    protected void SpecialBuffs(Level world, Entity entity) {
         if (entity instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) entity;
-            livingEntity.removeEffect(Effects.POISON);
+            livingEntity.removeEffect(MobEffects.POISON);
         }
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> textComponentList, ITooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> textComponentList, TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, world, textComponentList, tooltipFlag);
-        textComponentList.add(new StringTextComponent(TextFormatting.GREEN + "Gain immunity from Poison"));
+        textComponentList.add(new TextComponent(ChatFormatting.GREEN + "Gain immunity from Poison"));
     }
 }

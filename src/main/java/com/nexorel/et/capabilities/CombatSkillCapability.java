@@ -10,7 +10,7 @@ public class CombatSkillCapability {
     public static Capability<CombatSkill> COMBAT_CAP = null;
 
     public static void register() {
-        CapabilityManager.INSTANCE.register(CombatSkill.class, new CombatSkill.CombatSkillNBTStorage(), CombatSkill::createDefaultInstance);
+        CapabilityManager.INSTANCE.register(CombatSkill.class);
     }
 
 }

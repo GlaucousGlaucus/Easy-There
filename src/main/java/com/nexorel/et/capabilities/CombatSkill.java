@@ -3,16 +3,12 @@ package com.nexorel.et.capabilities;
 import com.google.common.collect.Maps;
 import com.nexorel.et.Network.EasyTherePacketHandler;
 import com.nexorel.et.Network.SkillPacket;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.common.capabilities.Capability;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 
 public class CombatSkill {
@@ -89,10 +85,8 @@ public class CombatSkill {
     public static StringBuilder getProgressBars(double xp_percent) {
         StringBuilder bars = new StringBuilder();
         if (xp_percent != -1) {
-            int bar_no = MathHelper.clamp((int) Math.round(xp_percent / 5), 0, 18);
-            for (int i = 0; i < bar_no; i++) {
-                bars.append("-");
-            }
+            int bar_no = Mth.clamp((int) Math.round(xp_percent / 5), 0, 18);
+            bars.append("-".repeat(Math.max(0, bar_no)));
             return bars;
         } else {
             return bars;
@@ -183,7 +177,7 @@ public class CombatSkill {
     }
 
     public void addXp(double points) {
-        double cap = 482028;
+//        double cap = 482028;
         xp += points;
     }
 
@@ -196,12 +190,10 @@ public class CombatSkill {
     }
 
     public void setXp(double points) {
-        xp = 0;
         xp = points;
     }
 
     public void setCrit_chance(int cc) {
-        crit_chance = 0;
         crit_chance = cc;
     }
 
@@ -209,31 +201,11 @@ public class CombatSkill {
         this.crit_chance += amount;
     }
 
-    public void shareData(ServerPlayerEntity playerEntity) {
-        CompoundNBT nbt = new CompoundNBT();
+    public void shareData(ServerPlayer playerEntity) {
+        CompoundTag nbt = new CompoundTag();
         nbt.putDouble("xp", this.xp);
         nbt.putInt("crit_chance", this.crit_chance);
         EasyTherePacketHandler.sendDataToClient(new SkillPacket(nbt), playerEntity);
-    }
-
-    public static class CombatSkillNBTStorage implements Capability.IStorage<CombatSkill> {
-
-        @Nullable
-        @Override
-        public INBT writeNBT(Capability<CombatSkill> capability, CombatSkill instance, Direction side) {
-            CompoundNBT compoundNBT = new CompoundNBT();
-            compoundNBT.putDouble("xp", instance.xp);
-            compoundNBT.putInt("crit_chance", instance.crit_chance);
-            return compoundNBT;
-        }
-
-        @Override
-        public void readNBT(Capability<CombatSkill> capability, CombatSkill instance, Direction side, INBT nbt) {
-            if (!(nbt instanceof CompoundNBT)) return;
-            CompoundNBT compoundNBT = (CompoundNBT) nbt;
-            instance.setXp(compoundNBT.getDouble("xp"));
-            instance.setCrit_chance(compoundNBT.getInt("crit_chance"));
-        }
     }
 
 }

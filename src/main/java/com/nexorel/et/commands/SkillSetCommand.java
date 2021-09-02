@@ -8,15 +8,18 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.nexorel.et.EasyThere;
 import com.nexorel.et.capabilities.CombatSkill;
 import com.nexorel.et.capabilities.CombatSkillCapability;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.*;
-
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 
 /**
  * skill_set <PlayerName> <Skill_Type> <Level>
@@ -24,8 +27,8 @@ import net.minecraft.util.text.*;
 
 public class SkillSetCommand {
 
-    public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> skill_set_cmd =
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+        LiteralArgumentBuilder<CommandSourceStack> skill_set_cmd =
                 Commands.literal("setskill")
                         .requires((commandSource -> commandSource.hasPermission(2)))
                         .then(Commands.argument("target", EntityArgument.players())
@@ -39,29 +42,29 @@ public class SkillSetCommand {
         dispatcher.register(skill_set_cmd);
     }
 
-    static int setCritChance(CommandContext<CommandSource> commandContext) throws CommandSyntaxException {
+    static int setCritChance(CommandContext<CommandSourceStack> commandContext) throws CommandSyntaxException {
         Entity entity = commandContext.getSource().getEntity();
-        if (entity instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) entity;
+        if (entity instanceof Player) {
+            Player player = (Player) entity;
             CombatSkill combatSkill = player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
             int cc = IntegerArgumentType.getInteger(commandContext, "amount");
             EasyThere.LOGGER.info("start" + cc);
-            combatSkill.setCrit_chance(MathHelper.clamp(cc, 0, 100));
-            combatSkill.shareData((ServerPlayerEntity) player);
+            combatSkill.setCrit_chance(Mth.clamp(cc, 0, 100));
+            combatSkill.shareData((ServerPlayer) player);
             EasyThere.LOGGER.info(combatSkill.getCrit_chance());
-            ITextComponent component = new StringTextComponent("Crit Chance Set to " + TextFormatting.AQUA + combatSkill.getCrit_chance());
-            TranslationTextComponent text =
-                    new TranslationTextComponent("chat.type.announcement",
+            Component component = new TextComponent("Crit Chance Set to " + ChatFormatting.AQUA + combatSkill.getCrit_chance());
+            TranslatableComponent text =
+                    new TranslatableComponent("chat.type.announcement",
                             commandContext.getSource().getDisplayName(), component);
             commandContext.getSource().getServer().getPlayerList().broadcastMessage(text, ChatType.CHAT, entity.getUUID());
         }
         return 1;
     }
 
-    static int setCombatSkillLvl(CommandContext<CommandSource> commandContext) throws CommandSyntaxException {
+    static int setCombatSkillLvl(CommandContext<CommandSourceStack> commandContext) throws CommandSyntaxException {
         Entity entity = commandContext.getSource().getEntity();
-        if (entity instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) entity;
+        if (entity instanceof Player) {
+            Player player = (Player) entity;
             CombatSkill combatSkill = player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
             int init_level = combatSkill.getLevel();
             int target_level = IntegerArgumentType.getInteger(commandContext, "level");
@@ -76,11 +79,11 @@ public class SkillSetCommand {
                 EasyThere.LOGGER.info("TARGET " + (target_xp));
                 EasyThere.LOGGER.info("% " + ((target_xp - CombatSkill.calculateFullTargetXp(target_level - 1)) / (CombatSkill.calculateFullTargetXp(target_level + 1)) * 100));*/
             }
-            combatSkill.shareData((ServerPlayerEntity) player);
+            combatSkill.shareData((ServerPlayer) player);
             EasyThere.LOGGER.info(combatSkill.getLevel());
-            ITextComponent component = new StringTextComponent("Skill Level Set to " + TextFormatting.AQUA + combatSkill.getLevel() + TextFormatting.WHITE + " For: " + TextFormatting.AQUA + "Combat Skill");
-            TranslationTextComponent text =
-                    new TranslationTextComponent("chat.type.announcement",
+            Component component = new TextComponent("Skill Level Set to " + ChatFormatting.AQUA + combatSkill.getLevel() + ChatFormatting.WHITE + " For: " + ChatFormatting.AQUA + "Combat Skill");
+            TranslatableComponent text =
+                    new TranslatableComponent("chat.type.announcement",
                             commandContext.getSource().getDisplayName(), component);
             commandContext.getSource().getServer().getPlayerList().broadcastMessage(text, ChatType.CHAT, entity.getUUID());
         }

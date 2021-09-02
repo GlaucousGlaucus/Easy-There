@@ -2,12 +2,12 @@ package com.nexorel.et.content.blocks.GemRefinery;
 
 import com.nexorel.et.Registries.BlockInit;
 import com.nexorel.et.Registries.ContainerInit;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IWorldPosCallable;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -15,15 +15,15 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-public class GRC extends Container {
+public class GRC extends AbstractContainerMenu {
 
     public GemRefineryTile tileEntity;
-    private PlayerEntity player;
+    private Player player;
     private IItemHandler playerinv;
     private int progress;
     private int MaxTime;
 
-    public GRC(int windowID, PlayerInventory playerInventory, PlayerEntity player, final GemRefineryTile tile) {
+    public GRC(int windowID, Inventory playerInventory, Player player, final GemRefineryTile tile) {
         super(ContainerInit.GRC.get(), windowID);
 
         this.tileEntity = tile;
@@ -44,12 +44,12 @@ public class GRC extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
-        return stillValid(IWorldPosCallable.create(tileEntity.getLevel(), tileEntity.getBlockPos()), player, BlockInit.GEM_REFINERY.get());
+    public boolean stillValid(Player player) {
+        return stillValid(ContainerLevelAccess.create(tileEntity.getLevel(), tileEntity.getBlockPos()), player, BlockInit.GEM_REFINERY.get());
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {

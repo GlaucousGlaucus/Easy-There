@@ -1,37 +1,41 @@
 package com.nexorel.et.content.Entity.boss.aura;
 
 import com.nexorel.et.content.Entity.projectile.aura_blast.AuraBlast;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.SkeletonEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.BossInfo;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerBossInfo;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -39,15 +43,15 @@ import java.util.Random;
 
 import static com.nexorel.et.Reference.MOD_ID;
 
-public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
+public class AuraEntity extends Monster implements RangedAttackMob {
 
-    private final ServerBossInfo bossEvent = new ServerBossInfo(new StringTextComponent(TextFormatting.DARK_AQUA + "AURA"), BossInfo.Color.BLUE, BossInfo.Overlay.PROGRESS);
+    private final ServerBossEvent bossEvent = new ServerBossEvent(new TextComponent(ChatFormatting.DARK_AQUA + "AURA"), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS);
 
     private int shield_time = 200;
     boolean flag = true;
     private Entity e;
 
-    public AuraEntity(EntityType<? extends MonsterEntity> type, World world) {
+    public AuraEntity(EntityType<? extends Monster> type, Level world) {
         super(type, world);
         this.setPersistenceRequired();
     }
@@ -55,7 +59,7 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(3, new RangedAttackGoal(this, 1.0D, 40, 20.0F) {
             @Override
             public void stop() {
@@ -72,12 +76,12 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
         this.goalSelector.addGoal(2, new MinionsGoal(this, this.shield_time));
         this.goalSelector.addGoal(1, new AuraImpactGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true/**check sight*/));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true/**check sight*/));
         super.registerGoals();
     }
 
-    public static AttributeModifierMap.MutableAttribute prepareAttributes() {
-        return MonsterEntity.createMonsterAttributes()
+    public static AttributeSupplier.Builder prepareAttributes() {
+        return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 300.0D)
                 .add(Attributes.MOVEMENT_SPEED, (double) 0.6F)
                 .add(Attributes.FOLLOW_RANGE, 40.0D)
@@ -98,7 +102,7 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
     }
 
     @Override
-    public void startSeenByPlayer(ServerPlayerEntity entity) {
+    public void startSeenByPlayer(ServerPlayer entity) {
         super.startSeenByPlayer(entity);
         this.bossEvent.addPlayer(entity);
     }
@@ -109,14 +113,14 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
         if (this.isAlive()) {
 
             // Damages player if it is within a certain range of blocks
-            World EW = this.level;
-            if (EW instanceof ServerWorld) {
-                ServerWorld serverWorld = (ServerWorld) EW;
-                Vector3d epos = AuraEntity.this.position();
-                AxisAlignedBB b = new AxisAlignedBB(epos.x - 5, epos.y - 5, epos.z - 5, epos.x + 5, epos.y + 5, epos.z + 5);
+            Level EW = this.level;
+            if (EW instanceof ServerLevel) {
+                ServerLevel serverWorld = (ServerLevel) EW;
+                Vec3 epos = AuraEntity.this.position();
+                AABB b = new AABB(epos.x - 5, epos.y - 5, epos.z - 5, epos.x + 5, epos.y + 5, epos.z + 5);
                 List<Entity> entities = serverWorld.getEntities(e, b);
                 for (Entity entity : entities) {
-                    if (entity instanceof PlayerEntity) {
+                    if (entity instanceof Player) {
                         entity.hurt(DamageSource.MAGIC, 1.0F);
                     }
                 }
@@ -132,16 +136,16 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
             BlockPos pos = this.blockPosition();
             BlockState state = Blocks.CHEST.defaultBlockState();
             this.level.setBlockAndUpdate(pos, state);
-            TileEntity chest = this.level.getBlockEntity(pos);
-            if (chest instanceof ChestTileEntity) {
-                ((ChestTileEntity) chest).setLootTable(new ResourceLocation(MOD_ID, "chests/aura_chest"), random.nextLong());
+            BlockEntity chest = this.level.getBlockEntity(pos);
+            if (chest instanceof ChestBlockEntity) {
+                ((ChestBlockEntity) chest).setLootTable(new ResourceLocation(MOD_ID, "chests/aura_chest"), random.nextLong());
             }
             flag = false;
         }
     }
 
     @Override
-    public void stopSeenByPlayer(ServerPlayerEntity entity) {
+    public void stopSeenByPlayer(ServerPlayer entity) {
         super.stopSeenByPlayer(entity);
         this.bossEvent.removePlayer(entity);
     }
@@ -154,14 +158,14 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
-        this.bossEvent.setPercent(this.getHealth() / this.getMaxHealth());
+        this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
     @Override
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
         int chance = random.nextInt(10 - 1 + 1) + 1;
         if (chance < 11) {
-            if (target instanceof PlayerEntity) {
+            if (target instanceof Player) {
                 double d0 = this.getHeadX((int) distanceFactor);
                 double d1 = this.getHeadY((int) distanceFactor);
                 double d2 = this.getHeadZ((int) distanceFactor);
@@ -174,15 +178,15 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
                 this.level.addFreshEntity(auraBlast);
             }
         } else {
-            if (target instanceof PlayerEntity) {
+            if (target instanceof Player) {
                 double x = target.getX();
                 double y = target.getY();
                 double z = target.getZ();
-                LightningBoltEntity le = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, this.level);
+                LightningBolt le = new LightningBolt(EntityType.LIGHTNING_BOLT, this.level);
                 le.setPos(x, y, z);
                 this.level.addFreshEntity(le);
                 target.hurt(DamageSource.GENERIC, 2);
-                target.addEffect(new EffectInstance(Effects.WEAKNESS, 10, 2));
+                target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 10, 2));
             }
         }
     }
@@ -192,7 +196,7 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
             return this.getX();
         } else {
             float f = (this.yBodyRot + (float) (180 * (p_82214_1_ - 1))) * ((float) Math.PI / 180F);
-            float f1 = MathHelper.cos(f);
+            float f1 = Mth.cos(f);
             return this.getX() + (double) f1 * 1.3D;
         }
     }
@@ -206,19 +210,19 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
             return this.getZ();
         } else {
             float f = (this.yBodyRot + (float) (180 * (p_82213_1_ - 1))) * ((float) Math.PI / 180F);
-            float f1 = MathHelper.sin(f);
+            float f1 = Mth.sin(f);
             return this.getZ() + (double) f1 * 1.3D;
         }
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT nbt) {
+    public void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
         nbt.putInt("shield_time", this.shield_time);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT nbt) {
+    public void readAdditionalSaveData(CompoundTag nbt) {
         super.readAdditionalSaveData(nbt);
         this.shield_time = nbt.getInt("shield_time");
         if (this.hasCustomName()) {
@@ -227,7 +231,7 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
     }
 
     @Override
-    public void setCustomName(@Nullable ITextComponent component) {
+    public void setCustomName(@Nullable Component component) {
         super.setCustomName(component);
         this.bossEvent.setName(this.getDisplayName());
     }
@@ -261,9 +265,9 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
             if (!this.ae.level.isClientSide) {
                 int i = 0;
                 do {
-                    ServerWorld serverworld = (ServerWorld) AuraEntity.this.level;
+                    ServerLevel serverworld = (ServerLevel) AuraEntity.this.level;
                     DifficultyInstance difficultyinstance = serverworld.getCurrentDifficultyAt(this.ae.blockPosition());
-                    SkeletonEntity minion = createMinion(difficultyinstance, this.ae);
+                    Skeleton minion = createMinion(difficultyinstance, this.ae);
                     serverworld.addFreshEntity(minion);
                     if (i == 10) {
                         this.flag = false;
@@ -274,10 +278,10 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
             }
         }
 
-        private SkeletonEntity createMinion(DifficultyInstance instance, AuraEntity entity) {
-            SkeletonEntity minion = EntityType.SKELETON.create(entity.level);
+        private Skeleton createMinion(DifficultyInstance instance, AuraEntity entity) {
+            Skeleton minion = EntityType.SKELETON.create(entity.level);
             if (minion != null) {
-                minion.finalizeSpawn((ServerWorld) entity.level, instance, SpawnReason.REINFORCEMENT, null, null);
+                minion.finalizeSpawn((ServerLevel) entity.level, instance, MobSpawnType.REINFORCEMENT, null, null);
                 minion.setPos(entity.getX(), entity.getY(), entity.getZ());
                 minion.isInvulnerableTo(DamageSource.WITHER);
                 minion.isInvulnerableTo(DamageSource.CRAMMING);
@@ -317,14 +321,14 @@ public class AuraEntity extends MonsterEntity implements IRangedAttackMob {
                             this.ae.heal(6.0F);
                         } else {
                             target.hurt(DamageSource.MAGIC, 5.0F);
-                            target.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 1));
-                            target.addEffect(new EffectInstance(Effects.HUNGER, 100, 1));
-                            target.addEffect(new EffectInstance(Effects.POISON, 100, 1));
+                            target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100, 1));
+                            target.addEffect(new MobEffectInstance(MobEffects.HUNGER, 100, 1));
+                            target.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 1));
                         }
-                        World world = AuraEntity.this.level;
-                        if (world instanceof ServerWorld) {
-                            ServerWorld serverWorld = (ServerWorld) world;
-                            Vector3d epos = AuraEntity.this.position();
+                        Level world = AuraEntity.this.level;
+                        if (world instanceof ServerLevel) {
+                            ServerLevel serverWorld = (ServerLevel) world;
+                            Vec3 epos = AuraEntity.this.position();
                             serverWorld.sendParticles(ParticleTypes.EXPLOSION, epos.x, epos.y, epos.z, 20, 0.5, 0.5, 0.5, 0);
                         }
                     }

@@ -1,16 +1,16 @@
 package com.nexorel.et.content.skills.widget;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.nexorel.et.capabilities.CombatSkill;
 import com.nexorel.et.capabilities.CombatSkillCapability;
 import com.nexorel.et.content.skills.SkillScreen;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.util.Mth;
 
-public class SkillButtonWidget extends AbstractGui {
+public class SkillButtonWidget extends GuiComponent {
 
     private final SkillScreen.Skills icon;
     private int X;
@@ -25,13 +25,13 @@ public class SkillButtonWidget extends AbstractGui {
 
     public SkillButtonWidget(SkillScreen skillScreen, SkillScreen.Skills icon, int x, int y) {
         this.icon = icon;
-        this.X = MathHelper.floor(x);
-        this.Y = MathHelper.floor(y);
+        this.X = Mth.floor(x);
+        this.Y = Mth.floor(y);
         this.skillScreen = skillScreen;
     }
 
-    public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks, long Time) {
-        Minecraft.getInstance().getTextureManager().bind(SkillScreen.SKILL_ASSETS_LOC);
+    public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks, long Time) {
+        RenderSystem.setShaderTexture(0, SkillScreen.SKILL_ASSETS_LOC);
         int relX = (skillScreen.width - 252) / 2;
         int relY = (skillScreen.height - 139) / 2;
         this.isSelected = mouseX >= this.X && mouseY >= this.Y && mouseX < this.X + 25 && mouseY < this.Y + 25 && mouseX > relX + 11 && mouseX < relX + 129 && mouseY > relY + 20 && mouseY < relY + 250;
@@ -46,15 +46,15 @@ public class SkillButtonWidget extends AbstractGui {
     }
 
     private float getVisibility(long Time) {
-        float f = MathHelper.clamp((float) (Time - this.animationTime) / 300, 0.0F, 1.0F);
+        float f = Mth.clamp((float) (Time - this.animationTime) / 300, 0.0F, 1.0F);
         f = f * f;
         return f;
     }
 
-    public void animateAndRender(MatrixStack matrixStack, long TimeE) {
+    public void animateAndRender(PoseStack matrixStack, long TimeE) {
         long Time = Util.getMillis();
 
-        Minecraft.getInstance().getTextureManager().bind(SkillScreen.SKILL_ASSETS_LOC);
+        RenderSystem.setShaderTexture(0, SkillScreen.SKILL_ASSETS_LOC);
 
         if (this.animationTime == -1L) {
             this.animationTime = Time;
@@ -67,7 +67,7 @@ public class SkillButtonWidget extends AbstractGui {
         matrixStack.pushPose();
         RenderSystem.enableBlend();
         this.blit(matrixStack, (this.X), (this.Y), 25, 143, 25, 25);
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 0.3F + MathHelper.clamp((getVisibility(Time) * 2), 0F, 0.7F));
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.3F + Mth.clamp((getVisibility(Time) * 2), 0F, 0.7F));
         matrixStack.translate(a, b, c);
         renderHoverGUI(matrixStack);
         matrixStack.translate(-a, -b, -c);
@@ -104,7 +104,7 @@ public class SkillButtonWidget extends AbstractGui {
         return 0;
     }
 
-    public void renderHoverGUI(MatrixStack matrixStack) {
+    public void renderHoverGUI(PoseStack matrixStack) {
         // 4, 147
         this.blit(matrixStack, (this.X) + 25, (this.Y), 0, 197, 25, 25); // TL
         this.blit(matrixStack, (this.X) + 25, (this.Y) + (3 * 25), 25, 197, 25, 25); // BL
@@ -134,7 +134,7 @@ public class SkillButtonWidget extends AbstractGui {
         }
     }
 
-    private static void drawForCombat(MatrixStack matrixStack, CombatSkill combatSkill, int X, int Y) {
+    private static void drawForCombat(PoseStack matrixStack, CombatSkill combatSkill, int X, int Y) {
         Minecraft.getInstance().font.draw(matrixStack, "\u2694 Combat \u2694", X + 58, Y + 5, 0x0fff7); //-5592406
         Minecraft.getInstance().font.draw(matrixStack, "Level:", X + 68, Y + 20, 0x0fff7); //-5592406
         Minecraft.getInstance().font.draw(matrixStack, Integer.toString(CombatSkill.calculateLvlFromXp(combatSkill.getXp())), X + 98, Y + 20, getLevelColor(CombatSkill.calculateLvlFromXp(combatSkill.getXp())));

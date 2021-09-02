@@ -1,19 +1,18 @@
 package com.nexorel.et.content.skills;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.nexorel.et.content.skills.widget.SkillButtonWidget;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
 import java.util.List;
 
 import static com.nexorel.et.Reference.MOD_ID;
 
-public class SkillTabGUI extends AbstractGui {
+public class SkillTabGUI extends GuiComponent {
 
     public double scrollX;
     public double scrollY;
@@ -39,7 +38,7 @@ public class SkillTabGUI extends AbstractGui {
         }
     }
 
-    public void drawContents(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks, long Time) {
+    public void drawContents(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks, long Time) {
         if (!this.centered) {
             this.scrollX = (double) ((w / 2) - (a) / 2);
             this.scrollY = (double) ((h / 2) - (b) / 2);
@@ -56,11 +55,11 @@ public class SkillTabGUI extends AbstractGui {
         fill(matrixStack, 234, 113, 0, 0, -16777216);
         RenderSystem.depthFunc(515);
         ResourceLocation resourcelocation = new ResourceLocation(MOD_ID, "textures/gui/skill_bg.png");
-        Minecraft.getInstance().getTextureManager().bind(resourcelocation);
+        RenderSystem.setShaderTexture(0, resourcelocation);
 
 
-        int i = MathHelper.floor(this.scrollX);
-        int j = MathHelper.floor(this.scrollY);
+        int i = Mth.floor(this.scrollX);
+        int j = Mth.floor(this.scrollY);
         int k = i % 16;
         int l = j % 16;
 
@@ -94,14 +93,14 @@ public class SkillTabGUI extends AbstractGui {
         matrixStack.popPose();
     }
 
-    public void drawTooltips(MatrixStack matrixStack, int RelX, int RelY, int mouseX, int mouseY, float partialTicks, long Time) {
+    public void drawTooltips(PoseStack matrixStack, int RelX, int RelY, int mouseX, int mouseY, float partialTicks, long Time) {
         matrixStack.pushPose();
         matrixStack.translate(0.0F, 0.0F, 200.0F);
-        fill(matrixStack, 0, 0, 234, 113, MathHelper.floor(this.fade * 255.0F) << 24);
+        fill(matrixStack, 0, 0, 234, 113, Mth.floor(this.fade * 255.0F) << 24);
         matrixStack.translate(-(float) (RelX + 9), -(float) (RelY + 18), 0.0F);
         boolean flag = false;
-        int i = MathHelper.floor(this.scrollX);
-        int j = MathHelper.floor(this.scrollY);
+        int i = Mth.floor(this.scrollX);
+        int j = Mth.floor(this.scrollY);
         for (SkillButtonWidget widget : this.widgets) {
             if (widget.isSelected) {
                 flag = true;
@@ -112,15 +111,15 @@ public class SkillTabGUI extends AbstractGui {
 
         matrixStack.popPose();
         if (flag) {
-            this.fade = MathHelper.clamp(this.fade + 0.009F, 0.0F, 0.45F);
+            this.fade = Mth.clamp(this.fade + 0.009F, 0.0F, 0.45F);
         } else {
-            this.fade = MathHelper.clamp(this.fade - 0.04F, 0.0F, 1.0F);
+            this.fade = Mth.clamp(this.fade - 0.04F, 0.0F, 1.0F);
         }
     }
 
     public void scroll(double x, double y) {
-        this.scrollX = MathHelper.clamp(this.scrollX + x, (double) (-(a - w)), 0.0D);
-        this.scrollY = MathHelper.clamp(this.scrollY + y, (double) (-(b - h)), 0.0D);
+        this.scrollX = Mth.clamp(this.scrollX + x, (double) (-(a - w)), 0.0D);
+        this.scrollY = Mth.clamp(this.scrollY + y, (double) (-(b - h)), 0.0D);
 
     }
 

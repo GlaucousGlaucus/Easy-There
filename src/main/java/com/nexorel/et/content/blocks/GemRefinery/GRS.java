@@ -1,39 +1,32 @@
 package com.nexorel.et.content.blocks.GemRefinery;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 import static com.nexorel.et.Reference.MOD_ID;
 
-public class GRS extends ContainerScreen<GRC> {
+public class GRS extends AbstractContainerScreen<GRC> {
 
     private ResourceLocation GUI = new ResourceLocation(MOD_ID, "textures/gui/gr.png");
 
-    public GRS(GRC container, PlayerInventory playerInventory, ITextComponent name) {
+    public GRS(GRC container, Inventory playerInventory, Component name) {
         super(container, playerInventory, name);
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
-    /**
-     @Override
-     protected void renderLabels(MatrixStack p_230451_1_, int p_230451_2_, int p_230451_3_) {
-     super.renderLabels(p_230451_1_, p_230451_2_, p_230451_3_);
-     }*/
-
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bind(GUI);
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+        RenderSystem.setShaderTexture(0, GUI);
         int relX = (this.width - this.imageWidth) / 2;
         int relY = (this.height - this.imageHeight) / 2;
         this.blit(matrixStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
