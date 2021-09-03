@@ -94,7 +94,7 @@ public class TalismanBagItem extends Item {
         super.appendHoverText(stack, world, iTextComponents, flag);
         CompoundTag nbt = stack.getTag();
         if (nbt != null) {
-            iTextComponents.add(new TextComponent(ChatFormatting.BLUE + "\u2726 " + "Crit Chance: " + ChatFormatting.WHITE + nbt.getInt("cc") + ChatFormatting.BLUE + " \u2726"));
+            iTextComponents.add(new TextComponent(ChatFormatting.BLUE + "Crit Chance: " + ChatFormatting.WHITE + nbt.getInt("cc")));
         }
     }
 }

@@ -82,14 +82,14 @@ riddles {
 
     The answer is: read it
 
-    What is the value of π upto 0 decimal places ?
-    The answer is : 3
+    What is the value of π upto 5 decimal places ?
+    The answer is : 3.14285
 
     How many errors are there in this question if
     there is at least one error in this question?
     The answer is : 1
 
-    Have you answer this question ?
+    Have you answered this question ?
     The answer is : yes
 
     Rearrange and answer:

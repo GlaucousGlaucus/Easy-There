@@ -76,7 +76,6 @@ public class SkillInteractions {
         }
     }
 
-    // TODO: Fix cap on death
     @SubscribeEvent
     public static void PlayerRespawnEvent(PlayerEvent.Clone event) {
         ServerPlayer serverPlayerEntity_original = (ServerPlayer) event.getOriginal();

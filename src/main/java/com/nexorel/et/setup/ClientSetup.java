@@ -3,6 +3,7 @@ package com.nexorel.et.setup;
 
 import com.nexorel.et.Registries.ContainerInit;
 import com.nexorel.et.Registries.EntityInit;
+import com.nexorel.et.Registries.ItemInit;
 import com.nexorel.et.content.Entity.boss.aura.AuraEntityModel;
 import com.nexorel.et.content.Entity.boss.aura.AuraRenderer;
 import com.nexorel.et.content.Entity.damage_ind.DamageIndicatorRenderer;
@@ -12,6 +13,7 @@ import com.nexorel.et.content.items.talisBag.TalismanBagScreen;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -44,5 +46,10 @@ public class ClientSetup {
         event.registerEntityRenderer(EntityInit.AURA.get(), AuraRenderer::new);
         event.registerEntityRenderer(EntityInit.AURA_BLAST.get(), AuraBlastRenderer::new);
         event.registerEntityRenderer(EntityInit.DMG_IND.get(), DamageIndicatorRenderer::new);
+    }
+
+    @SubscribeEvent
+    public static void onItemColor(ColorHandlerEvent.Item event) {
+        event.getItemColors().register((stack, i) -> 0xff0000, ItemInit.AURA_SPAWN_EGG.get());
     }
 }
