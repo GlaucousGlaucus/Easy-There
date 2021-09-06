@@ -39,7 +39,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SkillInteractions {
+public class ModInteractions {
 
     @SubscribeEvent
     public static void PlayerTickEvent(TickEvent.PlayerTickEvent event) {

@@ -4,7 +4,7 @@ import com.nexorel.et.Network.EasyTherePacketHandler;
 import com.nexorel.et.Registries.*;
 import com.nexorel.et.capabilities.AttachCap;
 import com.nexorel.et.capabilities.CombatSkillCapability;
-import com.nexorel.et.capabilities.SkillInteractions;
+import com.nexorel.et.capabilities.ModInteractions;
 import com.nexorel.et.content.Entity.boss.aura.AuraEntity;
 import com.nexorel.et.setup.ClientSetup;
 import com.nexorel.et.setup.ETConfig;
@@ -57,7 +57,7 @@ public class EasyThere {
         CombatSkillCapability.register();
 
         MinecraftForge.EVENT_BUS.register(AttachCap.class);
-        MinecraftForge.EVENT_BUS.register(SkillInteractions.class);
+        MinecraftForge.EVENT_BUS.register(ModInteractions.class);
         MinecraftForge.EVENT_BUS.register(CommandInit.class);
     }
 

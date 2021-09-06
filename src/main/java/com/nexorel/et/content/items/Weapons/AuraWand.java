@@ -3,7 +3,7 @@ package com.nexorel.et.content.items.Weapons;
 import com.nexorel.et.EasyThere;
 import com.nexorel.et.capabilities.CombatSkill;
 import com.nexorel.et.capabilities.CombatSkillCapability;
-import com.nexorel.et.capabilities.SkillInteractions;
+import com.nexorel.et.capabilities.ModInteractions;
 import com.nexorel.et.content.items.IWandTiers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -95,11 +95,11 @@ public class AuraWand extends Item {
             for (Entity target : entities) {
                 if (target instanceof LivingEntity && !(target instanceof Player)) {
                     CombatSkill combatSkill = player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
-                    float final_dmg = SkillInteractions.calculate_damage_PT((LivingEntity) target, combatSkill, this.tier.getAttackDamageBonus());
+                    float final_dmg = ModInteractions.calculate_damage_PT((LivingEntity) target, combatSkill, this.tier.getAttackDamageBonus());
                     boolean flag = combatSkill.canCrit();
                     final_dmg = flag ? (float) (final_dmg * 1.5) : final_dmg;
                     target.hurt(DamageSource.MAGIC, final_dmg);
-                    SkillInteractions.summon_damage_indicator((LivingEntity) target, final_dmg, flag);
+                    ModInteractions.summon_damage_indicator((LivingEntity) target, final_dmg, flag);
                     EasyThere.LOGGER.info(target);
                 }
             }
@@ -115,11 +115,11 @@ public class AuraWand extends Item {
             for (Entity target : entities) {
                 if (target instanceof LivingEntity && !(target instanceof Player)) {
                     CombatSkill combatSkill = player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
-                    float final_dmg = SkillInteractions.calculate_damage_PT((LivingEntity) target, combatSkill, this.tier.getAttackDamageBonus());
+                    float final_dmg = ModInteractions.calculate_damage_PT((LivingEntity) target, combatSkill, this.tier.getAttackDamageBonus());
                     boolean flag = combatSkill.canCrit();
                     final_dmg = flag ? (float) (final_dmg * 1.5) : final_dmg;
                     target.hurt(DamageSource.MAGIC, final_dmg);
-                    SkillInteractions.summon_damage_indicator((LivingEntity) target, final_dmg, flag);
+                    ModInteractions.summon_damage_indicator((LivingEntity) target, final_dmg, flag);
                     EasyThere.LOGGER.info(target);
                 }
             }

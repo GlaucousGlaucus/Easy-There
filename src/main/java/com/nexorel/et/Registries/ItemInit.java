@@ -5,6 +5,7 @@ import com.nexorel.et.content.items.Talismans.VenomProtectionTalismanItem;
 import com.nexorel.et.content.items.Weapons.AuraWand;
 import com.nexorel.et.content.items.talisBag.TalismanBagItem;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.BlockItem;
@@ -54,26 +55,53 @@ public class ItemInit {
     public static final RegistryObject<Item> VENOM_TALISMAN = ITEMS.register("venom_talisman", VenomProtectionTalismanItem::new);
 
     // Gems
-    public static final RegistryObject<Item> Agriyelite = ITEMS.register("agriyelite", () -> new Item(properties));
-    public static final RegistryObject<Item> Aquomite = ITEMS.register("aquomite", () -> new Item(properties));
-    public static final RegistryObject<Item> Gold_Almao = ITEMS.register("gold_almao", () -> new Item(properties));
-    public static final RegistryObject<Item> Orange_Red_Temarelite = ITEMS.register("orange_red_temarelite", () -> new Item(properties));
-    public static final RegistryObject<Item> Cryophanite = ITEMS.register("cryophanite", () -> new Item(properties));
-    public static final RegistryObject<Item> Peach_Ekanesia = ITEMS.register("peach_ekanesia", () -> new Item(properties));
-    public static final RegistryObject<Item> Crimson_Pectene = ITEMS.register("crimson_pectene", () -> new Item(properties));
-    public static final RegistryObject<Item> Blue_Violet_Aegidonyx = ITEMS.register("blue_violet_aegidonyx", () -> new Item(properties));
-    public static final RegistryObject<Item> Electric_Blue_Cypberite = ITEMS.register("electric_blue_cypberite", () -> new Item(properties));
-    public static final RegistryObject<Item> Twinkling_Breadite = ITEMS.register("twinkling_breadite", () -> new Item(properties));
-    public static final RegistryObject<Item> Salmon_Linadingerite = ITEMS.register("salmon_linadingerite", () -> new Item(properties) {
+    public static final RegistryObject<Item> AGRIYELITE_ITEM = ITEMS.register("agriyelite", () -> new Item(properties));
+    public static final RegistryObject<Item> AQUOMITE_ITEM = ITEMS.register("aquomite", () -> new Item(properties));
+    public static final RegistryObject<Item> GOLD_ALMAO_ITEM = ITEMS.register("gold_almao", () -> new Item(properties));
+    public static final RegistryObject<Item> ORANGE_RED_TEMARELITE_ITEM = ITEMS.register("orange_red_temarelite", () -> new Item(properties));
+    public static final RegistryObject<Item> CRYOPHANITE_ITEM = ITEMS.register("cryophanite", () -> new Item(properties));
+    public static final RegistryObject<Item> PEACH_EKANESIA_ITEM = ITEMS.register("peach_ekanesia", () -> new Item(properties));
+    public static final RegistryObject<Item> CRIMSON_PECTENE_ITEM = ITEMS.register("crimson_pectene", () -> new Item(properties));
+    public static final RegistryObject<Item> BLUE_VIOLET_AEGIDONYX_ITEM = ITEMS.register("blue_violet_aegidonyx", () -> new Item(properties));
+    public static final RegistryObject<Item> ELECTRIC_BLUE_CYPBERITE_ITEM = ITEMS.register("electric_blue_cypberite", () -> new Item(properties));
+    public static final RegistryObject<Item> TWINKLING_BREADITE_ITEM = ITEMS.register("twinkling_breadite", () -> new Item(properties));
+    public static final RegistryObject<Item> SALMON_LINADINGERITE_ITEM = ITEMS.register("salmon_linadingerite", () -> new Item(properties) {
         @Override
         public void appendHoverText(ItemStack p_41421_, @Nullable Level p_41422_, List<Component> p_41423_, TooltipFlag p_41424_) {
             super.appendHoverText(p_41421_, p_41422_, p_41423_, p_41424_);
-            p_41423_.add(new TextComponent(ChatFormatting.DARK_PURPLE + "The Mod author was also not able to find out why he added this.. "));
+            if (Screen.hasShiftDown()) {
+                p_41423_.add(new TextComponent(ChatFormatting.DARK_PURPLE + "The Mod author was also not able to find out why he added this.. "));
+            }
         }
     });
-    public static final RegistryObject<Item> Blue_Rapmony = ITEMS.register("blue_rapmony", () -> new Item(properties));
-    public static final RegistryObject<Item> Violet_Tunoradoite = ITEMS.register("violet_tunoradoite", () -> new Item(properties));
-    public static final RegistryObject<Item> Magenta_Rose_Lollnic = ITEMS.register("magenta_rose_lollnic", () -> new Item(properties));
-    public static final RegistryObject<Item> Jade_Petaogopite = ITEMS.register("jade_petaogopite", () -> new Item(properties));
+    public static final RegistryObject<Item> BLUE_RAPMONY_ITEM = ITEMS.register("blue_rapmony", () -> new Item(properties));
+    public static final RegistryObject<Item> VIOLET_TUNORADOITE_ITEM = ITEMS.register("violet_tunoradoite", () -> new Item(properties));
+    public static final RegistryObject<Item> MAGENTA_ROSE_LOLLNIC_ITEM = ITEMS.register("magenta_rose_lollnic", () -> new Item(properties));
+    public static final RegistryObject<Item> JADE_PETAOGOPITE_ITEM = ITEMS.register("jade_petaogopite", () -> new Item(properties));
+
+    // Gem Block
+    public static final RegistryObject<Item> AGRIYELITE_BLOCKITEM = ITEMS.register("agriyelite_block", () -> new BlockItem(BlockInit.AGRIYELITE_BLOCK.get(), properties));
+    public static final RegistryObject<Item> AQUOMITE_BLOCKITEM = ITEMS.register("aquomite_block", () -> new BlockItem(BlockInit.AQUOMITE_BLOCK.get(), properties));
+    public static final RegistryObject<Item> GOLD_ALMAO_BLOCKITEM = ITEMS.register("gold_almao_block", () -> new BlockItem(BlockInit.GOLD_ALMAO_BLOCK.get(), properties));
+    public static final RegistryObject<Item> ORANGE_RED_TEMARELITE_BLOCKITEM = ITEMS.register("orange_red_temarelite_block", () -> new BlockItem(BlockInit.ORANGE_RED_TEMARELITE_BLOCK.get(), properties));
+    public static final RegistryObject<Item> CRYOPHANITE_BLOCKITEM = ITEMS.register("cryophanite_block", () -> new BlockItem(BlockInit.CRYOPHANITE_BLOCK.get(), properties));
+    public static final RegistryObject<Item> PEACH_EKANESIA_BLOCKITEM = ITEMS.register("peach_ekanesia_block", () -> new BlockItem(BlockInit.PEACH_EKANESIA_BLOCK.get(), properties));
+    public static final RegistryObject<Item> CRIMSON_PECTENE_BLOCKITEM = ITEMS.register("crimson_pectene_block", () -> new BlockItem(BlockInit.CRIMSON_PECTENE_BLOCK.get(), properties));
+    public static final RegistryObject<Item> BLUE_VIOLET_AEGIDONYX_BLOCKITEM = ITEMS.register("blue_violet_aegidonyx_block", () -> new BlockItem(BlockInit.BLUE_VIOLET_AEGIDONYX_BLOCK.get(), properties));
+    public static final RegistryObject<Item> ELECTRIC_BLUE_CYPBERITE_BLOCKITEM = ITEMS.register("electric_blue_cypberite_block", () -> new BlockItem(BlockInit.ELECTRIC_BLUE_CYPBERITE_BLOCK.get(), properties));
+    public static final RegistryObject<Item> TWINKLING_BREADITE_BLOCKITEM = ITEMS.register("twinkling_breadite_block", () -> new BlockItem(BlockInit.TWINKLING_BREADITE_BLOCK.get(), properties));
+    public static final RegistryObject<Item> SALMON_LINADINGERITE_BLOCKITEM = ITEMS.register("salmon_linadingerite_block", () -> new BlockItem(BlockInit.SALMON_LINADINGERITE_BLOCK.get(), properties) {
+        @Override
+        public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> components, TooltipFlag flag) {
+            super.appendHoverText(stack, level, components, flag);
+            if (Screen.hasShiftDown()) {
+                components.add(new TextComponent(ChatFormatting.DARK_PURPLE + "The Mod author was also not able to find out why he added this.. "));
+            }
+        }
+    });
+    public static final RegistryObject<Item> BLUE_RAPMONY_BLOCKITEM = ITEMS.register("blue_rapmony_block", () -> new BlockItem(BlockInit.BLUE_RAPMONY_BLOCK.get(), properties));
+    public static final RegistryObject<Item> VIOLET_TUNORADOITE_BLOCKITEM = ITEMS.register("violet_tunoradoite_block", () -> new BlockItem(BlockInit.VIOLET_TUNORADOITE_BLOCK.get(), properties));
+    public static final RegistryObject<Item> MAGENTA_ROSE_LOLLNIC_BLOCKITEM = ITEMS.register("magenta_rose_lollnic_block", () -> new BlockItem(BlockInit.MAGENTA_ROSE_LOLLNIC_BLOCK.get(), properties));
+    public static final RegistryObject<Item> JADE_PETAOGOPITE_BLOCKITEM = ITEMS.register("jade_petaogopite_block", () -> new BlockItem(BlockInit.JADE_PETAOGOPITE_BLOCK.get(), properties));
 
 }

@@ -1,5 +1,6 @@
 package com.nexorel.et.Registries;
 
+import com.nexorel.et.content.blocks.GemOreBlock;
 import com.nexorel.et.content.blocks.GemRefinery.GemRefineryBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -28,5 +29,22 @@ public class BlockInit {
 
     public static final RegistryObject<Block> GEM_REFINERY = BLOCKS.register("gem_refinery", GemRefineryBlock::new);
 //    public static final RegistryObject<Block> AURA_INFESTED_BLOCK = BLOCKS.register("aura_infested_block", AuraInfestedBlock::new);
+
+    // Gems
+    public static final RegistryObject<Block> AGRIYELITE_BLOCK = BLOCKS.register("agriyelite_block", () -> new GemOreBlock(20));
+    public static final RegistryObject<Block> AQUOMITE_BLOCK = BLOCKS.register("aquomite_block", () -> new GemOreBlock(25));
+    public static final RegistryObject<Block> GOLD_ALMAO_BLOCK = BLOCKS.register("gold_almao_block", () -> new GemOreBlock(23));
+    public static final RegistryObject<Block> ORANGE_RED_TEMARELITE_BLOCK = BLOCKS.register("orange_red_temarelite_block", () -> new GemOreBlock(43));
+    public static final RegistryObject<Block> CRYOPHANITE_BLOCK = BLOCKS.register("cryophanite_block", () -> new GemOreBlock(25));
+    public static final RegistryObject<Block> PEACH_EKANESIA_BLOCK = BLOCKS.register("peach_ekanesia_block", () -> new GemOreBlock(27));
+    public static final RegistryObject<Block> CRIMSON_PECTENE_BLOCK = BLOCKS.register("crimson_pectene_block", () -> new GemOreBlock(32));
+    public static final RegistryObject<Block> BLUE_VIOLET_AEGIDONYX_BLOCK = BLOCKS.register("blue_violet_aegidonyx_block", () -> new GemOreBlock(23));
+    public static final RegistryObject<Block> ELECTRIC_BLUE_CYPBERITE_BLOCK = BLOCKS.register("electric_blue_cypberite_block", () -> new GemOreBlock(43));
+    public static final RegistryObject<Block> TWINKLING_BREADITE_BLOCK = BLOCKS.register("twinkling_breadite_block", () -> new GemOreBlock(34));
+    public static final RegistryObject<Block> SALMON_LINADINGERITE_BLOCK = BLOCKS.register("salmon_linadingerite_block", () -> new GemOreBlock(54));
+    public static final RegistryObject<Block> BLUE_RAPMONY_BLOCK = BLOCKS.register("blue_rapmony_block", () -> new GemOreBlock(54));
+    public static final RegistryObject<Block> VIOLET_TUNORADOITE_BLOCK = BLOCKS.register("violet_tunoradoite_block", () -> new GemOreBlock(56));
+    public static final RegistryObject<Block> MAGENTA_ROSE_LOLLNIC_BLOCK = BLOCKS.register("magenta_rose_lollnic_block", () -> new GemOreBlock(76));
+    public static final RegistryObject<Block> JADE_PETAOGOPITE_BLOCK = BLOCKS.register("jade_petaogopite_block", () -> new GemOreBlock(23));
 
 }

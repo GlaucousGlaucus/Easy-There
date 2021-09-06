@@ -5,19 +5,19 @@ license="All rights reserved"
 
 [[mods]] #mandatory
 
-modId="et" #mandatory
+modId = "et" #mandatory
 
-version="${file.jarVersion}" #mandatory
+version = "0.0.1" #mandatory
 
-displayName="Easy There" #mandatory
+displayName = "Easy There" #mandatory
 
-logoFile="examplemod.png" #optional
+logoFile = "examplemod.png" #optional
 
-credits="Thanks for this example mod goes to Java" #optional
+credits = "Thanks for this example mod goes to Java" #optional
 
-authors="Love, Cheese and small house plants" #optional
+authors = "Love, Cheese and small house plants" #optional
 
-description='''
+description = '''
 This is a long form description of the mod. You can write whatever you want here
 
 Have some lorem ipsum.
