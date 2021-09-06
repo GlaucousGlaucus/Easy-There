@@ -8,6 +8,7 @@ import com.nexorel.et.capabilities.ModInteractions;
 import com.nexorel.et.content.Entity.boss.aura.AuraEntity;
 import com.nexorel.et.setup.ClientSetup;
 import com.nexorel.et.setup.ETConfig;
+import com.nexorel.et.world.OreGeneration;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -55,6 +56,7 @@ public class EasyThere {
         // some preinit code
 
         CombatSkillCapability.register();
+        OreGeneration.registerConfiguredFeatures();
 
         MinecraftForge.EVENT_BUS.register(AttachCap.class);
         MinecraftForge.EVENT_BUS.register(ModInteractions.class);

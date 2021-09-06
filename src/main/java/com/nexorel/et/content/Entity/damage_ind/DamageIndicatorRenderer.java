@@ -30,20 +30,25 @@ public class DamageIndicatorRenderer extends EntityRenderer<DamageIndicatorEntit
 
     @Override
     public void render(DamageIndicatorEntity entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
-        Font fontRenderer = this.getFont();
-        matrixStack.pushPose();
-        double d = Math.sqrt(this.entityRenderDispatcher.distanceToSqr(entity.getX(), entity.getY(), entity.getZ()));
-        d = Mth.clamp(d, 0, 2.5);
-        float scale = (float) (0.006F * d);
-        matrixStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-        matrixStack.scale(-scale, -scale, scale);
-        float damage_number = entity.getDamage();
-        StringBuilder text = getDamageText(damage_number, entity.wasCrit(), entity.getTargetAlive());
-        float f1 = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
-        int j = (int) (f1 * 255.0F) << 25;
-        matrixStack.translate((-fontRenderer.width(text.toString()) / 2f) + 0.5f, 0, 0);
-        fontRenderer.drawInBatch(text.toString(), 0, 0, 0xffffffff, false, matrixStack.last().pose(), buffer, false, j, packedLight);
-        matrixStack.popPose();
+        if (entity.age > 0) {
+            Font fontRenderer = this.getFont();
+            matrixStack.pushPose();
+            double d = Math.sqrt(this.entityRenderDispatcher.distanceToSqr(entity.getX(), entity.getY(), entity.getZ()));
+            d = Mth.clamp(d, 0, 2.5);
+            float scale = (float) (0.006F * d);
+            float anim = Mth.lerp(partialTicks, entity.t1, entity.t);
+            float anim1 = Mth.lerp(partialTicks, entity.t3, entity.t2);
+            matrixStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
+            matrixStack.scale(-scale, -scale, scale);
+            matrixStack.scale(anim + anim1, anim, anim);
+            float damage_number = entity.getDamage();
+            StringBuilder text = getDamageText(damage_number, entity.wasCrit(), entity.getTargetAlive());
+            float f1 = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
+            int j = (int) (f1 * 255.0F) << 25;
+            matrixStack.translate((-fontRenderer.width(text.toString()) / 2f) + 0.5f, 0, 0);
+            fontRenderer.drawInBatch(text.toString(), 0, 0, 0xffffffff, false, matrixStack.last().pose(), buffer, false, j, packedLight);
+            matrixStack.popPose();
+        }
     }
 
     private StringBuilder getDamageText(float damage_number, boolean wasCrit, boolean isAlive) {

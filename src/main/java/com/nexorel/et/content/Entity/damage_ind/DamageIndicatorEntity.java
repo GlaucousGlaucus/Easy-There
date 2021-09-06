@@ -13,10 +13,14 @@ import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 public class DamageIndicatorEntity extends Entity implements IEntityAdditionalSpawnData {
 
-    private int age;
+    public int age;
     private float damage = 100;
     private boolean wasCrit;
     private boolean targetAlive;
+    public float t = -1;
+    public float t1 = -1;
+    public float t2 = -1;
+    public float t3 = -1;
 
     public DamageIndicatorEntity(EntityType<? extends DamageIndicatorEntity> w, Level world) {
         super(w, world);
@@ -37,6 +41,12 @@ public class DamageIndicatorEntity extends Entity implements IEntityAdditionalSp
             this.discard();
         } else {
             this.age++;
+        }
+        if (this.level.isClientSide) {
+            this.t1 = this.t;
+            this.t = this.age > (finalAge - 6) ? ((float) finalAge - this.age) / 6 : (this.age < 6 ? ((float) this.age) / 6 : 1);
+            this.t3 = this.t2;
+            this.t2 = this.age > 32 && this.age <= 35 ? 0.25F : this.age > 35 ? -0.05F * (finalAge - this.age) : 0;
         }
     }
 
