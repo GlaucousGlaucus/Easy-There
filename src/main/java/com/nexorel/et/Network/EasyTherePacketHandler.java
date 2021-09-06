@@ -20,10 +20,16 @@ public class EasyTherePacketHandler {
         int id = 0;
         INSTANCE.registerMessage(
                 id++,
-                SkillPacket.class,
-                SkillPacket::encodeMsg,
-                SkillPacket::decodeMsg,
-                SkillPacket.Handler::handle);
+                CombatSkillPacket.class,
+                CombatSkillPacket::encodeMsg,
+                CombatSkillPacket::decodeMsg,
+                CombatSkillPacket.Handler::handle);
+        INSTANCE.registerMessage(
+                id++,
+                MiningSkillPacket.class,
+                MiningSkillPacket::encodeMsg,
+                MiningSkillPacket::decodeMsg,
+                MiningSkillPacket.Handler::handle);
     }
 
     public static void sendDataToClient(Object msg, ServerPlayer player) {

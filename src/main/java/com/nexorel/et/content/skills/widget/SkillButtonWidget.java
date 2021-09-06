@@ -2,8 +2,11 @@ package com.nexorel.et.content.skills.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.nexorel.et.EasyThere;
 import com.nexorel.et.capabilities.CombatSkill;
 import com.nexorel.et.capabilities.CombatSkillCapability;
+import com.nexorel.et.capabilities.MiningSkill;
+import com.nexorel.et.capabilities.MiningSkillCapability;
 import com.nexorel.et.content.skills.SkillScreen;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -18,8 +21,9 @@ public class SkillButtonWidget extends GuiComponent {
     private static int r = 255;
     private static int g = 0;
     private static int b = 0;
-    private SkillScreen skillScreen;
-    private CombatSkill combatSkill = Minecraft.getInstance().player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
+    private final SkillScreen skillScreen;
+    private final CombatSkill combatSkill = Minecraft.getInstance().player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
+    private final MiningSkill miningSkill = Minecraft.getInstance().player.getCapability(MiningSkillCapability.MINING_CAP).orElse(null);
     public boolean isSelected;
     private long animationTime = -1L;
 
@@ -38,9 +42,9 @@ public class SkillButtonWidget extends GuiComponent {
         if (!isSelected) {
             this.blit(matrixStack, (this.X), (this.Y), 0, 143, 25, 25);
             this.animationTime = -1L;
-            r = 255;
-            g = 0;
-            b = 0;
+//            r = 255;
+//            g = 0;
+//            b = 0;
         }
         this.icon.drawIcon(Minecraft.getInstance().getItemRenderer(), this.X + 3, this.Y + 3);
     }
@@ -129,8 +133,37 @@ public class SkillButtonWidget extends GuiComponent {
             }
         }
 
+        rgbINC();
         if (this.icon.getName().equals("skill.combat") && Minecraft.getInstance().player != null) {
             drawForCombat(matrixStack, this.combatSkill, this.X, this.Y);
+        }
+        if (this.icon.getName().equals("skill.mining") && Minecraft.getInstance().player != null) {
+            drawForMining(matrixStack, this.miningSkill, this.X, this.Y);
+        }
+    }
+
+    private static void drawForMining(PoseStack matrixStack, MiningSkill miningSkill, int X, int Y) {
+        Minecraft.getInstance().font.draw(matrixStack, "\u2694 Mining \u2694", X + 58, Y + 5, 0x0fff7); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, "Level:", X + 68, Y + 20, 0x0fff7); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, Integer.toString(MiningSkill.calculateLvlFromXp(miningSkill.getXp())), X + 98, Y + 20, getLevelColor(MiningSkill.calculateLvlFromXp(miningSkill.getXp())));
+
+        double xp_percent = MiningSkill.getXPProgress(miningSkill);
+
+        Minecraft.getInstance().font.draw(matrixStack, xp_percent == -1 ? "" : "Progress To Level " + (MiningSkill.calculateLvlFromXp(miningSkill.getXp()) + 1), X + 35, Y + 35, 0x0fff7); //-5592406
+        if (xp_percent != -1)
+            Minecraft.getInstance().font.draw(matrixStack, xp_percent + " %", X + 50, Y + 53, getXp_percent_color(xp_percent)); //-5592406
+
+        StringBuilder bars = MiningSkill.getProgressBars(xp_percent);
+        if (xp_percent != -1) Minecraft.getInstance().font.draw(matrixStack, "------------------", X + 35, Y + 45, 0);
+        Minecraft.getInstance().font.draw(matrixStack, bars.toString(), X + 35, Y + 45, xp_percent != -1 ? getXp_percent_color(xp_percent) : 0x00ff11); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, "XP: ", X + 35, Y + 65, 0x0fff7); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, Double.toString((double) Math.round(miningSkill.getXp() * 100) / 100), X + 55, Y + 65, 0x77ff00); //-5592406
+        if (xp_percent == -1) {
+//            rgbINC();
+            String hex = String.format("%02x%02x%02x", r, g, b);
+            EasyThere.LOGGER.info("R: " + r + " G: " + g + " B: " + b);
+            int Hex = Integer.parseInt(hex, 16);
+            Minecraft.getInstance().font.draw(matrixStack, "SKILL MAXED", X + (57), Y + 42, Hex);
         }
     }
 
@@ -153,8 +186,9 @@ public class SkillButtonWidget extends GuiComponent {
         Minecraft.getInstance().font.draw(matrixStack, "Crit Chance: ", X + 35, Y + 80, 0x0fff7); //-5592406
         Minecraft.getInstance().font.draw(matrixStack, combatSkill.getCrit_chance() + " %", X + 35 + Minecraft.getInstance().font.width("Crit Chance: "), Y + 80, 0x77ff00); //-5592406
         if (xp_percent == -1) {
-            rgbINC();
+//            rgbINC();
             String hex = String.format("%02x%02x%02x", r, g, b);
+            EasyThere.LOGGER.info("R: " + r + " G: " + g + " B: " + b);
             int Hex = Integer.parseInt(hex, 16);
             Minecraft.getInstance().font.draw(matrixStack, "SKILL MAXED", X + (57), Y + 42, Hex);
         }

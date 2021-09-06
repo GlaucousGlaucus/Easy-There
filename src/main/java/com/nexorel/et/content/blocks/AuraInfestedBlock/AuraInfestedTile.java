@@ -21,7 +21,7 @@ import net.minecraftforge.client.model.data.IModelData;
 
  public class AuraInfestedTile extends TileEntity {
 
- //TODO: MAKE AuraInfestedBlock Work
+ //TODO: Re-add
 
  public static final ModelProperty<BlockState> stateForRender1 = new ModelProperty<>();
  //    private BlockState stateForRender = Blocks.STONE.defaultBlockState();

@@ -9,9 +9,9 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class SkillsCapProvider implements ICapabilitySerializable<CompoundTag> {
+public class CombatSkillCapProvider implements ICapabilitySerializable<CompoundTag> {
 
-    private CombatSkill combat_skill = new CombatSkill();
+    private final CombatSkill combat_skill = new CombatSkill();
     private final static String COMBAT_SKILL_NBT = "combat_skill";
 
     @Nonnull

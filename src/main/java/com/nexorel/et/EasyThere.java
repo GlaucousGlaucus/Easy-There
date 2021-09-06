@@ -4,6 +4,7 @@ import com.nexorel.et.Network.EasyTherePacketHandler;
 import com.nexorel.et.Registries.*;
 import com.nexorel.et.capabilities.AttachCap;
 import com.nexorel.et.capabilities.CombatSkillCapability;
+import com.nexorel.et.capabilities.MiningSkillCapability;
 import com.nexorel.et.capabilities.ModInteractions;
 import com.nexorel.et.content.Entity.boss.aura.AuraEntity;
 import com.nexorel.et.setup.ClientSetup;
@@ -14,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -34,6 +36,7 @@ public class EasyThere {
     public static final Logger LOGGER = LogManager.getLogger();
 
     public EasyThere() {
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ETConfig.clientSpec);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ETConfig.commonSpec);
 
         EasyTherePacketHandler.register();
@@ -46,6 +49,7 @@ public class EasyThere {
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onAttributeCreate);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::capRegistry);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
 
         // Register ourselves for server and other game events we are interested in
@@ -53,9 +57,6 @@ public class EasyThere {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-        // some preinit code
-
-        CombatSkillCapability.register();
         OreGeneration.registerConfiguredFeatures();
 
         MinecraftForge.EVENT_BUS.register(AttachCap.class);
@@ -65,6 +66,11 @@ public class EasyThere {
 
     public void onAttributeCreate(EntityAttributeCreationEvent event) {
         event.put(EntityInit.AURA.get(), AuraEntity.prepareAttributes().build());
+    }
+
+    public void capRegistry(RegisterCapabilitiesEvent event) {
+        CombatSkillCapability.registerCapabilities(event);
+        MiningSkillCapability.registerCapabilities(event);
     }
 
     public static final CreativeModeTab EASY_THERE = new CreativeModeTab("easy_there") {

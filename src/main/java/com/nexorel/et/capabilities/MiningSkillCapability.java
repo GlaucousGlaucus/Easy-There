@@ -4,13 +4,13 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 
-public class CombatSkillCapability {
+public class MiningSkillCapability {
 
-    @CapabilityInject(CombatSkill.class)
-    public static Capability<CombatSkill> COMBAT_CAP = null;
+    @CapabilityInject(MiningSkill.class)
+    public static Capability<MiningSkill> MINING_CAP = null;
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        event.register(CombatSkill.class);
+        event.register(MiningSkill.class);
     }
 
 }

@@ -12,7 +12,8 @@ public class AttachCap {
     public static void attachCap(AttachCapabilitiesEvent<Entity> event) {
         Entity entity = event.getObject();
         if (entity instanceof Player) {
-            event.addCapability(new ResourceLocation("et:skills_cap"), new SkillsCapProvider());
+            event.addCapability(new ResourceLocation("et:combat_skill_cap"), new CombatSkillCapProvider());
+            event.addCapability(new ResourceLocation("et:mining_skill_cap"), new MiningSkillCapProvider());
         }
     }
 

@@ -107,7 +107,8 @@ public class SkillScreen extends Screen {
     }
 
     public enum Skills {
-        COMBAT("skill.combat", new ItemStack(Items.DIAMOND_SWORD));
+        COMBAT("skill.combat", new ItemStack(Items.DIAMOND_SWORD)),
+        MINING("skill.mining", new ItemStack(Items.GOLDEN_PICKAXE));
         protected static final SkillScreen.Skills[] VALUES = values();
         final String name;
         final ItemStack renderStack;

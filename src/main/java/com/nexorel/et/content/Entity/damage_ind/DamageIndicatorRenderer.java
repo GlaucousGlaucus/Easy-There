@@ -1,6 +1,7 @@
 package com.nexorel.et.content.Entity.damage_ind;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.nexorel.et.setup.ETConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -35,7 +36,7 @@ public class DamageIndicatorRenderer extends EntityRenderer<DamageIndicatorEntit
             matrixStack.pushPose();
             double d = Math.sqrt(this.entityRenderDispatcher.distanceToSqr(entity.getX(), entity.getY(), entity.getZ()));
             d = Mth.clamp(d, 0, 2.5);
-            float scale = (float) (0.006F * d);
+            float scale = (float) ((0.006F * d) * ETConfig.CLIENT.DMG_IND_SIZE.get());
             float anim = Mth.lerp(partialTicks, entity.t1, entity.t);
             float anim1 = Mth.lerp(partialTicks, entity.t3, entity.t2);
             matrixStack.mulPose(this.entityRenderDispatcher.cameraOrientation());

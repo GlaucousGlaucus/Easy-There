@@ -1,8 +1,8 @@
 package com.nexorel.et.capabilities;
 
 import com.google.common.collect.Maps;
+import com.nexorel.et.Network.CombatSkillPacket;
 import com.nexorel.et.Network.EasyTherePacketHandler;
-import com.nexorel.et.Network.SkillPacket;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -168,10 +168,6 @@ public class CombatSkill {
         return map;
     }
 
-    public static CombatSkill createDefaultInstance() {
-        return new CombatSkill();
-    }
-
     public int getLevel() {
         return calculateLvlFromXp(this.xp);
     }
@@ -205,7 +201,7 @@ public class CombatSkill {
         CompoundTag nbt = new CompoundTag();
         nbt.putDouble("xp", this.xp);
         nbt.putInt("crit_chance", this.crit_chance);
-        EasyTherePacketHandler.sendDataToClient(new SkillPacket(nbt), playerEntity);
+        EasyTherePacketHandler.sendDataToClient(new CombatSkillPacket(nbt), playerEntity);
     }
 
 }
