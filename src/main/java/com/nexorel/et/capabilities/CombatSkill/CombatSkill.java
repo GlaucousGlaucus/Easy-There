@@ -1,4 +1,4 @@
-package com.nexorel.et.capabilities;
+package com.nexorel.et.capabilities.CombatSkill;
 
 import com.google.common.collect.Maps;
 import com.nexorel.et.Network.CombatSkillPacket;

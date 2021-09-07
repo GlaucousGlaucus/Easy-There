@@ -58,7 +58,7 @@ public class SkillScreen extends Screen {
         this.renderBackground(matrixStack);
         renderInside(matrixStack, mouseX, mouseY, relX, relY, partialTicks, Time);
         renderWindow(matrixStack, relX, relY);
-        renderTooltips(matrixStack, relX, relY, mouseX, mouseY, partialTicks, Time);
+        renderTooltips(matrixStack, relX, relY, mouseX, mouseY, partialTicks);
     }
 
     private void renderInside(PoseStack matrixStack, int mouseX, int mouseY, int x, int y, float partialTicks, long Time) {
@@ -85,9 +85,9 @@ public class SkillScreen extends Screen {
         this.font.draw(matrixStack, "Skills", (float) (p_238695_2_ + 8), (float) (p_238695_3_ + 6), 4210752);
     }
 
-    public void renderTooltips(PoseStack matrixStack, int x, int y, int mouseX, int mouseY, float partialTicks, long Time) {
+    public void renderTooltips(PoseStack matrixStack, int x, int y, int mouseX, int mouseY, float partialTicks) {
         matrixStack.translate((float) (x + 9), (float) (y + 18), 0.0F);
-        this.skillTabGUI.drawTooltips(matrixStack, x, y, mouseX, mouseY, partialTicks, Time);
+        this.skillTabGUI.drawTooltips(matrixStack, x, y, mouseX, mouseY, partialTicks);
     }
 
     @Override

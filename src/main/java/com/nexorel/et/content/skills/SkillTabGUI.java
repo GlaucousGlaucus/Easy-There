@@ -93,7 +93,7 @@ public class SkillTabGUI extends GuiComponent {
         matrixStack.popPose();
     }
 
-    public void drawTooltips(PoseStack matrixStack, int RelX, int RelY, int mouseX, int mouseY, float partialTicks, long Time) {
+    public void drawTooltips(PoseStack matrixStack, int RelX, int RelY, int mouseX, int mouseY, float partialTicks) {
         matrixStack.pushPose();
         matrixStack.translate(0.0F, 0.0F, 200.0F);
         fill(matrixStack, 0, 0, 234, 113, Mth.floor(this.fade * 255.0F) << 24);
@@ -104,7 +104,7 @@ public class SkillTabGUI extends GuiComponent {
         for (SkillButtonWidget widget : this.widgets) {
             if (widget.isSelected) {
                 flag = true;
-                widget.animateAndRender(matrixStack, Time);
+                widget.animateAndRender(matrixStack);
                 break;
             }
         }

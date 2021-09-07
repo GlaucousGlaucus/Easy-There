@@ -3,8 +3,8 @@ package com.nexorel.et;
 import com.nexorel.et.Network.EasyTherePacketHandler;
 import com.nexorel.et.Registries.*;
 import com.nexorel.et.capabilities.AttachCap;
-import com.nexorel.et.capabilities.CombatSkillCapability;
-import com.nexorel.et.capabilities.MiningSkillCapability;
+import com.nexorel.et.capabilities.CombatSkill.CombatSkillCapability;
+import com.nexorel.et.capabilities.MiningSkill.MiningSkillCapability;
 import com.nexorel.et.capabilities.ModInteractions;
 import com.nexorel.et.content.Entity.boss.aura.AuraEntity;
 import com.nexorel.et.setup.ClientSetup;
@@ -27,7 +27,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * TODO: oh yeah and add more skills
+ * TODO: Data Generators
+ * <p>
+ * TODO: ADD FORAGING, FARMING, CRAFTING
  */
 
 @Mod("et")

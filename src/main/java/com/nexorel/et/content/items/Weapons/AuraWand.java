@@ -1,8 +1,8 @@
 package com.nexorel.et.content.items.Weapons;
 
 import com.nexorel.et.EasyThere;
-import com.nexorel.et.capabilities.CombatSkill;
-import com.nexorel.et.capabilities.CombatSkillCapability;
+import com.nexorel.et.capabilities.CombatSkill.CombatSkill;
+import com.nexorel.et.capabilities.CombatSkill.CombatSkillCapability;
 import com.nexorel.et.capabilities.ModInteractions;
 import com.nexorel.et.content.items.IWandTiers;
 import net.minecraft.ChatFormatting;

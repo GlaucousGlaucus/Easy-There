@@ -1,6 +1,6 @@
 package com.nexorel.et.Network;
 
-import com.nexorel.et.capabilities.MiningSkillCapability;
+import com.nexorel.et.capabilities.MiningSkill.MiningSkillCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;

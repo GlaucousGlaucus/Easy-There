@@ -1,16 +1,16 @@
-package com.nexorel.et.capabilities;
+package com.nexorel.et.capabilities.CombatSkill;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 
-public class MiningSkillCapability {
+public class CombatSkillCapability {
 
-    @CapabilityInject(MiningSkill.class)
-    public static Capability<MiningSkill> MINING_CAP = null;
+    @CapabilityInject(CombatSkill.class)
+    public static Capability<CombatSkill> COMBAT_CAP = null;
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        event.register(MiningSkill.class);
+        event.register(CombatSkill.class);
     }
 
 }

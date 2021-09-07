@@ -1,6 +1,10 @@
 package com.nexorel.et.capabilities;
 
 import com.nexorel.et.EasyThere;
+import com.nexorel.et.capabilities.CombatSkill.CombatSkill;
+import com.nexorel.et.capabilities.CombatSkill.CombatSkillCapability;
+import com.nexorel.et.capabilities.MiningSkill.MiningSkill;
+import com.nexorel.et.capabilities.MiningSkill.MiningSkillCapability;
 import com.nexorel.et.content.Entity.damage_ind.DamageIndicatorEntity;
 import com.nexorel.et.content.items.Talismans.TalismanItem;
 import com.nexorel.et.content.items.talisBag.TalismanBagItem;
@@ -25,13 +29,16 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.glfw.GLFW;
 
@@ -43,8 +50,7 @@ public class ModInteractions {
 
     @SubscribeEvent
     public static void PlayerTickEvent(TickEvent.PlayerTickEvent event) {
-        if (event.player instanceof ServerPlayer) {
-            ServerPlayer serverPlayerEntity = (ServerPlayer) event.player;
+        if (event.player instanceof ServerPlayer serverPlayerEntity) {
             if (!serverPlayerEntity.level.isClientSide) {
                 serverPlayerEntity.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(combatSkill -> {
                     Inventory inv = event.player.getInventory();
@@ -57,7 +63,6 @@ public class ModInteractions {
                             }
                         }
                     });
-//                    int items_talis_bag_cc = inv.items.stream().map(ItemStack::getItem).filter(item -> item instanceof TalismanBagItem).map(item -> (TalismanBagItem) item).mapToInt(TalismanBagItem::getOverallCC).sum();
                     int final_cc = items_cc + items_talis_bag_cc.get();
                     combatSkill.setCrit_chance(Mth.clamp(final_cc, 0, 100));
                     combatSkill.shareData(serverPlayerEntity);
@@ -72,6 +77,9 @@ public class ModInteractions {
         if (!serverPlayerEntity.level.isClientSide) {
             serverPlayerEntity.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(combatSkill -> {
                 combatSkill.shareData(serverPlayerEntity);
+            });
+            serverPlayerEntity.getCapability(MiningSkillCapability.MINING_CAP).ifPresent(miningSkill -> {
+                miningSkill.shareData(serverPlayerEntity);
             });
         }
     }
@@ -89,9 +97,13 @@ public class ModInteractions {
                         combatSkill_new.setXp(combatSkill.getXp());
                         combatSkill_new.setCrit_chance(combatSkill.getCrit_chance());
                         combatSkill_new.shareData(serverPlayerEntity_new);
-                        EasyThere.LOGGER.info("passed - A");
                     });
-                    EasyThere.LOGGER.info("passed - B");
+                });
+                serverPlayerEntity_original.getCapability(MiningSkillCapability.MINING_CAP).ifPresent(miningSkill -> {
+                    serverPlayerEntity_new.getCapability(MiningSkillCapability.MINING_CAP).ifPresent(miningSkill_new -> {
+                        miningSkill_new.setXp(miningSkill.getXp());
+                        miningSkill.shareData(serverPlayerEntity_new);
+                    });
                 });
             }
             serverPlayerEntity_original.invalidateCaps();
@@ -103,6 +115,7 @@ public class ModInteractions {
         ServerPlayer serverPlayerEntity = (ServerPlayer) event.getPlayer();
         if (!serverPlayerEntity.level.isClientSide) {
             serverPlayerEntity.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(combatSkill -> combatSkill.shareData(serverPlayerEntity));
+            serverPlayerEntity.getCapability(MiningSkillCapability.MINING_CAP).ifPresent(miningSkill -> miningSkill.shareData(serverPlayerEntity));
         }
     }
 
@@ -170,8 +183,7 @@ public class ModInteractions {
         if (event.getSource().isProjectile()) {
             DamageSource damageSource = event.getSource();
             LivingEntity target = event.getEntityLiving();
-            if (damageSource.getEntity() instanceof Player && damageSource.getDirectEntity() != null && target != null) {
-                Player attacker = (Player) damageSource.getEntity();
+            if (damageSource.getEntity() instanceof Player attacker && damageSource.getDirectEntity() != null && target != null) {
                 CombatSkill combatSkill = attacker.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
                 Level world = attacker.level;
                 if (world.isClientSide()) return;
@@ -199,8 +211,7 @@ public class ModInteractions {
         if (world.isClientSide()) return;
         if (!(world instanceof ServerLevel)) throw new AssertionError("ServerWorld Expected");
         int combat_skill_level = combatSkill.getLevel();
-        if (Target instanceof LivingEntity) {
-            LivingEntity target = (LivingEntity) Target;
+        if (Target instanceof LivingEntity target) {
             float attack_strength = attacker.getAttackStrengthScale(0.5F);
             float final_damage = calculate_dmg_M(target, attacker, combat_skill_level, attack_strength);
             boolean flag = ETConfig.COMMON.COMBAT_COOLDOWN.get() && (attack_strength > 0.9F);
@@ -252,4 +263,46 @@ public class ModInteractions {
         EasyThere.LOGGER.info(final_damage);
         target.level.addFreshEntity(indicator);
     }
+
+    // Mining Skill Interactions
+
+    @SubscribeEvent
+    public static void onBlockBreakByPlayer(BlockEvent.BreakEvent event) {
+        Player player = event.getPlayer();
+        MiningSkill miningSkill = player.getCapability(MiningSkillCapability.MINING_CAP).orElse(null);
+        if (!player.level.isClientSide && player.level instanceof ServerLevel) {
+            if (MiningSkill.getMiningXp().containsKey(event.getState().getBlock())) {
+                event.setExpToDrop(event.getExpToDrop() + event.getExpToDrop() * miningSkill.getLevel());
+                int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, player);
+                if (i == 0) {
+                    assignMiningXP(event.getState().getBlock(), miningSkill, player, player.level);
+                    if (player instanceof ServerPlayer serverPlayer) {
+                        if (!serverPlayer.level.isClientSide) {
+                            serverPlayer.getCapability(MiningSkillCapability.MINING_CAP).ifPresent(miningSkill1 -> miningSkill.shareData(serverPlayer));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static void assignMiningXP(Block target, MiningSkill miningSkill, Player player, Level world) {
+        if (player.isCreative()) return;
+        Map<Block, Float> xps = MiningSkill.getMiningXp();
+        float xp;
+        if (xps.get(target) != null) {
+            xp = xps.get(target);
+            xp = (float) (xp + (xp * (miningSkill.getLevel() * 0.05)));
+            int OL = miningSkill.getLevel();
+            miningSkill.addXp(xp);
+            player.displayClientMessage(new TextComponent(ChatFormatting.AQUA + "Mining +" + xp), true);
+            int NL = miningSkill.getLevel();
+            if (NL - OL > 0) {
+                player.sendMessage(new TextComponent(ChatFormatting.AQUA + "\u263A" + "Skill Level Up: Mining Level: " + OL + " \u2192 " + NL), player.getUUID());
+                world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 3F, 0.24F);
+            }
+        }
+        world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 3F, 2F);
+    }
+    //--------------------------
 }

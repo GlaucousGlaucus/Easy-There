@@ -1,5 +1,7 @@
 package com.nexorel.et.capabilities;
 
+import com.nexorel.et.capabilities.CombatSkill.CombatSkillCapProvider;
+import com.nexorel.et.capabilities.MiningSkill.MiningSkillCapProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
