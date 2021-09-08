@@ -48,6 +48,7 @@ public class EasyThere {
         BlockEntityInit.init();
         ContainerInit.init();
         RecipeInit.init();
+        LootInit.init();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onAttributeCreate);

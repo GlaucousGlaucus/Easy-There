@@ -14,8 +14,8 @@ public class GemOreBlock extends Block {
 
     public GemOreBlock(int xp) {
         super(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.STONE)
+                .strength(5, 70)
                 .requiresCorrectToolForDrops()
-                .strength(35, 70)
         );
         this.xp = xp;
     }

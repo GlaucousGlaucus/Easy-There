@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "et:agriyelite_block",
+    "et:aquomite_block",
+    "et:gold_almao_block",
+    "et:orange_red_temarelite_block",
+    "et:cryophanite_block",
+    "et:peach_ekanesia_block",
+    "et:crimson_pectene_block",
+    "et:blue_violet_aegidonyx_block",
+    "et:electric_blue_cypberite_block",
+    "et:twinkling_breadite_block",
+    "et:salmon_linadingerite_block",
+    "et:blue_rapmony_block",
+    "et:violet_tunoradoite_block",
+    "et:magenta_rose_lollnic_block",
+    "et:jade_petaogopite_block"
+  ]
+}

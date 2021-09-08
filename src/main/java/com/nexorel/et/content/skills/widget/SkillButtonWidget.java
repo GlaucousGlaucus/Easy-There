@@ -155,9 +155,8 @@ public class SkillButtonWidget extends GuiComponent {
         Minecraft.getInstance().font.draw(matrixStack, "XP: ", X + 35, Y + 65, 0x0fff7); //-5592406
         Minecraft.getInstance().font.draw(matrixStack, Double.toString((double) Math.round(miningSkill.getXp() * 100) / 100), X + 55, Y + 65, 0x77ff00); //-5592406
         Minecraft.getInstance().font.draw(matrixStack, "XP MULTIPLIER: ", X + 35, Y + 80, 0x0fff7); //-5592406
-        Minecraft.getInstance().font.draw(matrixStack, (miningSkill.getLevel() * 0.05) + "x", X + 35 + Minecraft.getInstance().font.width("XP MULTIPLIER: "), Y + 80, 0x77ff00); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, Math.round(miningSkill.getLevel() * 0.05 * 100) / 100 + "x", X + 35 + Minecraft.getInstance().font.width("XP MULTIPLIER: "), Y + 80, 0x77ff00); //-5592406
         if (xp_percent == -1) {
-//            rgbINC();
             String hex = String.format("%02x%02x%02x", r, g, b);
             int Hex = Integer.parseInt(hex, 16);
             Minecraft.getInstance().font.draw(matrixStack, "SKILL MAXED", X + (57), Y + 42, Hex);
@@ -183,7 +182,6 @@ public class SkillButtonWidget extends GuiComponent {
         Minecraft.getInstance().font.draw(matrixStack, "Crit Chance: ", X + 35, Y + 80, 0x0fff7); //-5592406
         Minecraft.getInstance().font.draw(matrixStack, combatSkill.getCrit_chance() + " %", X + 35 + Minecraft.getInstance().font.width("Crit Chance: "), Y + 80, 0x77ff00); //-5592406
         if (xp_percent == -1) {
-//            rgbINC();
             String hex = String.format("%02x%02x%02x", r, g, b);
             int Hex = Integer.parseInt(hex, 16);
             Minecraft.getInstance().font.draw(matrixStack, "SKILL MAXED", X + (57), Y + 42, Hex);
