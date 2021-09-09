@@ -2,6 +2,8 @@ package com.nexorel.et.capabilities;
 
 import com.nexorel.et.capabilities.CombatSkill.CombatSkill;
 import com.nexorel.et.capabilities.CombatSkill.CombatSkillCapability;
+import com.nexorel.et.capabilities.FarmingSkill.FarmingSkill;
+import com.nexorel.et.capabilities.FarmingSkill.FarmingSkillCapability;
 import com.nexorel.et.capabilities.ForagingSkill.ForagingSkill;
 import com.nexorel.et.capabilities.ForagingSkill.ForagingSkillCapability;
 import com.nexorel.et.capabilities.MiningSkill.MiningSkill;
@@ -93,6 +95,9 @@ public class ModInteractions {
             serverPlayerEntity.getCapability(ForagingSkillCapability.FORAGING_CAP).ifPresent(foragingSkill -> {
                 foragingSkill.shareData(serverPlayerEntity);
             });
+            serverPlayerEntity.getCapability(FarmingSkillCapability.FARMING_CAP).ifPresent(farmingSkill -> {
+                farmingSkill.shareData(serverPlayerEntity);
+            });
         }
     }
 
@@ -122,6 +127,12 @@ public class ModInteractions {
                         foragingSkill.shareData(serverPlayerEntity_new);
                     });
                 });
+                serverPlayerEntity_original.getCapability(FarmingSkillCapability.FARMING_CAP).ifPresent(farmingSkill -> {
+                    serverPlayerEntity_new.getCapability(FarmingSkillCapability.FARMING_CAP).ifPresent(farmingSkill1 -> {
+                        farmingSkill1.setXp(farmingSkill.getXp());
+                        farmingSkill.shareData(serverPlayerEntity_new);
+                    });
+                });
             }
             serverPlayerEntity_original.invalidateCaps();
         }
@@ -134,6 +145,7 @@ public class ModInteractions {
             serverPlayerEntity.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(combatSkill -> combatSkill.shareData(serverPlayerEntity));
             serverPlayerEntity.getCapability(MiningSkillCapability.MINING_CAP).ifPresent(miningSkill -> miningSkill.shareData(serverPlayerEntity));
             serverPlayerEntity.getCapability(ForagingSkillCapability.FORAGING_CAP).ifPresent(foragingSkill -> foragingSkill.shareData(serverPlayerEntity));
+            serverPlayerEntity.getCapability(FarmingSkillCapability.FARMING_CAP).ifPresent(farmingSkill -> farmingSkill.shareData(serverPlayerEntity));
         }
     }
 
@@ -301,6 +313,27 @@ public class ModInteractions {
         level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 3F, 2F);
     }
 
+    // Farming SKill int
+
+    private static void assignFarmingXP(Block target, FarmingSkill farmingSkill, Player player, Level world) {
+        if (player.isCreative()) return;
+        Map<Block, Float> xps = FarmingSkill.getFarmingXp();
+        float xp;
+        if (xps.get(target) != null) {
+            xp = xps.get(target);
+            xp = (float) (xp + (xp * (farmingSkill.getLevel() * 0.05)));
+            int OL = farmingSkill.getLevel();
+            farmingSkill.addXp(xp);
+            player.displayClientMessage(new TextComponent(ChatFormatting.AQUA + "Farming +" + xp), true);
+            int NL = farmingSkill.getLevel();
+            if (NL - OL > 0) {
+                player.sendMessage(new TextComponent(ChatFormatting.AQUA + "\u263A" + "Skill Level Up: Farming Level: " + OL + " \u2192 " + NL), player.getUUID());
+                world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 3F, 0.24F);
+            }
+        }
+        world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 3F, 2F);
+    }
+
     // Mining Skill Interactions
 
     @SubscribeEvent
@@ -310,6 +343,7 @@ public class ModInteractions {
         Level level = player.level;
         MiningSkill miningSkill = player.getCapability(MiningSkillCapability.MINING_CAP).orElse(null);
         ForagingSkill foragingSkill = player.getCapability(ForagingSkillCapability.FORAGING_CAP).orElse(null);
+        FarmingSkill farmingSkill = player.getCapability(FarmingSkillCapability.FARMING_CAP).orElse(null);
         if (!player.level.isClientSide && player.level instanceof ServerLevel) {
             if (MiningSkill.getMiningXp().containsKey(target_block)) {
                 event.setExpToDrop(event.getExpToDrop() + event.getExpToDrop() * miningSkill.getLevel());
@@ -330,6 +364,13 @@ public class ModInteractions {
                         if (!serverPlayer.level.isClientSide) {
                             serverPlayer.getCapability(ForagingSkillCapability.FORAGING_CAP).ifPresent(skill -> foragingSkill.shareData(serverPlayer));
                         }
+                    }
+                }
+            } else if (FarmingSkill.getFarmingXp().containsKey(target_block)) {
+                assignFarmingXP(target_block, farmingSkill, player, player.level);
+                if (player instanceof ServerPlayer serverPlayer) {
+                    if (!serverPlayer.level.isClientSide) {
+                        serverPlayer.getCapability(FarmingSkillCapability.FARMING_CAP).ifPresent(skill -> farmingSkill.shareData(serverPlayer));
                     }
                 }
             }

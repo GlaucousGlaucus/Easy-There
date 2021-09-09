@@ -7,6 +7,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.nexorel.et.capabilities.CombatSkill.CombatSkill;
 import com.nexorel.et.capabilities.CombatSkill.CombatSkillCapability;
+import com.nexorel.et.capabilities.FarmingSkill.FarmingSkill;
+import com.nexorel.et.capabilities.FarmingSkill.FarmingSkillCapability;
 import com.nexorel.et.capabilities.ForagingSkill.ForagingSkill;
 import com.nexorel.et.capabilities.ForagingSkill.ForagingSkillCapability;
 import com.nexorel.et.capabilities.MiningSkill.MiningSkill;
@@ -43,14 +45,37 @@ public class SkillSetCommand {
                                 .then(Commands.literal("foraging")
                                         .then(Commands.argument("level", IntegerArgumentType.integer(0, 20))
                                                 .executes(SkillSetCommand::setForagingSkillLvl)))
+                                .then(Commands.literal("farming")
+                                        .then(Commands.argument("level", IntegerArgumentType.integer(0, 20))
+                                                .executes(SkillSetCommand::setFarmingSkillLvl)))
                         );
         dispatcher.register(skill_set_cmd);
     }
 
+    static int setFarmingSkillLvl(CommandContext<CommandSourceStack> commandContext) throws CommandSyntaxException {
+        Entity entity = commandContext.getSource().getEntity();
+        if (entity instanceof Player player) {
+            FarmingSkill farmingSkill = player.getCapability(FarmingSkillCapability.FARMING_CAP).orElse(null);
+            int target_level = IntegerArgumentType.getInteger(commandContext, "level");
+            if (target_level == 0) {
+                farmingSkill.setXp(0);
+            } else {
+                double target_xp = ((FarmingSkill.calculateFullTargetXp(target_level - 1) + 1));
+                farmingSkill.setXp(target_xp);
+            }
+            farmingSkill.shareData((ServerPlayer) player);
+            Component component = new TextComponent("Skill Level Set to " + ChatFormatting.AQUA + farmingSkill.getLevel() + ChatFormatting.WHITE + " For: " + ChatFormatting.AQUA + "Farming Skill");
+            TranslatableComponent text =
+                    new TranslatableComponent("chat.type.announcement",
+                            commandContext.getSource().getDisplayName(), component);
+            commandContext.getSource().getServer().getPlayerList().broadcastMessage(text, ChatType.CHAT, entity.getUUID());
+        }
+        return 1;
+    }
+
     static int setForagingSkillLvl(CommandContext<CommandSourceStack> commandContext) throws CommandSyntaxException {
         Entity entity = commandContext.getSource().getEntity();
-        if (entity instanceof Player) {
-            Player player = (Player) entity;
+        if (entity instanceof Player player) {
             ForagingSkill foragingSkill = player.getCapability(ForagingSkillCapability.FORAGING_CAP).orElse(null);
             int target_level = IntegerArgumentType.getInteger(commandContext, "level");
             if (target_level == 0) {
@@ -71,8 +96,7 @@ public class SkillSetCommand {
 
     static int setMiningSkillLvl(CommandContext<CommandSourceStack> commandContext) throws CommandSyntaxException {
         Entity entity = commandContext.getSource().getEntity();
-        if (entity instanceof Player) {
-            Player player = (Player) entity;
+        if (entity instanceof Player player) {
             MiningSkill miningSkill = player.getCapability(MiningSkillCapability.MINING_CAP).orElse(null);
             int target_level = IntegerArgumentType.getInteger(commandContext, "level");
             if (target_level == 0) {
@@ -93,8 +117,7 @@ public class SkillSetCommand {
 
     static int setCombatSkillLvl(CommandContext<CommandSourceStack> commandContext) throws CommandSyntaxException {
         Entity entity = commandContext.getSource().getEntity();
-        if (entity instanceof Player) {
-            Player player = (Player) entity;
+        if (entity instanceof Player player) {
             CombatSkill combatSkill = player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
             int target_level = IntegerArgumentType.getInteger(commandContext, "level");
             if (target_level == 0) {

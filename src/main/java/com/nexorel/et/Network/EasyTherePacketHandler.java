@@ -36,6 +36,12 @@ public class EasyTherePacketHandler {
                 ForagingSkillPacket::encodeMsg,
                 ForagingSkillPacket::decodeMsg,
                 ForagingSkillPacket.Handler::handle);
+        INSTANCE.registerMessage(
+                id++,
+                FarmingSkillPacket.class,
+                FarmingSkillPacket::encodeMsg,
+                FarmingSkillPacket::decodeMsg,
+                FarmingSkillPacket.Handler::handle);
     }
 
     public static void sendDataToClient(Object msg, ServerPlayer player) {

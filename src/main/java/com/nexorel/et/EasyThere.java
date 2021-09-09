@@ -4,6 +4,7 @@ import com.nexorel.et.Network.EasyTherePacketHandler;
 import com.nexorel.et.Registries.*;
 import com.nexorel.et.capabilities.AttachCap;
 import com.nexorel.et.capabilities.CombatSkill.CombatSkillCapability;
+import com.nexorel.et.capabilities.FarmingSkill.FarmingSkillCapability;
 import com.nexorel.et.capabilities.ForagingSkill.ForagingSkillCapability;
 import com.nexorel.et.capabilities.MiningSkill.MiningSkillCapability;
 import com.nexorel.et.capabilities.ModInteractions;
@@ -30,6 +31,8 @@ import org.apache.logging.log4j.Logger;
 /**
  * TODO: FARMING, CRAFTING
  */
+
+// TODO: Add Choppermerang that right click goes like a boomerang and chops tress it encounters and add skill lvl requrement to it
 
 @Mod("et")
 public class EasyThere {
@@ -74,6 +77,7 @@ public class EasyThere {
         CombatSkillCapability.registerCapabilities(event);
         MiningSkillCapability.registerCapabilities(event);
         ForagingSkillCapability.registerCapabilities(event);
+        FarmingSkillCapability.registerCapabilities(event);
     }
 
     public static final CreativeModeTab EASY_THERE = new CreativeModeTab("easy_there") {
