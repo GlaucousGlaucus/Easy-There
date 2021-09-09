@@ -4,6 +4,7 @@ import com.nexorel.et.Network.EasyTherePacketHandler;
 import com.nexorel.et.Registries.*;
 import com.nexorel.et.capabilities.AttachCap;
 import com.nexorel.et.capabilities.CombatSkill.CombatSkillCapability;
+import com.nexorel.et.capabilities.ForagingSkill.ForagingSkillCapability;
 import com.nexorel.et.capabilities.MiningSkill.MiningSkillCapability;
 import com.nexorel.et.capabilities.ModInteractions;
 import com.nexorel.et.content.Entity.boss.aura.AuraEntity;
@@ -27,9 +28,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * TODO: Data Generators
- * <p>
- * TODO: ADD FORAGING, FARMING, CRAFTING
+ * TODO: FARMING, CRAFTING
  */
 
 @Mod("et")
@@ -74,6 +73,7 @@ public class EasyThere {
     public void capRegistry(RegisterCapabilitiesEvent event) {
         CombatSkillCapability.registerCapabilities(event);
         MiningSkillCapability.registerCapabilities(event);
+        ForagingSkillCapability.registerCapabilities(event);
     }
 
     public static final CreativeModeTab EASY_THERE = new CreativeModeTab("easy_there") {

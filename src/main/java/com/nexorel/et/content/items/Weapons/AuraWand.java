@@ -1,6 +1,5 @@
 package com.nexorel.et.content.items.Weapons;
 
-import com.nexorel.et.EasyThere;
 import com.nexorel.et.capabilities.CombatSkill.CombatSkill;
 import com.nexorel.et.capabilities.CombatSkill.CombatSkillCapability;
 import com.nexorel.et.capabilities.ModInteractions;
@@ -66,13 +65,11 @@ public class AuraWand extends Item {
                     itemInHand.setTag(tag);
                 }
                 if (tag.contains("test_mode")) {
-                    EasyThere.LOGGER.info("TEST_MODE: " + tag.getInt("test_mode"));
                     if (tag.getInt("test_mode") == 1) {
                         tag.putInt("test_mode", 2);
                     } else {
                         tag.putInt("test_mode", 1);
                     }
-                    EasyThere.LOGGER.info("TEST_MODE: " + tag.getInt("test_mode"));
                 } else {
                     tag.putInt("test_mode", 1);
                 }
@@ -100,7 +97,6 @@ public class AuraWand extends Item {
                     final_dmg = flag ? (float) (final_dmg * 1.5) : final_dmg;
                     target.hurt(DamageSource.MAGIC, final_dmg);
                     ModInteractions.summon_damage_indicator((LivingEntity) target, final_dmg, flag);
-                    EasyThere.LOGGER.info(target);
                 }
             }
         } else {
@@ -120,7 +116,6 @@ public class AuraWand extends Item {
                     final_dmg = flag ? (float) (final_dmg * 1.5) : final_dmg;
                     target.hurt(DamageSource.MAGIC, final_dmg);
                     ModInteractions.summon_damage_indicator((LivingEntity) target, final_dmg, flag);
-                    EasyThere.LOGGER.info(target);
                 }
             }
         }

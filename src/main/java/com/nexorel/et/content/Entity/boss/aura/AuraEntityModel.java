@@ -6,7 +6,6 @@ package com.nexorel.et.content.Entity.boss.aura;// Made with Blockbench 3.9.2
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.nexorel.et.EasyThere;
 import net.minecraft.client.model.BlazeModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -93,7 +92,6 @@ public class AuraEntityModel extends EntityModel<AuraEntity> {
      */
     @Override
     public void setupAnim(AuraEntity auraEntity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        EasyThere.LOGGER.info(ageInTicks);
         if (auraEntity.isAggressive()) {
             if (tick > 0) {
                 tick--;

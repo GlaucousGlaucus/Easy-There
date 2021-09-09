@@ -4,6 +4,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.nexorel.et.capabilities.CombatSkill.CombatSkill;
 import com.nexorel.et.capabilities.CombatSkill.CombatSkillCapability;
+import com.nexorel.et.capabilities.ForagingSkill.ForagingSkill;
+import com.nexorel.et.capabilities.ForagingSkill.ForagingSkillCapability;
 import com.nexorel.et.capabilities.MiningSkill.MiningSkill;
 import com.nexorel.et.capabilities.MiningSkill.MiningSkillCapability;
 import com.nexorel.et.content.skills.SkillScreen;
@@ -23,6 +25,7 @@ public class SkillButtonWidget extends GuiComponent {
     private final SkillScreen skillScreen;
     private final CombatSkill combatSkill = Minecraft.getInstance().player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
     private final MiningSkill miningSkill = Minecraft.getInstance().player.getCapability(MiningSkillCapability.MINING_CAP).orElse(null);
+    private final ForagingSkill foragingSkill = Minecraft.getInstance().player.getCapability(ForagingSkillCapability.FORAGING_CAP).orElse(null);
     public boolean isSelected;
     private long animationTime = -1L;
 
@@ -135,6 +138,34 @@ public class SkillButtonWidget extends GuiComponent {
         }
         if (this.icon.getName().equals("skill.mining") && Minecraft.getInstance().player != null) {
             drawForMining(matrixStack, this.miningSkill, this.X, this.Y);
+        }
+        if (this.icon.getName().equals("skill.foraging") && Minecraft.getInstance().player != null) {
+            drawForForaging(matrixStack, this.foragingSkill, this.X, this.Y);
+        }
+    }
+
+    private static void drawForForaging(PoseStack matrixStack, ForagingSkill foragingSkill, int X, int Y) {
+        Minecraft.getInstance().font.draw(matrixStack, "\u2692 Foraging \u2692", X + 48, Y + 5, 0x0fff7); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, "Level:", X + 68, Y + 20, 0x0fff7); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, Integer.toString(ForagingSkill.calculateLvlFromXp(foragingSkill.getXp())), X + 98, Y + 20, getLevelColor(ForagingSkill.calculateLvlFromXp(foragingSkill.getXp())));
+
+        double xp_percent = ForagingSkill.getXPProgress(foragingSkill);
+
+        Minecraft.getInstance().font.draw(matrixStack, xp_percent == -1 ? "" : "Progress To Level " + (ForagingSkill.calculateLvlFromXp(foragingSkill.getXp()) + 1), X + 35, Y + 35, 0x0fff7); //-5592406
+        if (xp_percent != -1)
+            Minecraft.getInstance().font.draw(matrixStack, xp_percent + " %", X + 60, Y + 53, getXp_percent_color(xp_percent)); //-5592406
+
+        StringBuilder bars = ForagingSkill.getProgressBars(xp_percent);
+        if (xp_percent != -1) Minecraft.getInstance().font.draw(matrixStack, "------------------", X + 35, Y + 45, 0);
+        Minecraft.getInstance().font.draw(matrixStack, bars.toString(), X + 35, Y + 45, xp_percent != -1 ? getXp_percent_color(xp_percent) : 0x00ff11); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, "XP: ", X + 35, Y + 65, 0x0fff7); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, Double.toString((double) Math.round(foragingSkill.getXp() * 100) / 100), X + 55, Y + 65, 0x77ff00); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, "XP MULTIPLIER: ", X + 35, Y + 80, 0x0fff7); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, Math.round(foragingSkill.getLevel() * 0.05 * 100) / 100 + "x", X + 35 + Minecraft.getInstance().font.width("XP MULTIPLIER: "), Y + 80, 0x77ff00); //-5592406
+        if (xp_percent == -1) {
+            String hex = String.format("%02x%02x%02x", r, g, b);
+            int Hex = Integer.parseInt(hex, 16);
+            Minecraft.getInstance().font.draw(matrixStack, "SKILL MAXED", X + (57), Y + 42, Hex);
         }
     }
 

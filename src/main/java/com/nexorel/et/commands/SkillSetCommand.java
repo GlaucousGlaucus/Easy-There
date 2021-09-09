@@ -5,9 +5,10 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.nexorel.et.EasyThere;
 import com.nexorel.et.capabilities.CombatSkill.CombatSkill;
 import com.nexorel.et.capabilities.CombatSkill.CombatSkillCapability;
+import com.nexorel.et.capabilities.ForagingSkill.ForagingSkill;
+import com.nexorel.et.capabilities.ForagingSkill.ForagingSkillCapability;
 import com.nexorel.et.capabilities.MiningSkill.MiningSkill;
 import com.nexorel.et.capabilities.MiningSkill.MiningSkillCapability;
 import net.minecraft.ChatFormatting;
@@ -39,8 +40,33 @@ public class SkillSetCommand {
                                 .then(Commands.literal("mining")
                                         .then(Commands.argument("level", IntegerArgumentType.integer(0, 20))
                                                 .executes(SkillSetCommand::setMiningSkillLvl)))
+                                .then(Commands.literal("foraging")
+                                        .then(Commands.argument("level", IntegerArgumentType.integer(0, 20))
+                                                .executes(SkillSetCommand::setForagingSkillLvl)))
                         );
         dispatcher.register(skill_set_cmd);
+    }
+
+    static int setForagingSkillLvl(CommandContext<CommandSourceStack> commandContext) throws CommandSyntaxException {
+        Entity entity = commandContext.getSource().getEntity();
+        if (entity instanceof Player) {
+            Player player = (Player) entity;
+            ForagingSkill foragingSkill = player.getCapability(ForagingSkillCapability.FORAGING_CAP).orElse(null);
+            int target_level = IntegerArgumentType.getInteger(commandContext, "level");
+            if (target_level == 0) {
+                foragingSkill.setXp(0);
+            } else {
+                double target_xp = ((ForagingSkill.calculateFullTargetXp(target_level - 1) + 1));
+                foragingSkill.setXp(target_xp);
+            }
+            foragingSkill.shareData((ServerPlayer) player);
+            Component component = new TextComponent("Skill Level Set to " + ChatFormatting.AQUA + foragingSkill.getLevel() + ChatFormatting.WHITE + " For: " + ChatFormatting.AQUA + "Foraging Skill");
+            TranslatableComponent text =
+                    new TranslatableComponent("chat.type.announcement",
+                            commandContext.getSource().getDisplayName(), component);
+            commandContext.getSource().getServer().getPlayerList().broadcastMessage(text, ChatType.CHAT, entity.getUUID());
+        }
+        return 1;
     }
 
     static int setMiningSkillLvl(CommandContext<CommandSourceStack> commandContext) throws CommandSyntaxException {
@@ -56,7 +82,6 @@ public class SkillSetCommand {
                 miningSkill.setXp(target_xp);
             }
             miningSkill.shareData((ServerPlayer) player);
-            EasyThere.LOGGER.info(miningSkill.getLevel());
             Component component = new TextComponent("Skill Level Set to " + ChatFormatting.AQUA + miningSkill.getLevel() + ChatFormatting.WHITE + " For: " + ChatFormatting.AQUA + "Mining Skill");
             TranslatableComponent text =
                     new TranslatableComponent("chat.type.announcement",
@@ -79,7 +104,6 @@ public class SkillSetCommand {
                 combatSkill.setXp(target_xp);
             }
             combatSkill.shareData((ServerPlayer) player);
-            EasyThere.LOGGER.info(combatSkill.getLevel());
             Component component = new TextComponent("Skill Level Set to " + ChatFormatting.AQUA + combatSkill.getLevel() + ChatFormatting.WHITE + " For: " + ChatFormatting.AQUA + "Combat Skill");
             TranslatableComponent text =
                     new TranslatableComponent("chat.type.announcement",

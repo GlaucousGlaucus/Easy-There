@@ -12,7 +12,7 @@ public class DataGenerators {
     public static void gatherData(GatherDataEvent event) {
         DataGenerator generator = event.getGenerator();
         if (event.includeServer()) {
-//            generator.addProvider(new ModGenRecipes(generator));
+            generator.addProvider(new RecipeGen(generator));
             generator.addProvider(new ModGenLootTables(generator));
         }
         if (event.includeClient()) {

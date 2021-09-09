@@ -1,8 +1,9 @@
 package com.nexorel.et.capabilities;
 
-import com.nexorel.et.EasyThere;
 import com.nexorel.et.capabilities.CombatSkill.CombatSkill;
 import com.nexorel.et.capabilities.CombatSkill.CombatSkillCapability;
+import com.nexorel.et.capabilities.ForagingSkill.ForagingSkill;
+import com.nexorel.et.capabilities.ForagingSkill.ForagingSkillCapability;
 import com.nexorel.et.capabilities.MiningSkill.MiningSkill;
 import com.nexorel.et.capabilities.MiningSkill.MiningSkillCapability;
 import com.nexorel.et.content.Entity.damage_ind.DamageIndicatorEntity;
@@ -13,6 +14,7 @@ import com.nexorel.et.setup.ClientSetup;
 import com.nexorel.et.setup.ETConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,6 +22,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -67,6 +70,12 @@ public class ModInteractions {
                     combatSkill.setCrit_chance(Mth.clamp(final_cc, 0, 100));
                     combatSkill.shareData(serverPlayerEntity);
                 });
+                serverPlayerEntity.getCapability(ForagingSkillCapability.FORAGING_CAP).ifPresent(foragingSkill -> {
+                    int dig_speed_str = (int) Math.min(Math.floor(foragingSkill.getLevel() * 0.15), 3);
+                    if (foragingSkill.getLevel() > 5) {
+                        serverPlayerEntity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 3, dig_speed_str));
+                    }
+                });
             }
         }
     }
@@ -81,6 +90,9 @@ public class ModInteractions {
             serverPlayerEntity.getCapability(MiningSkillCapability.MINING_CAP).ifPresent(miningSkill -> {
                 miningSkill.shareData(serverPlayerEntity);
             });
+            serverPlayerEntity.getCapability(ForagingSkillCapability.FORAGING_CAP).ifPresent(foragingSkill -> {
+                foragingSkill.shareData(serverPlayerEntity);
+            });
         }
     }
 
@@ -89,7 +101,6 @@ public class ModInteractions {
         ServerPlayer serverPlayerEntity_original = (ServerPlayer) event.getOriginal();
         ServerPlayer serverPlayerEntity_new = (ServerPlayer) event.getPlayer();
         if (!serverPlayerEntity_original.level.isClientSide) {
-            EasyThere.LOGGER.info("test - Z");
             serverPlayerEntity_original.reviveCaps();
             if (event.isWasDeath()) {
                 serverPlayerEntity_original.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(combatSkill -> {
@@ -105,6 +116,12 @@ public class ModInteractions {
                         miningSkill.shareData(serverPlayerEntity_new);
                     });
                 });
+                serverPlayerEntity_original.getCapability(ForagingSkillCapability.FORAGING_CAP).ifPresent(foragingSkill -> {
+                    serverPlayerEntity_new.getCapability(ForagingSkillCapability.FORAGING_CAP).ifPresent(foragingSkill1 -> {
+                        foragingSkill1.setXp(foragingSkill.getXp());
+                        foragingSkill.shareData(serverPlayerEntity_new);
+                    });
+                });
             }
             serverPlayerEntity_original.invalidateCaps();
         }
@@ -116,6 +133,7 @@ public class ModInteractions {
         if (!serverPlayerEntity.level.isClientSide) {
             serverPlayerEntity.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(combatSkill -> combatSkill.shareData(serverPlayerEntity));
             serverPlayerEntity.getCapability(MiningSkillCapability.MINING_CAP).ifPresent(miningSkill -> miningSkill.shareData(serverPlayerEntity));
+            serverPlayerEntity.getCapability(ForagingSkillCapability.FORAGING_CAP).ifPresent(foragingSkill -> foragingSkill.shareData(serverPlayerEntity));
         }
     }
 
@@ -260,8 +278,27 @@ public class ModInteractions {
         rand_x = rand_x < 0 ? Mth.clamp(rand_x, -0.75, -0.5) : Mth.clamp(rand_x, 0.5, 0.75);
         rand_z = rand_z < 0 ? Mth.clamp(rand_z, -0.75, -0.5) : Mth.clamp(rand_z, 0.5, 0.75);
         indicator.setPosRaw(target.getX() + x + rand_x, target.getY() + 1F + rand_y, target.getZ() + z + rand_z);
-        EasyThere.LOGGER.info(final_damage);
         target.level.addFreshEntity(indicator);
+    }
+
+    // Foraging Skill
+    private static void assignForagingXP(Block target, ForagingSkill foragingSkill, Player player, Level level) {
+        if (player.isCreative()) return;
+        Map<Block, Float> xps = ForagingSkill.getForagingXp();
+        float xp;
+        if (xps.get(target) != null) {
+            xp = xps.get(target);
+            xp = (float) (xp + (xp * (foragingSkill.getLevel() * 0.05)));
+            int OL = foragingSkill.getLevel();
+            foragingSkill.addXp(xp);
+            player.displayClientMessage(new TextComponent(ChatFormatting.AQUA + "Foraging +" + xp), true);
+            int NL = foragingSkill.getLevel();
+            if (NL - OL > 0) {
+                player.sendMessage(new TextComponent(ChatFormatting.AQUA + "\u263A" + "Skill Level Up: Foraging Level: " + OL + " \u2192 " + NL), player.getUUID());
+                level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 3F, 0.24F);
+            }
+        }
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 3F, 2F);
     }
 
     // Mining Skill Interactions
@@ -269,9 +306,12 @@ public class ModInteractions {
     @SubscribeEvent
     public static void onBlockBreakByPlayer(BlockEvent.BreakEvent event) {
         Player player = event.getPlayer();
+        Block target_block = event.getState().getBlock();
+        Level level = player.level;
         MiningSkill miningSkill = player.getCapability(MiningSkillCapability.MINING_CAP).orElse(null);
+        ForagingSkill foragingSkill = player.getCapability(ForagingSkillCapability.FORAGING_CAP).orElse(null);
         if (!player.level.isClientSide && player.level instanceof ServerLevel) {
-            if (MiningSkill.getMiningXp().containsKey(event.getState().getBlock())) {
+            if (MiningSkill.getMiningXp().containsKey(target_block)) {
                 event.setExpToDrop(event.getExpToDrop() + event.getExpToDrop() * miningSkill.getLevel());
                 int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, player);
                 if (i == 0) {
@@ -279,6 +319,16 @@ public class ModInteractions {
                     if (player instanceof ServerPlayer serverPlayer) {
                         if (!serverPlayer.level.isClientSide) {
                             serverPlayer.getCapability(MiningSkillCapability.MINING_CAP).ifPresent(miningSkill1 -> miningSkill.shareData(serverPlayer));
+                        }
+                    }
+                }
+            } else if (ForagingSkill.getForagingXp().containsKey(target_block)) { /* Foraging Part */
+                BlockPos target_block_pos = event.getPos();
+                if (target_block_pos.getY() >= 62 && player.level.dimension().equals(Level.OVERWORLD)) {
+                    assignForagingXP(target_block, foragingSkill, player, player.level);
+                    if (player instanceof ServerPlayer serverPlayer) {
+                        if (!serverPlayer.level.isClientSide) {
+                            serverPlayer.getCapability(ForagingSkillCapability.FORAGING_CAP).ifPresent(skill -> foragingSkill.shareData(serverPlayer));
                         }
                     }
                 }

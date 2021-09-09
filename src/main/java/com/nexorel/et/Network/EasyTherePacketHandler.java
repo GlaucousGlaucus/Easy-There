@@ -30,6 +30,12 @@ public class EasyTherePacketHandler {
                 MiningSkillPacket::encodeMsg,
                 MiningSkillPacket::decodeMsg,
                 MiningSkillPacket.Handler::handle);
+        INSTANCE.registerMessage(
+                id++,
+                ForagingSkillPacket.class,
+                ForagingSkillPacket::encodeMsg,
+                ForagingSkillPacket::decodeMsg,
+                ForagingSkillPacket.Handler::handle);
     }
 
     public static void sendDataToClient(Object msg, ServerPlayer player) {
