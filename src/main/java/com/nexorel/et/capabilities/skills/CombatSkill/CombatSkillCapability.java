@@ -1,16 +1,16 @@
-package com.nexorel.et.capabilities.FarmingSkill;
+package com.nexorel.et.capabilities.skills.CombatSkill;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 
-public class FarmingSkillCapability {
+public class CombatSkillCapability {
 
-    @CapabilityInject(FarmingSkill.class)
-    public static Capability<FarmingSkill> FARMING_CAP = null;
+    @CapabilityInject(CombatSkill.class)
+    public static Capability<CombatSkill> COMBAT_CAP = null;
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        event.register(FarmingSkill.class);
+        event.register(CombatSkill.class);
     }
 
 }

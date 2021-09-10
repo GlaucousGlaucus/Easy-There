@@ -1,8 +1,8 @@
-package com.nexorel.et.capabilities.FarmingSkill;
+package com.nexorel.et.capabilities.skills.ForagingSkill;
 
 import com.google.common.collect.Maps;
 import com.nexorel.et.Network.EasyTherePacketHandler;
-import com.nexorel.et.Network.FarmingSkillPacket;
+import com.nexorel.et.Network.ForagingSkillPacket;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -11,15 +11,15 @@ import net.minecraft.world.level.block.Blocks;
 
 import java.util.Map;
 
-public class FarmingSkill {
+public class ForagingSkill {
 
     private double xp;
 
-    public FarmingSkill() {
+    public ForagingSkill() {
         this(0);
     }
 
-    public FarmingSkill(double points) {
+    public ForagingSkill(double points) {
         this.xp = points;
     }
 
@@ -48,16 +48,16 @@ public class FarmingSkill {
         return Math.min(level, 20);
     }
 
-    public static double getXPProgress(FarmingSkill farmingSkill) {
-        double xp = farmingSkill.getXp();
-        int current_lvl = farmingSkill.getLevel();
+    public static double getXPProgress(ForagingSkill foragingSkill) {
+        double xp = foragingSkill.getXp();
+        int current_lvl = foragingSkill.getLevel();
         if (current_lvl == 0) {
-            double xp_progress = (xp / ((FarmingSkill.calculateXpForLevel(current_lvl + 1)))) * 100;
+            double xp_progress = (xp / ((ForagingSkill.calculateXpForLevel(current_lvl + 1)))) * 100;
             return (double) Math.round(xp_progress * 100) / 100;
         }
-        double crr_xp = FarmingSkill.calculateFullTargetXp(current_lvl - 1);
+        double crr_xp = ForagingSkill.calculateFullTargetXp(current_lvl - 1);
         if (current_lvl + 1 <= 20) {
-            double xp_fornext_level = FarmingSkill.calculateFullTargetXp(current_lvl);
+            double xp_fornext_level = ForagingSkill.calculateFullTargetXp(current_lvl);
             double xp_progress = ((xp - crr_xp) / (xp_fornext_level - crr_xp)) * 100;
             return (double) Math.round(xp_progress * 100) / 100;
         }
@@ -95,28 +95,23 @@ public class FarmingSkill {
     public void shareData(ServerPlayer playerEntity) {
         CompoundTag nbt = new CompoundTag();
         nbt.putDouble("xp", this.xp);
-        EasyTherePacketHandler.sendDataToClient(new FarmingSkillPacket(nbt), playerEntity);
+        EasyTherePacketHandler.sendDataToClient(new ForagingSkillPacket(nbt), playerEntity);
     }
 
-    public static Map<Block, Float> getFarmingXp() {
+    public static Map<Block, Float> getForagingXp() {
         Map<Block, Float> map = Maps.newLinkedHashMap();
-        map.put(Blocks.WHEAT, 10.0F);
-        map.put(Blocks.BEETROOTS, 15.0F);
-        map.put(Blocks.POTATOES, 15.0F);
-        map.put(Blocks.CARROTS, 15.0F);
-        map.put(Blocks.MELON, 25.0F);
-        map.put(Blocks.PUMPKIN, 30.0F);
-        map.put(Blocks.BAMBOO, 1.0F);
-        map.put(Blocks.SUGAR_CANE, 10.0F);
-        map.put(Blocks.SWEET_BERRY_BUSH, 25.0F);
-        map.put(Blocks.CACTUS, 50.0F);
-        map.put(Blocks.RED_MUSHROOM_BLOCK, 50.0F);
-        map.put(Blocks.BROWN_MUSHROOM_BLOCK, 50.0F);
-        map.put(Blocks.KELP, 1.0F);
-        map.put(Blocks.SEA_PICKLE, 20.0F);
-        map.put(Blocks.NETHER_WART, 10.0F);
-        map.put(Blocks.CHORUS_FLOWER, 30.0F);
-        map.put(Blocks.GLOW_LICHEN, 25.0F);
+        map.put(Blocks.ACACIA_LOG, 15.0F);
+        map.put(Blocks.BIRCH_LOG, 7.0F);
+        map.put(Blocks.DARK_OAK_LOG, 8.0F);
+        map.put(Blocks.OAK_LOG, 5.0F);
+        map.put(Blocks.SPRUCE_LOG, 10.0F);
+        map.put(Blocks.JUNGLE_LOG, 20.0F);
+        map.put(Blocks.ACACIA_SAPLING, 5.0F);
+        map.put(Blocks.BIRCH_SAPLING, 5.0F);
+        map.put(Blocks.DARK_OAK_SAPLING, 5.0F);
+        map.put(Blocks.OAK_SAPLING, 5.0F);
+        map.put(Blocks.SPRUCE_SAPLING, 5.0F);
+        map.put(Blocks.JUNGLE_SAPLING, 5.0F);
         return map;
     }
 

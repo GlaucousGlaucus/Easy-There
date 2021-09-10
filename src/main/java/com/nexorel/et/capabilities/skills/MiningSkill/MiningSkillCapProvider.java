@@ -1,4 +1,4 @@
-package com.nexorel.et.capabilities.MiningSkill;
+package com.nexorel.et.capabilities.skills.MiningSkill;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

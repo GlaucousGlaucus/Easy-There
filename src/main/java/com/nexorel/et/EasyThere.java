@@ -3,11 +3,12 @@ package com.nexorel.et;
 import com.nexorel.et.Network.EasyTherePacketHandler;
 import com.nexorel.et.Registries.*;
 import com.nexorel.et.capabilities.AttachCap;
-import com.nexorel.et.capabilities.CombatSkill.CombatSkillCapability;
-import com.nexorel.et.capabilities.FarmingSkill.FarmingSkillCapability;
-import com.nexorel.et.capabilities.ForagingSkill.ForagingSkillCapability;
-import com.nexorel.et.capabilities.MiningSkill.MiningSkillCapability;
-import com.nexorel.et.capabilities.ModInteractions;
+import com.nexorel.et.capabilities.chunk.SkillChunkCap;
+import com.nexorel.et.capabilities.interaction.Interactions;
+import com.nexorel.et.capabilities.skills.CombatSkill.CombatSkillCapability;
+import com.nexorel.et.capabilities.skills.FarmingSkill.FarmingSkillCapability;
+import com.nexorel.et.capabilities.skills.ForagingSkill.ForagingSkillCapability;
+import com.nexorel.et.capabilities.skills.MiningSkill.MiningSkillCapability;
 import com.nexorel.et.content.Entity.boss.aura.AuraEntity;
 import com.nexorel.et.setup.ClientSetup;
 import com.nexorel.et.setup.ETConfig;
@@ -29,15 +30,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * TODO: FARMING, CRAFTING
+ * TODO: CRAFTING, Add Choppermerang that right click goes like a boomerang and chops tress it encounters and add skill lvl requrement to it
  */
-
-// TODO: Add Choppermerang that right click goes like a boomerang and chops tress it encounters and add skill lvl requrement to it
 
 @Mod("et")
 public class EasyThere {
     // Directly reference a log4j logger.
-    public static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public EasyThere() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ETConfig.clientSpec);
@@ -65,7 +64,7 @@ public class EasyThere {
         OreGeneration.registerConfiguredFeatures();
 
         MinecraftForge.EVENT_BUS.register(AttachCap.class);
-        MinecraftForge.EVENT_BUS.register(ModInteractions.class);
+        MinecraftForge.EVENT_BUS.register(Interactions.class);
         MinecraftForge.EVENT_BUS.register(CommandInit.class);
     }
 
@@ -78,6 +77,7 @@ public class EasyThere {
         MiningSkillCapability.registerCapabilities(event);
         ForagingSkillCapability.registerCapabilities(event);
         FarmingSkillCapability.registerCapabilities(event);
+        SkillChunkCap.registerCapabilities(event);
     }
 
     public static final CreativeModeTab EASY_THERE = new CreativeModeTab("easy_there") {

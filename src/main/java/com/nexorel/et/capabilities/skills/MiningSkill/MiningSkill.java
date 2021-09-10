@@ -1,4 +1,4 @@
-package com.nexorel.et.capabilities.MiningSkill;
+package com.nexorel.et.capabilities.skills.MiningSkill;
 
 import com.google.common.collect.Maps;
 import com.nexorel.et.Network.EasyTherePacketHandler;

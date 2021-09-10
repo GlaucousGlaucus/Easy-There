@@ -5,14 +5,14 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.nexorel.et.capabilities.CombatSkill.CombatSkill;
-import com.nexorel.et.capabilities.CombatSkill.CombatSkillCapability;
-import com.nexorel.et.capabilities.FarmingSkill.FarmingSkill;
-import com.nexorel.et.capabilities.FarmingSkill.FarmingSkillCapability;
-import com.nexorel.et.capabilities.ForagingSkill.ForagingSkill;
-import com.nexorel.et.capabilities.ForagingSkill.ForagingSkillCapability;
-import com.nexorel.et.capabilities.MiningSkill.MiningSkill;
-import com.nexorel.et.capabilities.MiningSkill.MiningSkillCapability;
+import com.nexorel.et.capabilities.skills.CombatSkill.CombatSkill;
+import com.nexorel.et.capabilities.skills.CombatSkill.CombatSkillCapability;
+import com.nexorel.et.capabilities.skills.FarmingSkill.FarmingSkill;
+import com.nexorel.et.capabilities.skills.FarmingSkill.FarmingSkillCapability;
+import com.nexorel.et.capabilities.skills.ForagingSkill.ForagingSkill;
+import com.nexorel.et.capabilities.skills.ForagingSkill.ForagingSkillCapability;
+import com.nexorel.et.capabilities.skills.MiningSkill.MiningSkill;
+import com.nexorel.et.capabilities.skills.MiningSkill.MiningSkillCapability;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -24,12 +24,16 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * skill_set <PlayerName> <Skill_Type> <Level>
  */
 
 public class SkillSetCommand {
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         LiteralArgumentBuilder<CommandSourceStack> skill_set_cmd =
@@ -48,8 +52,29 @@ public class SkillSetCommand {
                                 .then(Commands.literal("farming")
                                         .then(Commands.argument("level", IntegerArgumentType.integer(0, 20))
                                                 .executes(SkillSetCommand::setFarmingSkillLvl)))
+                                .then(Commands.literal("clear_chunk")
+                                        .then(Commands.argument("x", IntegerArgumentType.integer())
+                                                .then(Commands.argument("z", IntegerArgumentType.integer())
+                                                        .executes(SkillSetCommand::resetChunkDataForTest))))
                         );
         dispatcher.register(skill_set_cmd);
+    }
+
+    static int resetChunkDataForTest(CommandContext<CommandSourceStack> commandContext) throws CommandSyntaxException {
+        /*Entity entity = commandContext.getSource().getEntity();
+        if (entity instanceof Player player) {
+            int x = IntegerArgumentType.getInteger(commandContext, "x");
+            int z = IntegerArgumentType.getInteger(commandContext, "z");
+            LevelChunk chunk = player.level.getChunk(x, z);
+            chunk.getCapability(SkillChunkCap.BLOCK_CAP).ifPresent(skillChunk -> {
+                skillChunk.getStoredPos().forEach(skillChunk::removeData);
+                skillChunk.getStoredPos().forEach(pos -> {
+                    LOGGER.debug("CMD POS" + pos);
+                    LOGGER.debug("CMD STATE" + player.level.getBlockState(pos));
+                });
+            });
+        }*/
+        return 1;
     }
 
     static int setFarmingSkillLvl(CommandContext<CommandSourceStack> commandContext) throws CommandSyntaxException {

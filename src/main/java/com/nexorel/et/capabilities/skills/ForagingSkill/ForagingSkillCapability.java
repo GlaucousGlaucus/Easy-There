@@ -1,4 +1,4 @@
-package com.nexorel.et.capabilities.ForagingSkill;
+package com.nexorel.et.capabilities.skills.ForagingSkill;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;

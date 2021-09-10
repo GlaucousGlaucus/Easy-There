@@ -1,6 +1,6 @@
 package com.nexorel.et.Network;
 
-import com.nexorel.et.capabilities.ForagingSkill.ForagingSkillCapability;
+import com.nexorel.et.capabilities.skills.ForagingSkill.ForagingSkillCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;

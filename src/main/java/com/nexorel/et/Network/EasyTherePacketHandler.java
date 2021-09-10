@@ -42,6 +42,12 @@ public class EasyTherePacketHandler {
                 FarmingSkillPacket::encodeMsg,
                 FarmingSkillPacket::decodeMsg,
                 FarmingSkillPacket.Handler::handle);
+        INSTANCE.registerMessage(
+                id++,
+                SkillChunkPacket.class,
+                SkillChunkPacket::encodeMsg,
+                SkillChunkPacket::decodeMsg,
+                SkillChunkPacket.Handler::handle);
     }
 
     public static void sendDataToClient(Object msg, ServerPlayer player) {

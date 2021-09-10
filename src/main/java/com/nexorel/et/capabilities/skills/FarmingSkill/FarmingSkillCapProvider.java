@@ -1,4 +1,4 @@
-package com.nexorel.et.capabilities.FarmingSkill;
+package com.nexorel.et.capabilities.skills.FarmingSkill;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

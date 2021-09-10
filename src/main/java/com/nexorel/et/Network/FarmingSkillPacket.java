@@ -1,6 +1,6 @@
 package com.nexorel.et.Network;
 
-import com.nexorel.et.capabilities.FarmingSkill.FarmingSkillCapability;
+import com.nexorel.et.capabilities.skills.FarmingSkill.FarmingSkillCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
