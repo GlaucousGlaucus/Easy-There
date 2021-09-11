@@ -2,6 +2,7 @@ package com.nexorel.et.Registries;
 
 import com.nexorel.et.content.blocks.GemOreBlock;
 import com.nexorel.et.content.blocks.GemRefinery.GemRefineryBlock;
+import com.nexorel.et.content.blocks.dungeon.DungeonBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Material;
@@ -46,5 +47,13 @@ public class BlockInit {
     public static final RegistryObject<Block> VIOLET_TUNORADOITE_BLOCK = BLOCKS.register("violet_tunoradoite_block", () -> new GemOreBlock(56));
     public static final RegistryObject<Block> MAGENTA_ROSE_LOLLNIC_BLOCK = BLOCKS.register("magenta_rose_lollnic_block", () -> new GemOreBlock(76));
     public static final RegistryObject<Block> JADE_PETAOGOPITE_BLOCK = BLOCKS.register("jade_petaogopite_block", () -> new GemOreBlock(23));
+
+    // Dungeon Blocks
+    public static final RegistryObject<Block> DUNGEON_CHISELED_POLISHED_BLACKSTONE = BLOCKS.register("dungeon_chiseled_polished_blackstone", DungeonBlock::new);
+    public static final RegistryObject<Block> DUNGEON_CRACKED_POLISHED_BLACKSTONE_BRICKS = BLOCKS.register("dungeon_cracked_polished_blackstone_bricks", DungeonBlock::new);
+    public static final RegistryObject<Block> DUNGEON_GILDED_BLACKSTONE = BLOCKS.register("dungeon_gilded_blackstone", DungeonBlock::new);
+    public static final RegistryObject<Block> DUNGEON_POLISHED_BLACKSTONE = BLOCKS.register("dungeon_polished_blackstone", DungeonBlock::new);
+    public static final RegistryObject<Block> DUNGEON_POLISHED_BLACKSTONE_BRICKS = BLOCKS.register("dungeon_polished_blackstone_bricks", DungeonBlock::new);
+    public static final RegistryObject<Block> DUNGEON_STONE = BLOCKS.register("dungeon_stone", DungeonBlock::new);
 
 }

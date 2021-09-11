@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "et:block/dungeon/asthetic/dungeon_gilded_blackstone"
+  }
+}

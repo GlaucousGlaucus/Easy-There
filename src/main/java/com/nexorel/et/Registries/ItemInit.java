@@ -104,4 +104,12 @@ public class ItemInit {
     public static final RegistryObject<Item> MAGENTA_ROSE_LOLLNIC_BLOCKITEM = ITEMS.register("magenta_rose_lollnic_block", () -> new BlockItem(BlockInit.MAGENTA_ROSE_LOLLNIC_BLOCK.get(), properties));
     public static final RegistryObject<Item> JADE_PETAOGOPITE_BLOCKITEM = ITEMS.register("jade_petaogopite_block", () -> new BlockItem(BlockInit.JADE_PETAOGOPITE_BLOCK.get(), properties));
 
+    // Dungeon
+    public static final RegistryObject<Item> DUNGEON_CHISELED_POLISHED_BLACKSTONE_ITEM = ITEMS.register("dungeon_chiseled_polished_blackstone", () -> new BlockItem(BlockInit.DUNGEON_CHISELED_POLISHED_BLACKSTONE.get(), properties));
+    public static final RegistryObject<Item> DUNGEON_CRACKED_POLISHED_BLACKSTONE_BRICKS_ITEM = ITEMS.register("dungeon_cracked_polished_blackstone_bricks", () -> new BlockItem(BlockInit.DUNGEON_CRACKED_POLISHED_BLACKSTONE_BRICKS.get(), properties));
+    public static final RegistryObject<Item> DUNGEON_GILDED_BLACKSTONE_ITEM = ITEMS.register("dungeon_gilded_blackstone", () -> new BlockItem(BlockInit.DUNGEON_GILDED_BLACKSTONE.get(), properties));
+    public static final RegistryObject<Item> DUNGEON_POLISHED_BLACKSTONE_ITEM = ITEMS.register("dungeon_polished_blackstone", () -> new BlockItem(BlockInit.DUNGEON_POLISHED_BLACKSTONE.get(), properties));
+    public static final RegistryObject<Item> DUNGEON_POLISHED_BLACKSTONE_BRICKS_ITEM = ITEMS.register("dungeon_polished_blackstone_bricks", () -> new BlockItem(BlockInit.DUNGEON_POLISHED_BLACKSTONE_BRICKS.get(), properties));
+    public static final RegistryObject<Item> DUNGEON_STONE_ITEM = ITEMS.register("dungeon_stone", () -> new BlockItem(BlockInit.DUNGEON_STONE.get(), properties));
+
 }

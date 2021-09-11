@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "et:block/dungeon/asthetic/dungeon_stone",
+    "side": "et:block/dungeon/asthetic/dungeon_stone_top"
+  }
+}

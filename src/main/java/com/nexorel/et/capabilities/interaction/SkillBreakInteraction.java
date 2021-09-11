@@ -16,6 +16,8 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.world.BlockEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SkillBreakInteraction {
 
@@ -37,6 +39,7 @@ public class SkillBreakInteraction {
             if (!serverPlayer.level.isClientSide) {
                 LevelChunk chunk = serverPlayer.level.getChunkAt(target_block_pos);
                 chunk.getCapability(SkillChunkCap.BLOCK_CAP).ifPresent(skillChunk -> {
+//                    LOGGER.info(!skillChunk.getStoredPos().containsKey(target_block_pos));
                     if (!skillChunk.getStoredPos().containsKey(target_block_pos)) {
                         XPAssignHelper.assignForagingXP(target_block, foragingSkill, player, player.level);
                     }
@@ -63,4 +66,5 @@ public class SkillBreakInteraction {
         }
     }
 
+    private static final Logger LOGGER = LogManager.getLogger();
 }

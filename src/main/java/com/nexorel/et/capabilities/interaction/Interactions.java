@@ -176,10 +176,10 @@ public class Interactions {
         MiningSkill miningSkill = player.getCapability(MiningSkillCapability.MINING_CAP).orElse(null);
         ForagingSkill foragingSkill = player.getCapability(ForagingSkillCapability.FORAGING_CAP).orElse(null);
         FarmingSkill farmingSkill = player.getCapability(FarmingSkillCapability.FARMING_CAP).orElse(null);
-        if (!player.level.isClientSide && player.level instanceof ServerLevel) {
+        if (!level.isClientSide && level instanceof ServerLevel) {
             if (MiningSkill.getMiningXp().containsKey(target_block)) {
                 SkillBreakInteraction.mining(event, player, target_block, target_block_pos, miningSkill);
-            } else if (ForagingSkill.getForagingXp().containsKey(target_block)) { /* Foraging Part */
+            } else if (ForagingSkill.getForagingXp().containsKey(target_block)) {
                 SkillBreakInteraction.foraging(player, target_block, target_block_pos, foragingSkill);
             } else if (FarmingSkill.getFarmingXp().containsKey(target_block)) {
                 SkillBreakInteraction.farming(player, target_block, target_block_pos, farmingSkill);

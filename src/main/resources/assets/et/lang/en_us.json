@@ -1,5 +1,6 @@
 {
   "itemGroup.easy_there": "Easy There Mod",
+
   "item.et.delerite_crystal": "Delerite Crystal",
   "item.et.delerite_crystal_block": "Delerite Crystal Block",
   "item.et.aura_infested_block": "Aura Infested Block",
@@ -36,7 +37,12 @@
   "block.et.violet_tunoradoite_block": "Biolet Tunoradoite",
   "block.et.magenta_rose_lollnic_block": "Magenta Rose Lollnic",
   "block.et.jade_petaogopite_block": "Jade Petaogopite",
-  "block.et.delerite_crystal_block": "Delerite Crystal Block",
+  "block.et.dungeon_chiseled_polished_blackstone": "Dungeon Chiseled Polished Blackstone",
+  "block.et.dungeon_cracked_polished_blackstone_bricks": "Dungeon Cracked Polished Blackstone Bricks",
+  "block.et.dungeon_gilded_blackstone": "Dungeon Gilded Blackstone",
+  "block.et.dungeon_polished_blackstone": "Dungeon Polished Blackstone",
+  "block.et.dungeon_polished_blackstone_bricks": "Dungeon Polished Blackstone Bricks",
+  "block.et.dungeon_stone": "Dungeon Stone",
   "block.et.gem_refinery": "Gem Refinery",
   "block.et.aura_infested_block": "Aura Infested Block",
   "container.et.talisman_bag": "PackPack",
