@@ -3,15 +3,15 @@ package com.nexorel.et.capabilities.skills.CombatSkill;
 import com.google.common.collect.Maps;
 import com.nexorel.et.Network.CombatSkillPacket;
 import com.nexorel.et.Network.EasyTherePacketHandler;
+import com.nexorel.et.capabilities.skills.ISkills;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.Map;
 
-public class CombatSkill {
+public class CombatSkill implements ISkills {
 
     private double xp;
     private int crit_chance;
@@ -23,33 +23,6 @@ public class CombatSkill {
     public CombatSkill(double points, int crit_chance) {
         this.xp = points;
         this.crit_chance = crit_chance;
-    }
-
-    public static double calculateXpForLevel(int level) {
-        // formula: base_xp + (base_xp * level ^ exponent)
-        double exponent = 3.8;
-        double base_xp = 500;
-        double alpha_xp = (60 * Math.pow(level, 2)) + level + base_xp + Math.pow(level, exponent);
-        //base_xp + (base_xp * Math.pow(level, exponent))
-        return alpha_xp;
-    }
-
-    public static double calculateFullTargetXp(int level) {
-        double requiredXP = 0;
-        for (int i = 0; i <= level; i++) {
-            requiredXP += calculateXpForLevel(i);
-        }
-        return requiredXP;
-    }
-
-    public static int calculateLvlFromXp(double xp) {
-        if (xp < 500) return 0;
-        int level = 0;
-        double maxXp = calculateXpForLevel(0);
-        do {
-            maxXp += calculateXpForLevel(++level);
-        } while (maxXp < xp);
-        return Math.min(level, 20);
     }
 
     public static int getMobLevel(LivingEntity mob) {
@@ -64,33 +37,6 @@ public class CombatSkill {
 
     public static float getCombatXPForMob(int mob_level) {
         return (float) (mob_level * 6.25);
-    }
-
-    public static double getXPProgress(CombatSkill combatSkill) {
-        double xp = combatSkill.getXp();
-        int current_lvl = combatSkill.getLevel();
-        if (current_lvl == 0) {
-            double xp_progress = (xp / ((CombatSkill.calculateXpForLevel(current_lvl + 1)))) * 100;
-            return (double) Math.round(xp_progress * 100) / 100;
-        }
-        double crr_xp = CombatSkill.calculateFullTargetXp(current_lvl - 1);
-        if (current_lvl + 1 <= 20) {
-            double xp_fornext_level = CombatSkill.calculateFullTargetXp(current_lvl);
-            double xp_progress = ((xp - crr_xp) / (xp_fornext_level - crr_xp)) * 100;
-            return (double) Math.round(xp_progress * 100) / 100;
-        }
-        return -1;
-    }
-
-    public static StringBuilder getProgressBars(double xp_percent) {
-        StringBuilder bars = new StringBuilder();
-        if (xp_percent != -1) {
-            int bar_no = Mth.clamp((int) Math.round(xp_percent / 5), 0, 18);
-            bars.append("-".repeat(Math.max(0, bar_no)));
-            return bars;
-        } else {
-            return bars;
-        }
     }
 
     public static Map<EntityType<?>, Float> getCombatXp() {
@@ -169,7 +115,7 @@ public class CombatSkill {
     }
 
     public int getLevel() {
-        return calculateLvlFromXp(this.xp);
+        return ISkills.calculateLvlFromXp(this.xp);
     }
 
     public void addXp(double points) {

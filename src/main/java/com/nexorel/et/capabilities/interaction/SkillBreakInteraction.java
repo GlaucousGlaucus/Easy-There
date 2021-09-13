@@ -21,6 +21,16 @@ import org.apache.logging.log4j.Logger;
 
 public class SkillBreakInteraction {
 
+    public static void onBreakInteration(BlockEvent.BreakEvent event, Block target_block, BlockPos target_block_pos, Player player, MiningSkill miningSkill, ForagingSkill foragingSkill, FarmingSkill farmingSkill) {
+        if (MiningSkill.getMiningXp().containsKey(target_block)) {
+            SkillBreakInteraction.mining(event, player, target_block, target_block_pos, miningSkill);
+        } else if (ForagingSkill.getForagingXp().containsKey(target_block)) {
+            SkillBreakInteraction.foraging(player, target_block, target_block_pos, foragingSkill);
+        } else if (FarmingSkill.getFarmingXp().containsKey(target_block)) {
+            SkillBreakInteraction.farming(player, target_block, target_block_pos, farmingSkill);
+        }
+    }
+
     public static void mining(BlockEvent.BreakEvent event, Player player, Block target_block, BlockPos target_block_pos, MiningSkill miningSkill) {
         event.setExpToDrop(event.getExpToDrop() + event.getExpToDrop() * miningSkill.getLevel());
         int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, player);

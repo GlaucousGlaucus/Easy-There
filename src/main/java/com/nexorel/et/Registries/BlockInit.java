@@ -3,6 +3,7 @@ package com.nexorel.et.Registries;
 import com.nexorel.et.content.blocks.GemOreBlock;
 import com.nexorel.et.content.blocks.GemRefinery.GemRefineryBlock;
 import com.nexorel.et.content.blocks.dungeon.DungeonBlock;
+import com.nexorel.et.content.blocks.dungeon.PitTrap.PitTrap;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Material;
@@ -55,5 +56,7 @@ public class BlockInit {
     public static final RegistryObject<Block> DUNGEON_POLISHED_BLACKSTONE = BLOCKS.register("dungeon_polished_blackstone", DungeonBlock::new);
     public static final RegistryObject<Block> DUNGEON_POLISHED_BLACKSTONE_BRICKS = BLOCKS.register("dungeon_polished_blackstone_bricks", DungeonBlock::new);
     public static final RegistryObject<Block> DUNGEON_STONE = BLOCKS.register("dungeon_stone", DungeonBlock::new);
+
+    public static final RegistryObject<Block> DUNGEON_PIT_TRAP = BLOCKS.register("dungeon_pitfall_trap", PitTrap::new);
 
 }

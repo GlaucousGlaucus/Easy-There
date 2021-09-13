@@ -8,6 +8,7 @@ import com.nexorel.et.capabilities.skills.FarmingSkill.FarmingSkill;
 import com.nexorel.et.capabilities.skills.FarmingSkill.FarmingSkillCapability;
 import com.nexorel.et.capabilities.skills.ForagingSkill.ForagingSkill;
 import com.nexorel.et.capabilities.skills.ForagingSkill.ForagingSkillCapability;
+import com.nexorel.et.capabilities.skills.ISkills;
 import com.nexorel.et.capabilities.skills.MiningSkill.MiningSkill;
 import com.nexorel.et.capabilities.skills.MiningSkill.MiningSkillCapability;
 import com.nexorel.et.content.skills.SkillScreen;
@@ -153,15 +154,15 @@ public class SkillButtonWidget extends GuiComponent {
     private static void drawForFarming(PoseStack matrixStack, FarmingSkill farmingSkill, int X, int Y) {
         Minecraft.getInstance().font.draw(matrixStack, "\u2692 Farming \u2692", X + 48, Y + 5, 0x0fff7); //-5592406
         Minecraft.getInstance().font.draw(matrixStack, "Level:", X + 68, Y + 20, 0x0fff7); //-5592406
-        Minecraft.getInstance().font.draw(matrixStack, Integer.toString(FarmingSkill.calculateLvlFromXp(farmingSkill.getXp())), X + 98, Y + 20, getLevelColor(FarmingSkill.calculateLvlFromXp(farmingSkill.getXp())));
+        Minecraft.getInstance().font.draw(matrixStack, Integer.toString(ISkills.calculateLvlFromXp(farmingSkill.getXp())), X + 98, Y + 20, getLevelColor(ISkills.calculateLvlFromXp(farmingSkill.getXp())));
 
-        double xp_percent = FarmingSkill.getXPProgress(farmingSkill);
+        double xp_percent = ISkills.getXPProgress(farmingSkill);
 
-        Minecraft.getInstance().font.draw(matrixStack, xp_percent == -1 ? "" : "Progress To Level " + (FarmingSkill.calculateLvlFromXp(farmingSkill.getXp()) + 1), X + 35, Y + 35, 0x0fff7); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, xp_percent == -1 ? "" : "Progress To Level " + (ISkills.calculateLvlFromXp(farmingSkill.getXp()) + 1), X + 35, Y + 35, 0x0fff7); //-5592406
         if (xp_percent != -1)
             Minecraft.getInstance().font.draw(matrixStack, xp_percent + " %", X + 60, Y + 53, getXp_percent_color(xp_percent)); //-5592406
 
-        StringBuilder bars = FarmingSkill.getProgressBars(xp_percent);
+        StringBuilder bars = ISkills.getProgressBars(xp_percent);
         if (xp_percent != -1) Minecraft.getInstance().font.draw(matrixStack, "------------------", X + 35, Y + 45, 0);
         Minecraft.getInstance().font.draw(matrixStack, bars.toString(), X + 35, Y + 45, xp_percent != -1 ? getXp_percent_color(xp_percent) : 0x00ff11); //-5592406
         Minecraft.getInstance().font.draw(matrixStack, "XP: ", X + 35, Y + 65, 0x0fff7); //-5592406
@@ -178,15 +179,15 @@ public class SkillButtonWidget extends GuiComponent {
     private static void drawForForaging(PoseStack matrixStack, ForagingSkill foragingSkill, int X, int Y) {
         Minecraft.getInstance().font.draw(matrixStack, "\u2692 Foraging \u2692", X + 48, Y + 5, 0x0fff7); //-5592406
         Minecraft.getInstance().font.draw(matrixStack, "Level:", X + 68, Y + 20, 0x0fff7); //-5592406
-        Minecraft.getInstance().font.draw(matrixStack, Integer.toString(ForagingSkill.calculateLvlFromXp(foragingSkill.getXp())), X + 98, Y + 20, getLevelColor(ForagingSkill.calculateLvlFromXp(foragingSkill.getXp())));
+        Minecraft.getInstance().font.draw(matrixStack, Integer.toString(ISkills.calculateLvlFromXp(foragingSkill.getXp())), X + 98, Y + 20, getLevelColor(ISkills.calculateLvlFromXp(foragingSkill.getXp())));
 
-        double xp_percent = ForagingSkill.getXPProgress(foragingSkill);
+        double xp_percent = ISkills.getXPProgress(foragingSkill);
 
-        Minecraft.getInstance().font.draw(matrixStack, xp_percent == -1 ? "" : "Progress To Level " + (ForagingSkill.calculateLvlFromXp(foragingSkill.getXp()) + 1), X + 35, Y + 35, 0x0fff7); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, xp_percent == -1 ? "" : "Progress To Level " + (ISkills.calculateLvlFromXp(foragingSkill.getXp()) + 1), X + 35, Y + 35, 0x0fff7); //-5592406
         if (xp_percent != -1)
             Minecraft.getInstance().font.draw(matrixStack, xp_percent + " %", X + 60, Y + 53, getXp_percent_color(xp_percent)); //-5592406
 
-        StringBuilder bars = ForagingSkill.getProgressBars(xp_percent);
+        StringBuilder bars = ISkills.getProgressBars(xp_percent);
         if (xp_percent != -1) Minecraft.getInstance().font.draw(matrixStack, "------------------", X + 35, Y + 45, 0);
         Minecraft.getInstance().font.draw(matrixStack, bars.toString(), X + 35, Y + 45, xp_percent != -1 ? getXp_percent_color(xp_percent) : 0x00ff11); //-5592406
         Minecraft.getInstance().font.draw(matrixStack, "XP: ", X + 35, Y + 65, 0x0fff7); //-5592406
@@ -203,15 +204,15 @@ public class SkillButtonWidget extends GuiComponent {
     private static void drawForMining(PoseStack matrixStack, MiningSkill miningSkill, int X, int Y) {
         Minecraft.getInstance().font.draw(matrixStack, "\u2692 Mining \u2692", X + 58, Y + 5, 0x0fff7); //-5592406
         Minecraft.getInstance().font.draw(matrixStack, "Level:", X + 68, Y + 20, 0x0fff7); //-5592406
-        Minecraft.getInstance().font.draw(matrixStack, Integer.toString(MiningSkill.calculateLvlFromXp(miningSkill.getXp())), X + 98, Y + 20, getLevelColor(MiningSkill.calculateLvlFromXp(miningSkill.getXp())));
+        Minecraft.getInstance().font.draw(matrixStack, Integer.toString(ISkills.calculateLvlFromXp(miningSkill.getXp())), X + 98, Y + 20, getLevelColor(ISkills.calculateLvlFromXp(miningSkill.getXp())));
 
-        double xp_percent = MiningSkill.getXPProgress(miningSkill);
+        double xp_percent = ISkills.getXPProgress(miningSkill);
 
-        Minecraft.getInstance().font.draw(matrixStack, xp_percent == -1 ? "" : "Progress To Level " + (MiningSkill.calculateLvlFromXp(miningSkill.getXp()) + 1), X + 35, Y + 35, 0x0fff7); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, xp_percent == -1 ? "" : "Progress To Level " + (ISkills.calculateLvlFromXp(miningSkill.getXp()) + 1), X + 35, Y + 35, 0x0fff7); //-5592406
         if (xp_percent != -1)
             Minecraft.getInstance().font.draw(matrixStack, xp_percent + " %", X + 60, Y + 53, getXp_percent_color(xp_percent)); //-5592406
 
-        StringBuilder bars = MiningSkill.getProgressBars(xp_percent);
+        StringBuilder bars = ISkills.getProgressBars(xp_percent);
         if (xp_percent != -1) Minecraft.getInstance().font.draw(matrixStack, "------------------", X + 35, Y + 45, 0);
         Minecraft.getInstance().font.draw(matrixStack, bars.toString(), X + 35, Y + 45, xp_percent != -1 ? getXp_percent_color(xp_percent) : 0x00ff11); //-5592406
         Minecraft.getInstance().font.draw(matrixStack, "XP: ", X + 35, Y + 65, 0x0fff7); //-5592406
@@ -228,15 +229,15 @@ public class SkillButtonWidget extends GuiComponent {
     private static void drawForCombat(PoseStack matrixStack, CombatSkill combatSkill, int X, int Y) {
         Minecraft.getInstance().font.draw(matrixStack, "\u2694 Combat \u2694", X + 58, Y + 5, 0x0fff7); //-5592406
         Minecraft.getInstance().font.draw(matrixStack, "Level:", X + 68, Y + 20, 0x0fff7); //-5592406
-        Minecraft.getInstance().font.draw(matrixStack, Integer.toString(CombatSkill.calculateLvlFromXp(combatSkill.getXp())), X + 98, Y + 20, getLevelColor(CombatSkill.calculateLvlFromXp(combatSkill.getXp())));
+        Minecraft.getInstance().font.draw(matrixStack, Integer.toString(ISkills.calculateLvlFromXp(combatSkill.getXp())), X + 98, Y + 20, getLevelColor(ISkills.calculateLvlFromXp(combatSkill.getXp())));
 
-        double xp_percent = CombatSkill.getXPProgress(combatSkill);
+        double xp_percent = ISkills.getXPProgress(combatSkill);
 
-        Minecraft.getInstance().font.draw(matrixStack, xp_percent == -1 ? "" : "Progress To Level " + (CombatSkill.calculateLvlFromXp(combatSkill.getXp()) + 1), X + 35, Y + 35, 0x0fff7); //-5592406
+        Minecraft.getInstance().font.draw(matrixStack, xp_percent == -1 ? "" : "Progress To Level " + (ISkills.calculateLvlFromXp(combatSkill.getXp()) + 1), X + 35, Y + 35, 0x0fff7); //-5592406
         if (xp_percent != -1)
             Minecraft.getInstance().font.draw(matrixStack, xp_percent + " %", X + 50, Y + 53, getXp_percent_color(xp_percent)); //-5592406
 
-        StringBuilder bars = CombatSkill.getProgressBars(xp_percent);
+        StringBuilder bars = ISkills.getProgressBars(xp_percent);
         if (xp_percent != -1) Minecraft.getInstance().font.draw(matrixStack, "------------------", X + 35, Y + 45, 0);
         Minecraft.getInstance().font.draw(matrixStack, bars.toString(), X + 35, Y + 45, xp_percent != -1 ? getXp_percent_color(xp_percent) : 0x00ff11); //-5592406
         Minecraft.getInstance().font.draw(matrixStack, "XP: ", X + 35, Y + 65, 0x0fff7); //-5592406

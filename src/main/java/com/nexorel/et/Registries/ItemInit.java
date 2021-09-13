@@ -112,4 +112,6 @@ public class ItemInit {
     public static final RegistryObject<Item> DUNGEON_POLISHED_BLACKSTONE_BRICKS_ITEM = ITEMS.register("dungeon_polished_blackstone_bricks", () -> new BlockItem(BlockInit.DUNGEON_POLISHED_BLACKSTONE_BRICKS.get(), properties));
     public static final RegistryObject<Item> DUNGEON_STONE_ITEM = ITEMS.register("dungeon_stone", () -> new BlockItem(BlockInit.DUNGEON_STONE.get(), properties));
 
+    public static final RegistryObject<Item> DUNGEON_PITFALL_TRAP_ITEM = ITEMS.register("dungeon_pitfall_trap", () -> new BlockItem(BlockInit.DUNGEON_PIT_TRAP.get(), properties));
+
 }

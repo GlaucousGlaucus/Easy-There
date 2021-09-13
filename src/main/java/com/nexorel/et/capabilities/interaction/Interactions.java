@@ -2,11 +2,14 @@ package com.nexorel.et.capabilities.interaction;
 
 import com.nexorel.et.LootTable.modifier.SkillBonusModifier;
 import com.nexorel.et.capabilities.chunk.SkillChunkCap;
+import com.nexorel.et.capabilities.events.LevelUPEvent;
+import com.nexorel.et.capabilities.events.XPGainEvent;
 import com.nexorel.et.capabilities.skills.CombatSkill.CombatSkillCapability;
 import com.nexorel.et.capabilities.skills.FarmingSkill.FarmingSkill;
 import com.nexorel.et.capabilities.skills.FarmingSkill.FarmingSkillCapability;
 import com.nexorel.et.capabilities.skills.ForagingSkill.ForagingSkill;
 import com.nexorel.et.capabilities.skills.ForagingSkill.ForagingSkillCapability;
+import com.nexorel.et.capabilities.skills.ISkills;
 import com.nexorel.et.capabilities.skills.MiningSkill.MiningSkill;
 import com.nexorel.et.capabilities.skills.MiningSkill.MiningSkillCapability;
 import com.nexorel.et.content.skills.SkillScreen;
@@ -14,10 +17,14 @@ import com.nexorel.et.setup.ClientSetup;
 import com.nexorel.et.util.CapabilityHelper;
 import com.nexorel.et.util.CombatHelper;
 import com.nexorel.et.util.XPAssignHelper;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -28,6 +35,7 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkSource;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -44,6 +52,30 @@ import org.lwjgl.glfw.GLFW;
 public class Interactions {
 
     private static final Logger LOGGER = LogManager.getLogger();
+
+    @SubscribeEvent
+    public static void XPGainEvent(XPGainEvent event) {
+        Player player = event.getPlayer();
+        ISkills skills = event.getSkill();
+        int OL = skills.getLevel();
+        double xp = event.getXp_gain();
+        skills.addXp(xp);
+        player.displayClientMessage(new TextComponent(ChatFormatting.AQUA + event.getSkillName() + " +" + xp), true);
+        int NL = skills.getLevel();
+        if (NL - OL > 0) {
+            MinecraftForge.EVENT_BUS.post(new LevelUPEvent(player, NL, OL, skills));
+        }
+    }
+
+    @SubscribeEvent
+    public static void LevelUpEvent(LevelUPEvent event) {
+        Player player = event.getPlayer();
+        Level world = event.getPlayer().level;
+        int NL = event.getNew_lvl();
+        int OL = event.getPrev_lvl();
+        player.sendMessage(new TextComponent(ChatFormatting.AQUA + "\u263A" + "Skill Level Up: " + event.getSkillName() + " Level: " + OL + " \u2192 " + NL), player.getUUID());
+        world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 3F, 0.24F);
+    }
 
     @SubscribeEvent
     public static void PistonPostMoveEvent(PistonEvent.Pre event) {
@@ -177,13 +209,7 @@ public class Interactions {
         ForagingSkill foragingSkill = player.getCapability(ForagingSkillCapability.FORAGING_CAP).orElse(null);
         FarmingSkill farmingSkill = player.getCapability(FarmingSkillCapability.FARMING_CAP).orElse(null);
         if (!level.isClientSide && level instanceof ServerLevel) {
-            if (MiningSkill.getMiningXp().containsKey(target_block)) {
-                SkillBreakInteraction.mining(event, player, target_block, target_block_pos, miningSkill);
-            } else if (ForagingSkill.getForagingXp().containsKey(target_block)) {
-                SkillBreakInteraction.foraging(player, target_block, target_block_pos, foragingSkill);
-            } else if (FarmingSkill.getFarmingXp().containsKey(target_block)) {
-                SkillBreakInteraction.farming(player, target_block, target_block_pos, farmingSkill);
-            }
+            SkillBreakInteraction.onBreakInteration(event, target_block, target_block_pos, player, miningSkill, foragingSkill, farmingSkill);
             if (player instanceof ServerPlayer serverPlayer) {
                 LevelChunk chunk = serverPlayer.level.getChunkAt(target_block_pos);
                 chunk.getCapability(SkillChunkCap.BLOCK_CAP).ifPresent(skillChunk -> {

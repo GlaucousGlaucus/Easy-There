@@ -10,6 +10,21 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 
+/*
+ *
+ * Traps:-
+ *           1. Flame Trap,
+ *                Pit trap,
+ *                Spike Trap,
+ *                Literally a Bear trap (A bear falls on player),
+ *           2. Puzzles - A Quiz which bamboozles player,
+ *               Player has to find a lever to gain access to other rooms,
+ *               A Maze (Memory Maze - player will be given the directions to the end and will have a limited amount of time)
+ *               Timed Trivia (I would not read this.txt)
+ *           3. Add Timer to dungeon run
+ *           4. Unfair Room #UNFAIRMAPS
+ *
+ * */
 public class DungeonBlock extends Block {
 
     public DungeonBlock() {

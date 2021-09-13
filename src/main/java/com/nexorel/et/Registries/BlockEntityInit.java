@@ -20,6 +20,7 @@ public class BlockEntityInit {
     // Tile Entites
 
     public static final RegistryObject<BlockEntityType<GemRefineryTile>> GEM_REFINERY_TILE = TILE_ENTITIES.register("gem_refinery", () -> BlockEntityType.Builder.of(GemRefineryTile::new, BlockInit.GEM_REFINERY.get()).build(null));
+//    public static final RegistryObject<BlockEntityType<PitTrapTile>> PIT_TRAP_TILE = TILE_ENTITIES.register("dungeon_pitfall_trap", () -> BlockEntityType.Builder.of(PitTrapTile::new, BlockInit.DUNGEON_PIT_TRAP.get()).build(null));
 //    public static final RegistryObject<TileEntityType<AuraInfestedTile>> AURA_INFESTED_TILE = TILE_ENTITIES.register("aura_infested_block", () -> TileEntityType.Builder.of(AuraInfestedTile::new, BlockInit.AURA_INFESTED_BLOCK.get()).build(null));
 
 }

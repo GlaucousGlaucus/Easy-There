@@ -11,6 +11,7 @@ import com.nexorel.et.capabilities.skills.FarmingSkill.FarmingSkill;
 import com.nexorel.et.capabilities.skills.FarmingSkill.FarmingSkillCapability;
 import com.nexorel.et.capabilities.skills.ForagingSkill.ForagingSkill;
 import com.nexorel.et.capabilities.skills.ForagingSkill.ForagingSkillCapability;
+import com.nexorel.et.capabilities.skills.ISkills;
 import com.nexorel.et.capabilities.skills.MiningSkill.MiningSkill;
 import com.nexorel.et.capabilities.skills.MiningSkill.MiningSkillCapability;
 import net.minecraft.ChatFormatting;
@@ -85,7 +86,7 @@ public class SkillSetCommand {
             if (target_level == 0) {
                 farmingSkill.setXp(0);
             } else {
-                double target_xp = ((FarmingSkill.calculateFullTargetXp(target_level - 1) + 1));
+                double target_xp = ((ISkills.calculateFullTargetXp(target_level - 1) + 1));
                 farmingSkill.setXp(target_xp);
             }
             farmingSkill.shareData((ServerPlayer) player);
@@ -106,7 +107,7 @@ public class SkillSetCommand {
             if (target_level == 0) {
                 foragingSkill.setXp(0);
             } else {
-                double target_xp = ((ForagingSkill.calculateFullTargetXp(target_level - 1) + 1));
+                double target_xp = ((ISkills.calculateFullTargetXp(target_level - 1) + 1));
                 foragingSkill.setXp(target_xp);
             }
             foragingSkill.shareData((ServerPlayer) player);
@@ -127,7 +128,7 @@ public class SkillSetCommand {
             if (target_level == 0) {
                 miningSkill.setXp(0);
             } else {
-                double target_xp = ((MiningSkill.calculateFullTargetXp(target_level - 1) + 1));
+                double target_xp = ((ISkills.calculateFullTargetXp(target_level - 1) + 1));
                 miningSkill.setXp(target_xp);
             }
             miningSkill.shareData((ServerPlayer) player);
@@ -148,7 +149,7 @@ public class SkillSetCommand {
             if (target_level == 0) {
                 combatSkill.setXp(0);
             } else {
-                double target_xp = ((CombatSkill.calculateFullTargetXp(target_level - 1) + 1));
+                double target_xp = ((ISkills.calculateFullTargetXp(target_level - 1) + 1));
                 combatSkill.setXp(target_xp);
             }
             combatSkill.shareData((ServerPlayer) player);
