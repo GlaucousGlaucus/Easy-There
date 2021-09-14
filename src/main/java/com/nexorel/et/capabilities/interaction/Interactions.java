@@ -4,7 +4,6 @@ import com.nexorel.et.LootTable.modifier.SkillBonusModifier;
 import com.nexorel.et.capabilities.chunk.SkillChunkCap;
 import com.nexorel.et.capabilities.events.LevelUPEvent;
 import com.nexorel.et.capabilities.events.XPGainEvent;
-import com.nexorel.et.capabilities.skills.CombatSkill.CombatSkillCapability;
 import com.nexorel.et.capabilities.skills.FarmingSkill.FarmingSkill;
 import com.nexorel.et.capabilities.skills.FarmingSkill.FarmingSkillCapability;
 import com.nexorel.et.capabilities.skills.ForagingSkill.ForagingSkill;
@@ -13,6 +12,7 @@ import com.nexorel.et.capabilities.skills.ISkills;
 import com.nexorel.et.capabilities.skills.MiningSkill.MiningSkill;
 import com.nexorel.et.capabilities.skills.MiningSkill.MiningSkillCapability;
 import com.nexorel.et.content.skills.SkillScreen;
+import com.nexorel.et.content.skills.widget.LevelUpToast;
 import com.nexorel.et.setup.ClientSetup;
 import com.nexorel.et.util.CapabilityHelper;
 import com.nexorel.et.util.CombatHelper;
@@ -73,7 +73,9 @@ public class Interactions {
         Level world = event.getPlayer().level;
         int NL = event.getNew_lvl();
         int OL = event.getPrev_lvl();
-        player.sendMessage(new TextComponent(ChatFormatting.AQUA + "\u263A" + "Skill Level Up: " + event.getSkillName() + " Level: " + OL + " \u2192 " + NL), player.getUUID());
+        LevelUpToast toast = new LevelUpToast(event.getSkill(), OL, NL);
+        Minecraft.getInstance().getToasts().addToast(toast);
+//        player.sendMessage(new TextComponent(ChatFormatting.AQUA + "\u263A" + "Skill Level Up: " + event.getSkillName() + " Level: " + OL + " \u2192 " + NL), player.getUUID());
         world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 3F, 0.24F);
     }
 
@@ -121,10 +123,7 @@ public class Interactions {
     public static void PlayerLogInEvent(PlayerEvent.PlayerLoggedInEvent event) {
         ServerPlayer serverPlayerEntity = (ServerPlayer) event.getPlayer();
         if (!serverPlayerEntity.level.isClientSide) {
-            serverPlayerEntity.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(combatSkill -> combatSkill.shareData(serverPlayerEntity));
-            serverPlayerEntity.getCapability(MiningSkillCapability.MINING_CAP).ifPresent(miningSkill -> miningSkill.shareData(serverPlayerEntity));
-            serverPlayerEntity.getCapability(ForagingSkillCapability.FORAGING_CAP).ifPresent(foragingSkill -> foragingSkill.shareData(serverPlayerEntity));
-            serverPlayerEntity.getCapability(FarmingSkillCapability.FARMING_CAP).ifPresent(farmingSkill -> farmingSkill.shareData(serverPlayerEntity));
+            CapabilityHelper.cap_update(serverPlayerEntity);
         }
     }
 
@@ -153,7 +152,7 @@ public class Interactions {
         if (!serverPlayerEntity_original.level.isClientSide) {
             serverPlayerEntity_original.reviveCaps();
             if (event.isWasDeath()) {
-                CapabilityHelper.cap_update(serverPlayerEntity_original, serverPlayerEntity_new);
+                CapabilityHelper.death_cap_update(serverPlayerEntity_original, serverPlayerEntity_new);
             }
             serverPlayerEntity_original.invalidateCaps();
         }
@@ -163,10 +162,7 @@ public class Interactions {
     public static void PlayerDimensionChangeEvent(PlayerEvent.PlayerChangedDimensionEvent event) {
         ServerPlayer serverPlayerEntity = (ServerPlayer) event.getPlayer();
         if (!serverPlayerEntity.level.isClientSide) {
-            serverPlayerEntity.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(combatSkill -> combatSkill.shareData(serverPlayerEntity));
-            serverPlayerEntity.getCapability(MiningSkillCapability.MINING_CAP).ifPresent(miningSkill -> miningSkill.shareData(serverPlayerEntity));
-            serverPlayerEntity.getCapability(ForagingSkillCapability.FORAGING_CAP).ifPresent(foragingSkill -> foragingSkill.shareData(serverPlayerEntity));
-            serverPlayerEntity.getCapability(FarmingSkillCapability.FARMING_CAP).ifPresent(farmingSkill -> farmingSkill.shareData(serverPlayerEntity));
+            CapabilityHelper.cap_update(serverPlayerEntity);
         }
     }
 

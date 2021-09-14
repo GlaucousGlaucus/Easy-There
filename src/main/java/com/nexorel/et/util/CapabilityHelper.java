@@ -8,7 +8,14 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class CapabilityHelper {
 
-    public static void cap_update(ServerPlayer serverPlayerEntity_original, ServerPlayer serverPlayerEntity_new) {
+    public static void cap_update(ServerPlayer serverPlayerEntity) {
+        serverPlayerEntity.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(combatSkill -> combatSkill.shareData(serverPlayerEntity));
+        serverPlayerEntity.getCapability(MiningSkillCapability.MINING_CAP).ifPresent(miningSkill -> miningSkill.shareData(serverPlayerEntity));
+        serverPlayerEntity.getCapability(ForagingSkillCapability.FORAGING_CAP).ifPresent(foragingSkill -> foragingSkill.shareData(serverPlayerEntity));
+        serverPlayerEntity.getCapability(FarmingSkillCapability.FARMING_CAP).ifPresent(farmingSkill -> farmingSkill.shareData(serverPlayerEntity));
+    }
+
+    public static void death_cap_update(ServerPlayer serverPlayerEntity_original, ServerPlayer serverPlayerEntity_new) {
         serverPlayerEntity_original.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(combatSkill -> serverPlayerEntity_new.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(combatSkill_new -> {
             combatSkill_new.setXp(combatSkill.getXp());
             combatSkill_new.setCrit_chance(combatSkill.getCrit_chance());

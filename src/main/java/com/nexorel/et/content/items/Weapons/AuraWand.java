@@ -33,7 +33,6 @@ import java.util.List;
 import static com.nexorel.et.EasyThere.EASY_THERE;
 
 public class AuraWand extends Item {
-    private Entity e;
     private final Tier tier;
 
     public AuraWand() {
@@ -88,7 +87,7 @@ public class AuraWand extends Item {
             Vec3 location = result.getLocation();
             player.moveTo(location.x, location.y, location.z);
             AABB b = new AABB(player.getX() - 5, player.getY() - 5, player.getZ() - 5, player.getX() + 5, player.getY() + 5, player.getZ() + 5);
-            List<Entity> entities = world.getEntities(e, b);
+            List<Entity> entities = world.getEntities(null, b);
             for (Entity target : entities) {
                 if (target instanceof LivingEntity && !(target instanceof Player)) {
                     CombatSkill combatSkill = player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
@@ -107,7 +106,7 @@ public class AuraWand extends Item {
             double z = dist * Math.cos(Math.toRadians(player.getYRot())) * Math.cos(Math.toRadians(player.getXRot()));
             player.moveTo(player.getX() + x, player.getY() + y + 0.5, player.getZ() + z);
             AABB b = new AABB(player.getX() - 5, player.getY() - 5, player.getZ() - 5, player.getX() + 5, player.getY() + 5, player.getZ() + 5);
-            List<Entity> entities = world.getEntities(e, b);
+            List<Entity> entities = world.getEntities(null, b);
             for (Entity target : entities) {
                 if (target instanceof LivingEntity && !(target instanceof Player)) {
                     CombatSkill combatSkill = player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);

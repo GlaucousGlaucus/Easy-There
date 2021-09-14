@@ -14,7 +14,6 @@ import net.minecraft.world.level.material.MaterialColor;
  *
  * Traps:-
  *           1. Flame Trap,
- *                Pit trap,
  *                Spike Trap,
  *                Literally a Bear trap (A bear falls on player),
  *           2. Puzzles - A Quiz which bamboozles player,

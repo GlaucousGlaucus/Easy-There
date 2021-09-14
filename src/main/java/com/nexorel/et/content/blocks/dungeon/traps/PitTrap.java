@@ -1,4 +1,4 @@
-package com.nexorel.et.content.blocks.dungeon.PitTrap;
+package com.nexorel.et.content.blocks.dungeon.traps;
 
 import com.nexorel.et.content.blocks.dungeon.DungeonBlock;
 import net.minecraft.core.BlockPos;
