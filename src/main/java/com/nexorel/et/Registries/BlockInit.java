@@ -3,6 +3,7 @@ package com.nexorel.et.Registries;
 import com.nexorel.et.content.blocks.GemOreBlock;
 import com.nexorel.et.content.blocks.GemRefinery.GemRefineryBlock;
 import com.nexorel.et.content.blocks.dungeon.DungeonBlock;
+import com.nexorel.et.content.blocks.dungeon.traps.ArrowTrap;
 import com.nexorel.et.content.blocks.dungeon.traps.InstaKiller;
 import com.nexorel.et.content.blocks.dungeon.traps.InvisPressurePlate;
 import com.nexorel.et.content.blocks.dungeon.traps.PitTrap;
@@ -62,5 +63,6 @@ public class BlockInit {
     public static final RegistryObject<Block> DUNGEON_PIT_TRAP = BLOCKS.register("dungeon_pitfall_trap", PitTrap::new);
     public static final RegistryObject<Block> INSTA_KILLER = BLOCKS.register("insta_killer", InstaKiller::new);
     public static final RegistryObject<Block> IPP = BLOCKS.register("ipp", InvisPressurePlate::new);
+    public static final RegistryObject<Block> ARROW_TRAP = BLOCKS.register("arrow_trap", ArrowTrap::new);
 
 }

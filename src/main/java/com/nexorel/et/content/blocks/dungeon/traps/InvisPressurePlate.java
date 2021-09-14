@@ -52,7 +52,7 @@ public class InvisPressurePlate extends DungeonBlock {
 
     private int getSignalStrength(Level level, BlockPos pos) {
         AABB aabb = new AABB(pos).expandTowards(0, 0.25, 0);
-        return level.getEntities(null, aabb).isEmpty() ? 0 : 15;
+        return level.getEntitiesOfClass(Player.class, aabb).isEmpty() ? 0 : 15;
     }
 
     @Override

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/orientable_vertical",
+  "textures": {
+    "front": "et:block/dungeon/traps/arrow_trap_front_vertical",
+    "side": "et:block/dungeon/traps/arrow_trap_top"
+  }
+}

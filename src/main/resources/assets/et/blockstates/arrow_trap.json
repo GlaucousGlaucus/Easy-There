@@ -1,0 +1,26 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "et:block/arrow_trap_vertical",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "et:block/arrow_trap",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "et:block/arrow_trap"
+    },
+    "facing=south": {
+      "model": "et:block/arrow_trap",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "et:block/arrow_trap_vertical"
+    },
+    "facing=west": {
+      "model": "et:block/arrow_trap",
+      "y": 270
+    }
+  }
+}

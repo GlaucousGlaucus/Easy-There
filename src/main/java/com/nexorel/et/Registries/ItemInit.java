@@ -115,5 +115,6 @@ public class ItemInit {
     public static final RegistryObject<Item> DUNGEON_PITFALL_TRAP_ITEM = ITEMS.register("dungeon_pitfall_trap", () -> new BlockItem(BlockInit.DUNGEON_PIT_TRAP.get(), properties));
     public static final RegistryObject<Item> INSTA_KILLER_ITEM = ITEMS.register("insta_killer", () -> new BlockItem(BlockInit.INSTA_KILLER.get(), properties));
     public static final RegistryObject<Item> IPP_ITEM = ITEMS.register("ipp", () -> new BlockItem(BlockInit.IPP.get(), properties));
+    public static final RegistryObject<Item> ARROW_TRAP_ITEM = ITEMS.register("arrow_trap", () -> new BlockItem(BlockInit.ARROW_TRAP.get(), properties));
 
 }
