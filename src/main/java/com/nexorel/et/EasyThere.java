@@ -29,14 +29,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/**
- * TODO: CRAFTING, Add Choppermerang that right click goes like a boomerang and chops tress it encounters and add skill lvl requrement to it
- */
-
 @Mod("et")
 public class EasyThere {
     // Directly reference a log4j logger.
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
 
     public EasyThere() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ETConfig.clientSpec);

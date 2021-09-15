@@ -3,6 +3,7 @@ package com.nexorel.et.Registries;
 import com.nexorel.et.content.Entity.boss.aura.AuraEntity;
 import com.nexorel.et.content.Entity.damage_ind.DamageIndicatorEntity;
 import com.nexorel.et.content.Entity.projectile.aura_blast.AuraBlast;
+import com.nexorel.et.content.blocks.dungeon.traps.ArrowTrap.CustomTrapArrow;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -35,6 +36,14 @@ public class EntityInit {
                     .sized(0.9F, 3.5F)
                     .clientTrackingRange(10)
                     .build("aura_blast"));
+
+    public static final RegistryObject<EntityType<CustomTrapArrow>> CUSTOM_TRAP_ARROW = ENTITIES.register("trap_arrow",
+            () -> EntityType.Builder.<CustomTrapArrow>of(CustomTrapArrow::new, MobCategory.MISC)
+                    .fireImmune()
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(4)
+                    .updateInterval(20)
+                    .build("trap_arrow"));
 
     // DMGIND
 

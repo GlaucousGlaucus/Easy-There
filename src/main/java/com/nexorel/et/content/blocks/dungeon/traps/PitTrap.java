@@ -21,6 +21,7 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nullable;
 import java.util.*;
 
+@SuppressWarnings("deprecation")
 public class PitTrap extends DungeonBlock {
 
     protected static final VoxelShape NULL = Block.box(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
@@ -95,7 +96,7 @@ public class PitTrap extends DungeonBlock {
         BlockState blockstate = defaultBlockState();
         boolean hasSignal = context.getLevel().hasNeighborSignal(context.getClickedPos());
         if (hasSignal) {
-            blockstate.setValue(BlockStateProperties.POWERED, hasSignal);
+            blockstate.setValue(BlockStateProperties.POWERED, true);
         }
         return blockstate;
     }

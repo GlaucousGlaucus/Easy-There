@@ -116,6 +116,7 @@ public class Interactions {
                     }
                 });
             }
+            CapabilityHelper.cap_update(serverPlayerEntity);
         }
     }
 
@@ -146,7 +147,7 @@ public class Interactions {
     }
 
     @SubscribeEvent
-    public static void PlayerRespawnEvent(PlayerEvent.Clone event) {
+    public static void PlayerCloneEvent(PlayerEvent.Clone event) {
         ServerPlayer serverPlayerEntity_original = (ServerPlayer) event.getOriginal();
         ServerPlayer serverPlayerEntity_new = (ServerPlayer) event.getPlayer();
         if (!serverPlayerEntity_original.level.isClientSide) {

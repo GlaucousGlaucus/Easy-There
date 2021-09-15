@@ -19,19 +19,21 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static com.nexorel.et.EasyThere.EASY_THERE;
 import static com.nexorel.et.Reference.MOD_ID;
 
+@SuppressWarnings("unused")
 public class ItemInit {
 
-    private static Item.Properties properties = new Item.Properties().tab(EASY_THERE);
+    private static final Item.Properties properties = new Item.Properties().tab(EASY_THERE);
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
 
     public static void init() {
-            ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
     // Items
@@ -67,6 +69,7 @@ public class ItemInit {
     public static final RegistryObject<Item> TWINKLING_BREADITE_ITEM = ITEMS.register("twinkling_breadite", () -> new Item(properties));
     public static final RegistryObject<Item> SALMON_LINADINGERITE_ITEM = ITEMS.register("salmon_linadingerite", () -> new Item(properties) {
         @Override
+        @ParametersAreNonnullByDefault
         public void appendHoverText(ItemStack p_41421_, @Nullable Level p_41422_, List<Component> p_41423_, TooltipFlag p_41424_) {
             super.appendHoverText(p_41421_, p_41422_, p_41423_, p_41424_);
             if (Screen.hasShiftDown()) {
@@ -92,6 +95,7 @@ public class ItemInit {
     public static final RegistryObject<Item> TWINKLING_BREADITE_BLOCKITEM = ITEMS.register("twinkling_breadite_block", () -> new BlockItem(BlockInit.TWINKLING_BREADITE_BLOCK.get(), properties));
     public static final RegistryObject<Item> SALMON_LINADINGERITE_BLOCKITEM = ITEMS.register("salmon_linadingerite_block", () -> new BlockItem(BlockInit.SALMON_LINADINGERITE_BLOCK.get(), properties) {
         @Override
+        @ParametersAreNonnullByDefault
         public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> components, TooltipFlag flag) {
             super.appendHoverText(stack, level, components, flag);
             if (Screen.hasShiftDown()) {
@@ -116,5 +120,6 @@ public class ItemInit {
     public static final RegistryObject<Item> INSTA_KILLER_ITEM = ITEMS.register("insta_killer", () -> new BlockItem(BlockInit.INSTA_KILLER.get(), properties));
     public static final RegistryObject<Item> IPP_ITEM = ITEMS.register("ipp", () -> new BlockItem(BlockInit.IPP.get(), properties));
     public static final RegistryObject<Item> ARROW_TRAP_ITEM = ITEMS.register("arrow_trap", () -> new BlockItem(BlockInit.ARROW_TRAP.get(), properties));
+    public static final RegistryObject<Item> SPIKE_TRAP_ITEM = ITEMS.register("spike_trap", () -> new BlockItem(BlockInit.SPIKE_TRAP.get(), properties));
 
 }

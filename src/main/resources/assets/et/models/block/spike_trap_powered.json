@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "et:block/dungeon/traps/arrow_trap_top",
+    "front": "et:block/dungeon/traps/spike_trap_top_powered",
+    "side": "et:block/dungeon/traps/arrow_trap_side"
+  }
+}

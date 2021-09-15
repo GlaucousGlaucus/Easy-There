@@ -9,6 +9,7 @@ import com.nexorel.et.content.Entity.boss.aura.AuraRenderer;
 import com.nexorel.et.content.Entity.damage_ind.DamageIndicatorRenderer;
 import com.nexorel.et.content.Entity.projectile.aura_blast.AuraBlastRenderer;
 import com.nexorel.et.content.blocks.GemRefinery.GRS;
+import com.nexorel.et.content.blocks.dungeon.traps.ArrowTrap.CustomTrapArrowRenderer;
 import com.nexorel.et.content.items.talisBag.TalismanBagScreen;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -46,6 +47,7 @@ public class ClientSetup {
         event.registerEntityRenderer(EntityInit.AURA.get(), AuraRenderer::new);
         event.registerEntityRenderer(EntityInit.AURA_BLAST.get(), AuraBlastRenderer::new);
         event.registerEntityRenderer(EntityInit.DMG_IND.get(), DamageIndicatorRenderer::new);
+        event.registerEntityRenderer(EntityInit.CUSTOM_TRAP_ARROW.get(), CustomTrapArrowRenderer::new);
     }
 
     @SubscribeEvent

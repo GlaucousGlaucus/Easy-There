@@ -8,7 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 public class Stats {
 
     private double accuracy;
-    private double agility;
+    private double agility; /*Chance to not trigger traps*/
     private double strength;
     private double fortune;
     private int crit_chance;
