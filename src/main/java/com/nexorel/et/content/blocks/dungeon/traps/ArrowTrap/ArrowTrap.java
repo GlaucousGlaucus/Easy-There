@@ -4,9 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -50,6 +48,16 @@ public class ArrowTrap extends Block implements EntityBlock {
         return (level1, blockPos, state1, t) -> {
             if (t instanceof ArrowTrapBE te) te.tickServer();
         };
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Rotation direction) {
+        return state.setValue(BlockStateProperties.FACING, direction.rotate(state.getValue(BlockStateProperties.FACING)));
+    }
+
+    @Override
+    public BlockState mirror(BlockState state, Mirror mirror) {
+        return state.rotate(mirror.getRotation(state.getValue(BlockStateProperties.FACING)));
     }
 
     @Nullable

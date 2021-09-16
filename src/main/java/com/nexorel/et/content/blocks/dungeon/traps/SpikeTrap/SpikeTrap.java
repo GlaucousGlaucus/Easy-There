@@ -7,6 +7,8 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -42,6 +44,16 @@ public class SpikeTrap extends DungeonBlock implements EntityBlock {
         return (level1, blockPos, state1, t) -> {
             if (t instanceof SpikeTrapBE te) te.tickServer();
         };
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Rotation direction) {
+        return state.setValue(BlockStateProperties.FACING, direction.rotate(state.getValue(BlockStateProperties.FACING)));
+    }
+
+    @Override
+    public BlockState mirror(BlockState state, Mirror mirror) {
+        return state.rotate(mirror.getRotation(state.getValue(BlockStateProperties.FACING)));
     }
 
     @Nullable
