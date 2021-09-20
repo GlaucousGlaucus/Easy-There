@@ -3,6 +3,7 @@ package com.nexorel.et.Registries;
 import com.nexorel.et.content.blocks.GemOreBlock;
 import com.nexorel.et.content.blocks.GemRefinery.GemRefineryBlock;
 import com.nexorel.et.content.blocks.dungeon.DungeonBlock;
+import com.nexorel.et.content.blocks.dungeon.puzzles.quiz.QuestionBlock;
 import com.nexorel.et.content.blocks.dungeon.traps.ArrowTrap.ArrowTrap;
 import com.nexorel.et.content.blocks.dungeon.traps.InstaKiller;
 import com.nexorel.et.content.blocks.dungeon.traps.InvisPressurePlate;
@@ -16,11 +17,11 @@ import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import static com.nexorel.et.Reference.MOD_ID;
+import static com.nexorel.et.Reference.MODID;
 
 public class BlockInit {
 
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID);
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
 
     public static void init() {
         BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
@@ -66,5 +67,6 @@ public class BlockInit {
     public static final RegistryObject<Block> IPP = BLOCKS.register("ipp", InvisPressurePlate::new);
     public static final RegistryObject<Block> ARROW_TRAP = BLOCKS.register("arrow_trap", ArrowTrap::new);
     public static final RegistryObject<Block> SPIKE_TRAP = BLOCKS.register("spike_trap", SpikeTrap::new);
+    public static final RegistryObject<Block> QUESTION_BLOCK = BLOCKS.register("question_block", QuestionBlock::new);
 
 }

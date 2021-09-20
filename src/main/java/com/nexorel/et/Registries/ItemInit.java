@@ -23,14 +23,14 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static com.nexorel.et.EasyThere.EASY_THERE;
-import static com.nexorel.et.Reference.MOD_ID;
+import static com.nexorel.et.Reference.MODID;
 
 @SuppressWarnings("unused")
 public class ItemInit {
 
     private static final Item.Properties properties = new Item.Properties().tab(EASY_THERE);
 
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
 
     public static void init() {
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
@@ -121,5 +121,6 @@ public class ItemInit {
     public static final RegistryObject<Item> IPP_ITEM = ITEMS.register("ipp", () -> new BlockItem(BlockInit.IPP.get(), properties));
     public static final RegistryObject<Item> ARROW_TRAP_ITEM = ITEMS.register("arrow_trap", () -> new BlockItem(BlockInit.ARROW_TRAP.get(), properties));
     public static final RegistryObject<Item> SPIKE_TRAP_ITEM = ITEMS.register("spike_trap", () -> new BlockItem(BlockInit.SPIKE_TRAP.get(), properties));
+    public static final RegistryObject<Item> QUESTION_BLOCK_ITEM = ITEMS.register("question_block", () -> new BlockItem(BlockInit.QUESTION_BLOCK.get(), properties));
 
 }

@@ -18,10 +18,10 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 public class GRC extends AbstractContainerMenu {
 
     public GemRefineryTile tileEntity;
-    private Player player;
-    private IItemHandler playerinv;
-    private int progress;
-    private int MaxTime;
+    private final Player player;
+    private final IItemHandler playerinv;
+    private final int progress;
+    private final int MaxTime;
 
     public GRC(int windowID, Inventory playerInventory, Player player, final GemRefineryTile tile) {
         super(ContainerInit.GRC.get(), windowID);
@@ -32,14 +32,12 @@ public class GRC extends AbstractContainerMenu {
         this.progress = tileEntity.current_progress;
         this.MaxTime = tileEntity.Max_Time;
 
-        if (tileEntity != null) {
-            tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-                addSlot(new SlotItemHandler(h, 0, 50, 31)); // Input 1
-                addSlot(new SlotItemHandler(h, 1, 110, 57)); // Output
-                addSlot(new SlotItemHandler(h, 2, 110, 31)); // Input 2
-            });
-        }
-        layoutPlayerInventorySlots(8,84);
+        tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+            addSlot(new SlotItemHandler(h, 0, 50, 31)); // Input 1
+            addSlot(new SlotItemHandler(h, 1, 110, 57)); // Output
+            addSlot(new SlotItemHandler(h, 2, 110, 31)); // Input 2
+        });
+        layoutPlayerInventorySlots(8, 84);
 
     }
 

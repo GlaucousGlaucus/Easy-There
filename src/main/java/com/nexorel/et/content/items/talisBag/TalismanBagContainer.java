@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TalismanBagContainer extends AbstractContainerMenu {
 
     private int blocked = -1;
-    private ItemStack itemStack;
+    private final ItemStack itemStack;
     private IItemHandler inventory;
 
     public TalismanBagContainer(int id, Inventory playerInventory, Player player) {

@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 
 public class TalismanBagCapability extends CapabilityProvider implements ICapabilitySerializable<CompoundTag> {
 
-    private ItemStackHandler inventory = new ItemStackHandler(54) {
+    private final ItemStackHandler inventory = new ItemStackHandler(54) {
         @Override
         protected void onContentsChanged(int slot) {
             this.serializeNBT();

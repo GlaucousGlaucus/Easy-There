@@ -11,10 +11,10 @@ import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import static com.nexorel.et.Reference.MOD_ID;
+import static com.nexorel.et.Reference.MODID;
 
 public class EntityInit {
-    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, MOD_ID);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
 
     public static void initialization() {
         ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());

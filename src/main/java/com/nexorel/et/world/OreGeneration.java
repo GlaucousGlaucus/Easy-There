@@ -14,7 +14,7 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static com.nexorel.et.Reference.MOD_ID;
+import static com.nexorel.et.Reference.MODID;
 
 @Mod.EventBusSubscriber
 public class OreGeneration {
@@ -85,21 +85,21 @@ public class OreGeneration {
         MAGENTA_ROSE_LOLLNIC_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_MAGENTA_ROSE_LOLLNIC_BLOCK_TARGET_LIST, 8)).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared().count(8);
         JADE_PETAOGOPITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_JADE_PETAOGOPITE_BLOCK_TARGET_LIST, 8)).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared().count(8);
 
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MOD_ID, "agriyelite_block"), AGRIYELITE_BLOCK);
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MOD_ID, "aquomite_block"), AQUOMITE_BLOCK);
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MOD_ID, "gold_almao_block"), GOLD_ALMAO_BLOCK);
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MOD_ID, "orange_red_temarelite_block"), ORANGE_RED_TEMARELITE_BLOCK);
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MOD_ID, "cryophanite_block"), CRYOPHANITE_BLOCK);
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MOD_ID, "peach_ekanesia_block"), PEACH_EKANESIA_BLOCK);
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MOD_ID, "crimson_pectene_block"), CRIMSON_PECTENE_BLOCK);
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MOD_ID, "blue_violet_aegidonyx_block"), BLUE_VIOLET_AEGIDONYX_BLOCK);
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MOD_ID, "electric_blue_cypberite_block"), ELECTRIC_BLUE_CYPBERITE_BLOCK);
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MOD_ID, "twinkling_breadite_block"), TWINKLING_BREADITE_BLOCK);
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MOD_ID, "salmon_linadingerite_block"), SALMON_LINADINGERITE_BLOCK);
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MOD_ID, "blue_rapmony_block"), BLUE_RAPMONY_BLOCK);
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MOD_ID, "violet_tunoradoite_block"), VIOLET_TUNORADOITE_BLOCK);
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MOD_ID, "magenta_rose_lollnic_block"), MAGENTA_ROSE_LOLLNIC_BLOCK);
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MOD_ID, "jade_petaogopite_block"), JADE_PETAOGOPITE_BLOCK);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MODID, "agriyelite_block"), AGRIYELITE_BLOCK);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MODID, "aquomite_block"), AQUOMITE_BLOCK);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MODID, "gold_almao_block"), GOLD_ALMAO_BLOCK);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MODID, "orange_red_temarelite_block"), ORANGE_RED_TEMARELITE_BLOCK);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MODID, "cryophanite_block"), CRYOPHANITE_BLOCK);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MODID, "peach_ekanesia_block"), PEACH_EKANESIA_BLOCK);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MODID, "crimson_pectene_block"), CRIMSON_PECTENE_BLOCK);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MODID, "blue_violet_aegidonyx_block"), BLUE_VIOLET_AEGIDONYX_BLOCK);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MODID, "electric_blue_cypberite_block"), ELECTRIC_BLUE_CYPBERITE_BLOCK);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MODID, "twinkling_breadite_block"), TWINKLING_BREADITE_BLOCK);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MODID, "salmon_linadingerite_block"), SALMON_LINADINGERITE_BLOCK);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MODID, "blue_rapmony_block"), BLUE_RAPMONY_BLOCK);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MODID, "violet_tunoradoite_block"), VIOLET_TUNORADOITE_BLOCK);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MODID, "magenta_rose_lollnic_block"), MAGENTA_ROSE_LOLLNIC_BLOCK);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MODID, "jade_petaogopite_block"), JADE_PETAOGOPITE_BLOCK);
     }
 
     @SubscribeEvent

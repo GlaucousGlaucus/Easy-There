@@ -12,11 +12,11 @@ import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import static com.nexorel.et.Reference.MOD_ID;
+import static com.nexorel.et.Reference.MODID;
 
 public class ContainerInit {
 
-    public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, MOD_ID);
+    public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, MODID);
 
     public static void init() {
         CONTAINERS.register(FMLJavaModLoadingContext.get().getModEventBus());
@@ -30,4 +30,10 @@ public class ContainerInit {
     }));
 
     public static final RegistryObject<MenuType<TalismanBagContainer>> TBC = CONTAINERS.register("talisman_bag", () -> IForgeContainerType.create((windowId, inv, data) -> new TalismanBagContainer(windowId, inv, inv.player)));
+
+    /*public static final RegistryObject<MenuType<QuestionContainer>> QUESTION_CONTAINER = CONTAINERS.register("question_block", () -> IForgeContainerType.create((windowId, inv, data) -> {
+        BlockPos pos = data.readBlockPos();
+        Level world = inv.player.getCommandSenderWorld();
+        return new QuestionContainer(windowId, inv, inv.player, (QuestionBE) world.getBlockEntity(pos));
+    }));*/
 }

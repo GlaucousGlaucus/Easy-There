@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "et:block/question_block"
+    },
+    "powered=true": {
+      "model": "et:block/question_block_powered"
+    }
+  }
+}

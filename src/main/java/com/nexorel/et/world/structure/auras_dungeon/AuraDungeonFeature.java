@@ -1,4 +1,3 @@
-/*
 package com.nexorel.et.world.structure.auras_dungeon;
 
 import com.google.common.collect.ImmutableList;
@@ -12,7 +11,6 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.biome.Biome;
@@ -25,9 +23,10 @@ import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.structures.JigsawPlacement;
-import net.minecraft.world.level.levelgen.structure.*;
+import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
-import org.apache.logging.log4j.Level;
 
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class AuraDungeonFeature extends StructureFeature<NoneFeatureConfiguratio
 
     @Override
     public StructureStartFactory<NoneFeatureConfiguration> getStartFactory() {
-        return null;
+        return AuraDungeonFeature.FeatureStart::new;
     }
 
     @Override
@@ -54,13 +53,13 @@ public class AuraDungeonFeature extends StructureFeature<NoneFeatureConfiguratio
 
     @Override
     public List<MobSpawnSettings.SpawnerData> getDefaultSpawnList() {
-        return null;
+        return STRUCTURE_MONSTERS;
     }
 
-    */
-/**
- * Used to check for specific conditions for spawnning of structure
- *//*
+    /**
+     * Used to check for specific conditions for spawnning of structure
+     */
+
 
     @Override
     protected boolean isFeatureChunk(ChunkGenerator generator, BiomeSource biomeSource, long seed, WorldgenRandom random, ChunkPos pos, Biome biome, ChunkPos chunkPos, NoneFeatureConfiguration featureConfiguration, LevelHeightAccessor accessor) {
@@ -90,31 +89,31 @@ public class AuraDungeonFeature extends StructureFeature<NoneFeatureConfiguratio
             JigsawPlacement.addPieces(
                     access,
                     new JigsawConfiguration(() -> access.registryOrThrow(Registry.TEMPLATE_POOL_REGISTRY)
-                                .get(new ResourceLocation(Reference.MOD_ID, file)),
-                        10),
-                        PoolElementStructurePiece::new,
-                        generator,
-                        manager,
-                        center,
+                            .get(new ResourceLocation(Reference.MODID, file)),
+                            15),
+                    PoolElementStructurePiece::new,
+                    generator,
+                    manager,
+                    center,
                     this,
-                        this.random,
-                        false,
-                        false, heightAccessor);
+                    this.random,
+                    false,
+                    false, heightAccessor);
+
+            // Boss and Puzzles
+            String file2 = "aura_dungeon/boss_pool";
 
             Vec3i structureCenter = this.pieces.get(0).getBoundingBox().getCenter();
             int xOffset = center.getX() - structureCenter.getX();
             int zOffset = center.getZ() - structureCenter.getZ();
-            for(StructurePiece structurePiece : this.pieces){
+            for (StructurePiece structurePiece : this.pieces) {
                 structurePiece.move(xOffset, 0, zOffset);
             }
             this.createBoundingBox();
 
-            EasyThere.LOGGER.log(Level.DEBUG, "Dungeon at " +
-                    this.pieces.get(0).getBoundingBox().minX() + " " +
-                    this.pieces.get(0).getBoundingBox().minY() + " " +
-                    this.pieces.get(0).getBoundingBox().minZ()
+            EasyThere.LOGGER.info("Dungeon at " +
+                    this.pieces.get(0).getBoundingBox().getCenter()
             );
         }
     }
 }
-*/

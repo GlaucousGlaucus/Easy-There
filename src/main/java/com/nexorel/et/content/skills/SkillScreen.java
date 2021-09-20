@@ -12,7 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-import static com.nexorel.et.Reference.MOD_ID;
+import static com.nexorel.et.Reference.MODID;
 
 public class SkillScreen extends Screen {
 
@@ -20,9 +20,9 @@ public class SkillScreen extends Screen {
     public static final int HEIGHT = 139;
     SkillTabGUI skillTabGUI = new SkillTabGUI(this);
     private boolean isScrolling;
-    private ResourceLocation GUI = new ResourceLocation(MOD_ID, "textures/gui/skill_window.png");
-    public static ResourceLocation SKILL_ASSETS_LOC = new ResourceLocation(MOD_ID, "textures/gui/skill_window.png");
-    private Player player;
+    private final ResourceLocation GUI = new ResourceLocation(MODID, "textures/gui/skill_window.png");
+    public static ResourceLocation SKILL_ASSETS_LOC = new ResourceLocation(MODID, "textures/gui/skill_window.png");
+    private final Player player;
 
     public SkillScreen() {
         super(new TranslatableComponent("screen.et.skills"));
@@ -75,14 +75,14 @@ public class SkillScreen extends Screen {
         }
     }
 
-    public void renderWindow(PoseStack matrixStack, int p_238695_2_, int p_238695_3_) {
+    public void renderWindow(PoseStack matrixStack, int relX, int relY) {
         RenderSystem.enableBlend();
         RenderSystem.setShaderTexture(0, GUI);
-        this.blit(matrixStack, p_238695_2_, p_238695_3_, 0, 0, 252, 140);
+        this.blit(matrixStack, relX, relY, 0, 0, 252, 140);
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();
 
-        this.font.draw(matrixStack, "Skills", (float) (p_238695_2_ + 8), (float) (p_238695_3_ + 6), 4210752);
+        this.font.draw(matrixStack, "Skills", (float) (relX + 8), (float) (relY + 6), 4210752);
     }
 
     public void renderTooltips(PoseStack matrixStack, int x, int y, int mouseX, int mouseY, float partialTicks) {

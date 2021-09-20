@@ -7,13 +7,13 @@ import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import static com.nexorel.et.Reference.MOD_ID;
+import static com.nexorel.et.Reference.MODID;
 
 public class LootInit {
 
 //    public static final LootItemConditionType SKILL_LEVEL_BONUS = new LootItemConditionType(MiningLevelCondition.SERIALIZER);
 
-    public static final DeferredRegister<GlobalLootModifierSerializer<?>> LOOT_MODIFIERS = DeferredRegister.create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS, MOD_ID);
+    public static final DeferredRegister<GlobalLootModifierSerializer<?>> LOOT_MODIFIERS = DeferredRegister.create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS, MODID);
 
     public static final RegistryObject<GlobalLootModifierSerializer<?>> SKILL_LEVEL_BONUS_A = LOOT_MODIFIERS.register("skill_bonus_drops", SkillBonusModifier.Serializer::new);
 

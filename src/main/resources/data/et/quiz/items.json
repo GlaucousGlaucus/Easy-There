@@ -1,0 +1,68 @@
+{
+  "values": [
+    {
+      "Question": "How much time §a did it take me to write this question ?",
+      "Answer": "10 sec"
+    },
+    {
+      "Question": "Rearrange, and answer:\n    !!!ti, rewsna ,neht ,os ,fi ,? ,noitseuq ,siht ,degnarraer ,uoy,evaH",
+      "Answer": "ok"
+    },
+    {
+      "Question": "Have you answered this question ?",
+      "Answer": "Yes"
+    },
+    {
+      "Question": "How many errors are there in this question if\n    there is at least one error in this question?",
+      "Answer": "1"
+    },
+    {
+      "Question": "I drape the hills in gentle white and from the heavens I will glide.\n What am I?",
+      "Answer": "Snow"
+    },
+    {
+      "Question": "What am I?",
+      "Answer": "A question"
+    },
+    {
+      "Question": "When one does not know what it is, then it is something.\n When one knows what it is, then it is nothing.",
+      "Answer": "A riddle"
+    },
+    {
+      "Question": "I live in a block. What am I ?",
+      "Answer": "Bee"
+    },
+    {
+      "Question": "How do you solve this question ?",
+      "Answer": "By answering it"
+    },
+    {
+      "Question": "What will you get if you subtract Your xp level from the\n    number of experience points in your xp level.",
+      "Answer": "Some number"
+    },
+    {
+      "Question": "What is the question ?",
+      "Answer": "What is the question ?"
+    },
+    {
+      "Question": "Do you think this question in Unfair ?",
+      "Answer": "Do you think this answer is UNFAIR ?"
+    },
+    {
+      "Question": "What is first step to the solve this math problem ?\n    -> (1 + π^1 + π^2 + π^3 ... π^100) / (π^100 * (1 + π^1 + π^2 + π^3 ... π^100))",
+      "Answer": "Read it"
+    },
+    {
+      "Question": "What is the value of π upto 5 decimal places",
+      "Answer": "3.14285"
+    },
+    {
+      "Question": "What is so special about Spiders, Cave Spiders, Slimes, Silverfish and Illusioners ?",
+      "Answer": "They can see player behind walls"
+    },
+    {
+      "Question": "What is thte duration of Potion of Poison II (in seconds)",
+      "Answer": "22.5"
+    }
+  ]
+}

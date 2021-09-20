@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-import static com.nexorel.et.Reference.MOD_ID;
+import static com.nexorel.et.Reference.MODID;
 
 public class AuraEntity extends Monster implements RangedAttackMob {
 
@@ -83,7 +83,7 @@ public class AuraEntity extends Monster implements RangedAttackMob {
     public static AttributeSupplier.Builder prepareAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 300.0D)
-                .add(Attributes.MOVEMENT_SPEED, (double) 0.6F)
+                .add(Attributes.MOVEMENT_SPEED, 0.6F)
                 .add(Attributes.FOLLOW_RANGE, 40.0D)
                 .add(Attributes.ARMOR, 44.0D);
     }
@@ -138,7 +138,7 @@ public class AuraEntity extends Monster implements RangedAttackMob {
             this.level.setBlockAndUpdate(pos, state);
             BlockEntity chest = this.level.getBlockEntity(pos);
             if (chest instanceof ChestBlockEntity) {
-                ((ChestBlockEntity) chest).setLootTable(new ResourceLocation(MOD_ID, "chests/aura_chest"), random.nextLong());
+                ((ChestBlockEntity) chest).setLootTable(new ResourceLocation(MODID, "chests/aura_chest"), random.nextLong());
             }
             flag = false;
         }

@@ -88,7 +88,6 @@ public class CombatHelper {
             target.hurt(DamageSource.playerAttack(attacker), final_damage);
             CombatHelper.summon_damage_indicator(target, final_damage, flag2);
         }
-        entityEvent.setCanceled(true);
     }
 
     public static void calculateAndGiveCritChance(TickEvent.PlayerTickEvent event, ServerPlayer serverPlayerEntity) {

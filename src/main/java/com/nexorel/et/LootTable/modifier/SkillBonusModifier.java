@@ -25,12 +25,12 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Set;
 
-import static com.nexorel.et.Reference.MOD_ID;
+import static com.nexorel.et.Reference.MODID;
 
 public class SkillBonusModifier extends LootModifier {
 
-    public static final Tag.Named<Block> CROPS = BlockTags.createOptional(new ResourceLocation(MOD_ID, "farming_crops"));
-    public static final Tag.Named<Block> XP_LOGS = BlockTags.createOptional(new ResourceLocation(MOD_ID, "xp_logs"), Set.of(
+    public static final Tag.Named<Block> CROPS = BlockTags.createOptional(new ResourceLocation(MODID, "farming_crops"));
+    public static final Tag.Named<Block> XP_LOGS = BlockTags.createOptional(new ResourceLocation(MODID, "xp_logs"), Set.of(
             () -> Blocks.ACACIA_LOG,
             () -> Blocks.BIRCH_LOG,
             () -> Blocks.DARK_OAK_LOG,

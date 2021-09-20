@@ -22,9 +22,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fmlclient.registry.ClientRegistry;
 import org.lwjgl.glfw.GLFW;
 
-import static com.nexorel.et.Reference.MOD_ID;
+import static com.nexorel.et.Reference.MODID;
 
-@Mod.EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
 
     public static final KeyMapping TALISMAN_BAG_KEY = new KeyMapping("key.talis_bag", GLFW.GLFW_KEY_Y, "key.categories.inventory");
@@ -34,6 +34,7 @@ public class ClientSetup {
 
         MenuScreens.register(ContainerInit.GRC.get(), GRS::new);
         MenuScreens.register(ContainerInit.TBC.get(), TalismanBagScreen::new);
+//        MenuScreens.register(ContainerInit.QUESTION_CONTAINER.get(), QuestionScreen::new);
         ClientRegistry.registerKeyBinding(TALISMAN_BAG_KEY);
     }
 

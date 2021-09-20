@@ -20,7 +20,7 @@ import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import static com.nexorel.et.Reference.MOD_ID;
+import static com.nexorel.et.Reference.MODID;
 
 /**
  * AuraModel - Nexorel
@@ -36,7 +36,7 @@ public class AuraEntityModel extends EntityModel<AuraEntity> {
     public ModelPart D;
     private int tick = 20;
 
-    public static ModelLayerLocation CUBE_LAYER = new ModelLayerLocation(new ResourceLocation(MOD_ID, "aura"), "aura");
+    public static ModelLayerLocation CUBE_LAYER = new ModelLayerLocation(new ResourceLocation(MODID, "aura"), "aura");
 
     public AuraEntityModel(ModelPart body) {
         this.root = body;

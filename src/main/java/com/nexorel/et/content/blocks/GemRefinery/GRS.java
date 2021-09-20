@@ -7,11 +7,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-import static com.nexorel.et.Reference.MOD_ID;
+import static com.nexorel.et.Reference.MODID;
 
 public class GRS extends AbstractContainerScreen<GRC> {
 
-    private ResourceLocation GUI = new ResourceLocation(MOD_ID, "textures/gui/gr.png");
+    private final ResourceLocation GUI = new ResourceLocation(MODID, "textures/gui/gr.png");
 
     public GRS(GRC container, Inventory playerInventory, Component name) {
         super(container, playerInventory, name);

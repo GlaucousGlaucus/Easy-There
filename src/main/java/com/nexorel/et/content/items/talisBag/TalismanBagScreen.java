@@ -7,11 +7,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-import static com.nexorel.et.Reference.MOD_ID;
+import static com.nexorel.et.Reference.MODID;
 
 public class TalismanBagScreen extends AbstractContainerScreen<TalismanBagContainer> {
 
-    private ResourceLocation GUI = new ResourceLocation(MOD_ID, "textures/gui/talisman_bag.png");
+    private final ResourceLocation GUI = new ResourceLocation(MODID, "textures/gui/talisman_bag.png");
 
     public TalismanBagScreen(TalismanBagContainer container, Inventory playerInventory, Component component) {
         super(container, playerInventory, component);

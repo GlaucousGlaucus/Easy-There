@@ -167,6 +167,31 @@
           "name": "minecraft:cooked_salmon"
         }
       ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:exploration_map",
+              "destination": "et:aura_dungeon",
+              "decoration": "red_x",
+              "zoom": 1,
+              "skip_existing_chunks": false
+            },
+            {
+              "function": "minecraft:set_name",
+              "name": {
+                "translate": "filled_map.et.aura_dungeon"
+              }
+            }
+          ],
+          "name": "minecraft:map"
+        }
+      ]
     }
   ]
 }

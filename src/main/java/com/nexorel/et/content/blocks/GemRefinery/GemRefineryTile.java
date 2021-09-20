@@ -28,9 +28,9 @@ import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABI
 
 public class GemRefineryTile extends BlockEntity {
 
-    private ItemStackHandler ih = createHandler();
-    private LazyOptional<IItemHandler> handler = LazyOptional.of(() -> ih);
-    private RecipeWrapper wrapper = new RecipeWrapper(ih);
+    private final ItemStackHandler ih = createHandler();
+    private final LazyOptional<IItemHandler> handler = LazyOptional.of(() -> ih);
+    private final RecipeWrapper wrapper = new RecipeWrapper(ih);
     SimpleContainer inv = new SimpleContainer(wrapper.getItem(0), wrapper.getItem(1), wrapper.getItem(2));
     SimpleContainer inv_in = new SimpleContainer(wrapper.getItem(0), wrapper.getItem(1));
     SimpleContainer inv_r = new SimpleContainer(wrapper.getItem(2));

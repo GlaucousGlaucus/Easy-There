@@ -10,19 +10,19 @@ import net.minecraft.util.Mth;
 
 import java.util.List;
 
-import static com.nexorel.et.Reference.MOD_ID;
+import static com.nexorel.et.Reference.MODID;
 
 public class SkillTabGUI extends GuiComponent {
 
     public double scrollX;
     public double scrollY;
-    private int a = 260;//234
-    private int b = 160;
-    private int w = 234;
-    private int h = 113;
+    private final int a = 260;//234
+    private final int b = 160;
+    private final int w = 234;
+    private final int h = 113;
     private boolean centered;
     public final List<SkillButtonWidget> widgets = Lists.newArrayList();
-    private SkillScreen skillScreen;
+    private final SkillScreen skillScreen;
     private float fade;
 
     public SkillTabGUI(SkillScreen skillScreen) {
@@ -40,8 +40,8 @@ public class SkillTabGUI extends GuiComponent {
 
     public void drawContents(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks, long Time) {
         if (!this.centered) {
-            this.scrollX = (double) ((w / 2) - (a) / 2);
-            this.scrollY = (double) ((h / 2) - (b) / 2);
+            this.scrollX = (w / 2) - (a) / 2;
+            this.scrollY = (h / 2) - (b) / 2;
             this.centered = true;
         }
         matrixStack.pushPose();
@@ -54,7 +54,7 @@ public class SkillTabGUI extends GuiComponent {
         RenderSystem.depthFunc(518);
         fill(matrixStack, 234, 113, 0, 0, -16777216);
         RenderSystem.depthFunc(515);
-        ResourceLocation resourcelocation = new ResourceLocation(MOD_ID, "textures/gui/skill_bg.png");
+        ResourceLocation resourcelocation = new ResourceLocation(MODID, "textures/gui/skill_bg.png");
         RenderSystem.setShaderTexture(0, resourcelocation);
 
 
@@ -118,8 +118,8 @@ public class SkillTabGUI extends GuiComponent {
     }
 
     public void scroll(double x, double y) {
-        this.scrollX = Mth.clamp(this.scrollX + x, (double) (-(a - w)), 0.0D);
-        this.scrollY = Mth.clamp(this.scrollY + y, (double) (-(b - h)), 0.0D);
+        this.scrollX = Mth.clamp(this.scrollX + x, -(a - w), 0.0D);
+        this.scrollY = Mth.clamp(this.scrollY + y, -(b - h), 0.0D);
 
     }
 

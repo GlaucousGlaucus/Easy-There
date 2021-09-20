@@ -52,8 +52,10 @@
   "block.et.ipp": "Hidden Pressure Plate",
   "block.et.arrow_trap": "Arrow Trap",
   "block.et.spike_trap": "Spike Trap",
+  "block.et.question_block": "Question Block",
   "container.et.talisman_bag": "PackPack",
   "screen.et.gem_refinery": "Gem Refinery",
   "screen.et.skills": "Skills",
-  "key.talis_bag": "Open Talisman Bag"
+  "key.talis_bag": "Open Talisman Bag",
+  "quiz.done_button": "Done"
 }
