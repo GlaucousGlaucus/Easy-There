@@ -1,6 +1,7 @@
 package com.nexorel.et.capabilities.interaction;
 
-import com.nexorel.et.LootTable.modifier.SkillBonusModifier;
+import com.nexorel.et.EasyThere;
+import com.nexorel.et.Registries.StructureInit;
 import com.nexorel.et.capabilities.chunk.SkillChunkCap;
 import com.nexorel.et.capabilities.events.LevelUPEvent;
 import com.nexorel.et.capabilities.events.XPGainEvent;
@@ -13,11 +14,13 @@ import com.nexorel.et.capabilities.skills.MiningSkill.MiningSkill;
 import com.nexorel.et.capabilities.skills.MiningSkill.MiningSkillCapability;
 import com.nexorel.et.content.skills.SkillScreen;
 import com.nexorel.et.content.skills.widget.LevelUpToast;
+import com.nexorel.et.content.trades.MapTrade;
 import com.nexorel.et.setup.ClientSetup;
 import com.nexorel.et.util.CapabilityHelper;
 import com.nexorel.et.util.CombatHelper;
 import com.nexorel.et.util.XPAssignHelper;
 import net.minecraft.ChatFormatting;
+import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextComponent;
@@ -25,6 +28,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -34,6 +38,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkSource;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -41,17 +46,23 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.village.WandererTradesEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.PistonEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 
-//@SuppressWarnings("unused")
+@SuppressWarnings("unused")
 public class Interactions {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = EasyThere.LOGGER;
+    private static final LocationPredicate predicate = LocationPredicate.inFeature(StructureInit.AURA_DUNGEON.get());
+
+    @SubscribeEvent
+    public static void PutTrades(WandererTradesEvent event) {
+        event.getGenericTrades().add(new MapTrade(20, StructureInit.AURA_DUNGEON.get(), MapDecoration.Type.RED_X, 12, 10));
+    }
 
     @SubscribeEvent
     public static void XPGainEvent(XPGainEvent event) {
@@ -131,11 +142,16 @@ public class Interactions {
     @SubscribeEvent
     public static void PlayerBlockPlaceEvent(BlockEvent.EntityPlaceEvent event) {
         if (event.getEntity() instanceof Player player) {
-            if (player instanceof ServerPlayer serverPlayer) {//Chunk Stuff
+            if (player instanceof ServerPlayer serverPlayer) {
+                if (serverPlayer.level instanceof ServerLevel serverLevel && predicate.matches(serverLevel, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ())) {
+                    player.displayClientMessage(new TextComponent(ChatFormatting.RED + "A Weird Force Prevents You From Placing The Block"), true);
+                    event.setCanceled(true);
+                    return;
+                }
                 BlockPos pos = event.getPos();
                 LevelChunk chunk = serverPlayer.level.getChunkAt(pos);
-                boolean cond_crops = event.getPlacedBlock().getBlock().getTags().contains(SkillBonusModifier.CROPS.getName());
-                boolean cond_foraging = event.getPlacedBlock().getBlock().getTags().contains(SkillBonusModifier.XP_LOGS.getName());
+                boolean cond_crops = event.getPlacedBlock().getBlock().getTags().contains(BlockTags.CROPS.getName());
+                boolean cond_foraging = event.getPlacedBlock().getBlock().getTags().contains(BlockTags.LOGS.getName());
                 if (cond_crops || cond_foraging) {
                     chunk.getCapability(SkillChunkCap.BLOCK_CAP).ifPresent(skillChunk -> {
                         skillChunk.addData(event.getPos(), event.getPlacedBlock());
@@ -202,6 +218,11 @@ public class Interactions {
         Block target_block = event.getState().getBlock();
         BlockPos target_block_pos = event.getPos();
         Level level = player.level;
+        if (!level.isClientSide && level instanceof ServerLevel serverLevel && player instanceof ServerPlayer serverPlayer && predicate.matches(serverLevel, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ())) {
+            player.displayClientMessage(new TextComponent(ChatFormatting.RED + "A Weird Force Prevents You From Breaking The Block"), true);
+            event.setCanceled(true);
+            return;
+        }
         MiningSkill miningSkill = player.getCapability(MiningSkillCapability.MINING_CAP).orElse(null);
         ForagingSkill foragingSkill = player.getCapability(ForagingSkillCapability.FORAGING_CAP).orElse(null);
         FarmingSkill farmingSkill = player.getCapability(FarmingSkillCapability.FARMING_CAP).orElse(null);

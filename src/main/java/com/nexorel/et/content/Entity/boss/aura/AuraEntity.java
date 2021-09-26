@@ -17,7 +17,10 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -27,7 +30,7 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
-import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -85,7 +88,8 @@ public class AuraEntity extends Monster implements RangedAttackMob {
                 .add(Attributes.MAX_HEALTH, 300.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.6F)
                 .add(Attributes.FOLLOW_RANGE, 40.0D)
-                .add(Attributes.ARMOR, 44.0D);
+                .add(Attributes.ARMOR, 44.0D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D);
     }
 
     @Override
@@ -111,11 +115,8 @@ public class AuraEntity extends Monster implements RangedAttackMob {
     @Override
     public void tick() {
         if (this.isAlive()) {
-
-            // Damages player if it is within a certain range of blocks
             Level EW = this.level;
-            if (EW instanceof ServerLevel) {
-                ServerLevel serverWorld = (ServerLevel) EW;
+            if (EW instanceof ServerLevel serverWorld) {
                 Vec3 epos = AuraEntity.this.position();
                 AABB b = new AABB(epos.x - 5, epos.y - 5, epos.z - 5, epos.x + 5, epos.y + 5, epos.z + 5);
                 List<Entity> entities = serverWorld.getEntities(e, b);
@@ -163,31 +164,17 @@ public class AuraEntity extends Monster implements RangedAttackMob {
 
     @Override
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
-        int chance = random.nextInt(10 - 1 + 1) + 1;
-        if (chance < 11) {
-            if (target instanceof Player) {
-                double d0 = this.getHeadX((int) distanceFactor);
-                double d1 = this.getHeadY((int) distanceFactor);
-                double d2 = this.getHeadZ((int) distanceFactor);
-                double d3 = target.getX() - d0;
-                double d4 = target.getY() - d1;
-                double d5 = target.getZ() - d2;
-                AuraBlast auraBlast = new AuraBlast(this.level, this, d3, d4, d5);
-                auraBlast.setOwner(this);
-                auraBlast.setPosRaw(d0, d1 + 1, d2);
-                this.level.addFreshEntity(auraBlast);
-            }
-        } else {
-            if (target instanceof Player) {
-                double x = target.getX();
-                double y = target.getY();
-                double z = target.getZ();
-                LightningBolt le = new LightningBolt(EntityType.LIGHTNING_BOLT, this.level);
-                le.setPos(x, y, z);
-                this.level.addFreshEntity(le);
-                target.hurt(DamageSource.GENERIC, 2);
-                target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 10, 2));
-            }
+        if (target instanceof Player) {
+            double d0 = this.getHeadX((int) distanceFactor);
+            double d1 = this.getHeadY((int) distanceFactor);
+            double d2 = this.getHeadZ((int) distanceFactor);
+            double d3 = target.getX() - d0;
+            double d4 = target.getY() - d1;
+            double d5 = target.getZ() - d2;
+            AuraBlast auraBlast = new AuraBlast(this.level, this, d3, d4, d5);
+            auraBlast.setOwner(this);
+            auraBlast.setPosRaw(d0, d1 + 1, d2);
+            this.level.addFreshEntity(auraBlast);
         }
     }
 
@@ -263,36 +250,60 @@ public class AuraEntity extends Monster implements RangedAttackMob {
         public void tick() {
             super.tick();
             if (!this.ae.level.isClientSide) {
-                int i = 0;
-                do {
-                    ServerLevel serverworld = (ServerLevel) AuraEntity.this.level;
-                    DifficultyInstance difficultyinstance = serverworld.getCurrentDifficultyAt(this.ae.blockPosition());
-                    Skeleton minion = createMinion(difficultyinstance, this.ae);
-                    serverworld.addFreshEntity(minion);
-                    if (i == 10) {
-                        this.flag = false;
-                    } else {
-                        i++;
+                if (this.flag) {
+                    int count = 21;
+                    for (int i = 0; i < count; i++) {
+                        ServerLevel serverworld = (ServerLevel) AuraEntity.this.level;
+                        DifficultyInstance difficultyinstance = serverworld.getCurrentDifficultyAt(this.ae.blockPosition());
+                        Vex minion = createMinion(difficultyinstance, this.ae);
+                        serverworld.addFreshEntity(minion);
+                        if (i == count - 1) {
+                            this.flag = false;
+                        }
                     }
-                } while (i < 11 && this.flag);
+                }
             }
         }
 
-        private Skeleton createMinion(DifficultyInstance instance, AuraEntity entity) {
-            Skeleton minion = EntityType.SKELETON.create(entity.level);
+        private Vex createMinion(DifficultyInstance instance, AuraEntity entity) {
+            BlockPos pos = entity.blockPosition().offset(-2 + AuraEntity.this.random.nextInt(5), 1, -2 + AuraEntity.this.random.nextInt(5));
+            Vex minion = EntityType.VEX.create(entity.level);
             if (minion != null) {
                 minion.finalizeSpawn((ServerLevel) entity.level, instance, MobSpawnType.REINFORCEMENT, null, null);
-                minion.setPos(entity.getX(), entity.getY(), entity.getZ());
-                minion.isInvulnerableTo(DamageSource.WITHER);
-                minion.isInvulnerableTo(DamageSource.CRAMMING);
-                minion.isInvulnerableTo(DamageSource.LIGHTNING_BOLT);
-                minion.isInvulnerableTo(DamageSource.LAVA);
-                minion.isInvulnerableTo(DamageSource.IN_FIRE);
-                minion.isInvulnerableTo(DamageSource.ON_FIRE);
+                minion.moveTo(pos, 0, 0);
+                minion.setOwner(entity);
+                minion.setBoundOrigin(pos);
+                setInvulnerableStats(minion);
+                minion.setLimitedLife(20 * (30 + AuraEntity.this.random.nextInt(90)));
                 minion.setPersistenceRequired();
             }
             return minion;
         }
+
+        private void setInvulnerableStats(Vex minion) {
+            minion.isInvulnerableTo(DamageSource.IN_FIRE);
+            minion.isInvulnerableTo(DamageSource.LIGHTNING_BOLT);
+            minion.isInvulnerableTo(DamageSource.ON_FIRE);
+            minion.isInvulnerableTo(DamageSource.LAVA);
+            minion.isInvulnerableTo(DamageSource.HOT_FLOOR);
+            minion.isInvulnerableTo(DamageSource.IN_WALL);
+            minion.isInvulnerableTo(DamageSource.CRAMMING);
+            minion.isInvulnerableTo(DamageSource.DROWN);
+            minion.isInvulnerableTo(DamageSource.CACTUS);
+            minion.isInvulnerableTo(DamageSource.FALL);
+            minion.isInvulnerableTo(DamageSource.FLY_INTO_WALL);
+            minion.isInvulnerableTo(DamageSource.MAGIC);
+            minion.isInvulnerableTo(DamageSource.WITHER);
+            minion.isInvulnerableTo(DamageSource.ANVIL);
+            minion.isInvulnerableTo(DamageSource.FALLING_BLOCK);
+            minion.isInvulnerableTo(DamageSource.DRAGON_BREATH);
+            minion.isInvulnerableTo(DamageSource.DRY_OUT);
+            minion.isInvulnerableTo(DamageSource.SWEET_BERRY_BUSH);
+            minion.isInvulnerableTo(DamageSource.FREEZE);
+            minion.isInvulnerableTo(DamageSource.FALLING_STALACTITE);
+            minion.isInvulnerableTo(DamageSource.STALAGMITE);
+        }
+
     }
 
     class AuraImpactGoal extends Goal {
@@ -326,8 +337,7 @@ public class AuraEntity extends Monster implements RangedAttackMob {
                             target.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 1));
                         }
                         Level world = AuraEntity.this.level;
-                        if (world instanceof ServerLevel) {
-                            ServerLevel serverWorld = (ServerLevel) world;
+                        if (world instanceof ServerLevel serverWorld) {
                             Vec3 epos = AuraEntity.this.position();
                             serverWorld.sendParticles(ParticleTypes.EXPLOSION, epos.x, epos.y, epos.z, 20, 0.5, 0.5, 0.5, 0);
                         }

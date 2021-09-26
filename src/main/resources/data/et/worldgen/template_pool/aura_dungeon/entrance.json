@@ -1,12 +1,12 @@
 {
-  "name": "et:aura_dungeon/side_pool",
+  "name": "et:aura_dungeon/entrance",
   "fallback": "minecraft:empty",
   "elements": [
     {
       "weight": 1,
       "element": {
-        "location": "et:dungeon_corridor",
-        "processors": "minecraft:empty",
+        "location": "et:rooms/dungeon_hub_a",
+        "processors": "et:main",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -14,8 +14,8 @@
     {
       "weight": 1,
       "element": {
-        "location": "et:dungeon_corridor_trapped",
-        "processors": "minecraft:empty",
+        "location": "et:rooms/dungeon_entrance",
+        "processors": "et:main",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }

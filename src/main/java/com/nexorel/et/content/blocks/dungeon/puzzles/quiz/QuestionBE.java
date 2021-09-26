@@ -1,6 +1,5 @@
 package com.nexorel.et.content.blocks.dungeon.puzzles.quiz;
 
-import com.nexorel.et.EasyThere;
 import com.nexorel.et.Registries.BlockEntityInit;
 import com.nexorel.et.util.SomeFunctions;
 import net.minecraft.core.BlockPos;
@@ -11,7 +10,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.common.util.Constants;
 
 public class QuestionBE extends BlockEntity {
 
@@ -37,7 +35,7 @@ public class QuestionBE extends BlockEntity {
             if (level != null) {
                 BlockState state = level.getBlockState(pos);
                 state = state.setValue(BlockStateProperties.POWERED, true);
-                level.setBlock(pos, state, Constants.BlockFlags.BLOCK_UPDATE + Constants.BlockFlags.NOTIFY_NEIGHBORS);
+                level.setBlockAndUpdate(pos, state);
                 level.playSound(null, pos, SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, 5.0F, SomeFunctions.generateRandomIntBetweenRange(0, 2, level.random) + level.random.nextFloat());
             }
             this.flag = true;
@@ -49,7 +47,6 @@ public class QuestionBE extends BlockEntity {
         String ques = tag.getString("ques");
         String ans = tag.getString("ans");
         this.question = new Question(ques, ans);
-        EasyThere.LOGGER.info("TEST: " + tag.getString("answer"));
         this.answer = tag.getString("answer");
         this.locked = tag.getBoolean("locked");
         this.flag = tag.getBoolean("flag");

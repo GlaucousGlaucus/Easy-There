@@ -34,8 +34,8 @@ public class LevelUpToast implements Toast {
         RenderSystem.setShaderTexture(0, TEXTURE);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         component.blit(stack, 0, 0, 0, 0, this.width(), this.height());
-        component.getMinecraft().font.draw(stack, title, 30.0F, 7.0F, -11534256);
-        component.getMinecraft().font.draw(stack, message, 30.0F, 18.0F, -16777216);
+        component.getMinecraft().font.draw(stack, title, 30.0F, 7.0F, 0xffffff);
+        component.getMinecraft().font.draw(stack, message, 30.0F, 18.0F, 0xffffff);
         return VisTime >= 50000L ? Toast.Visibility.HIDE : Toast.Visibility.SHOW;
     }
 

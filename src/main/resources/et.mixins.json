@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.nexorel.et.mixins",
+  "compatibilityLevel": "JAVA_16",
+  "minVersion": "0.8",
+  "refmap": "et.refmap.json",
+  "mixins": [
+    "SinglePoolElementAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -49,7 +49,7 @@ public class SkillBreakInteraction {
             if (!serverPlayer.level.isClientSide) {
                 LevelChunk chunk = serverPlayer.level.getChunkAt(target_block_pos);
                 chunk.getCapability(SkillChunkCap.BLOCK_CAP).ifPresent(skillChunk -> {
-//                    LOGGER.info(!skillChunk.getStoredPos().containsKey(target_block_pos));
+                    LOGGER.info(!skillChunk.getStoredPos().containsKey(target_block_pos));
                     if (!skillChunk.getStoredPos().containsKey(target_block_pos)) {
                         XPAssignHelper.assignForagingXP(target_block, foragingSkill, player, player.level);
                     }

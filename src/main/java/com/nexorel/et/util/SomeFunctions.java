@@ -8,6 +8,14 @@ public class SomeFunctions {
         return random.nextInt((max - min) + 1) + min;
     }
 
+    public static float generateRandomFloatBetweenRange(int min, int max, Random random) {
+        return min + (max - min) * random.nextFloat();
+    }
+
+    public static double generateRandomDoubleBetweenRange(int min, int max, Random random) {
+        return min + (max - min) * random.nextDouble();
+    }
+
     public static double interpolate_with_clipping(double x, double x1, double x2, double y1, double y2) {
         if (x1 > x2) {
             double temp = x1;

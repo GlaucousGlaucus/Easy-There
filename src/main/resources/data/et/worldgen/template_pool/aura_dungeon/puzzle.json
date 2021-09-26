@@ -1,0 +1,42 @@
+{
+  "name": "et:aura_dungeon/puzzle",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 25,
+      "element": {
+        "location": "et:puzzle_a",
+        "processors": "et:main",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 25,
+      "element": {
+        "location": "et:puzzle_b",
+        "processors": "et:main",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 25,
+      "element": {
+        "location": "et:puzzle_c",
+        "processors": "et:main",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 25,
+      "element": {
+        "location": "et:puzzle_d",
+        "processors": "et:main",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "et:aura_dungeon/mobs",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "et:mobs/mobs_evoker",
+        "processors": "et:main",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "et:mobs/mobs_illusioner",
+        "processors": "et:main",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

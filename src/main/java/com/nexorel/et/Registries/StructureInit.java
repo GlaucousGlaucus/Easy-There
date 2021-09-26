@@ -27,9 +27,9 @@ public class StructureInit {
     public static void setupStructures() {
         setupMapSpacingAndLand(
                 AURA_DUNGEON.get(), /* The instance of the structure */
-                new StructureFeatureConfiguration(5 /* average distance apart in chunks between spawn attempts */,
-                        3 /* minimum distance apart in chunks between spawn attempts. MUST BE LESS THAN ABOVE VALUE*/,
-                        1603213280),
+                new StructureFeatureConfiguration(100 /* average distance apart in chunks between spawn attempts */,
+                        80 /* minimum distance apart in chunks between spawn attempts. MUST BE LESS THAN ABOVE VALUE*/,
+                        1532844619),
                 false);
 
 

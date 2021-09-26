@@ -94,8 +94,6 @@ public class PuzzleUtil {
     public static Question getRandomQuestion() {
         List<Question> question = EasyThere.getQNAManager().getAllQuestions();
         int index = random.nextInt(question.size());
-        EasyThere.LOGGER.info("Question: " + question.get(index).getQuestion());
-        EasyThere.LOGGER.info("Answer: " + question.get(index).getAnswer());
         return question.get(index);
     }
 }

@@ -51,7 +51,7 @@ public class ForagingSkill implements ISkills {
         map.put(Blocks.ACACIA_LOG, 15.0F);
         map.put(Blocks.BIRCH_LOG, 7.0F);
         map.put(Blocks.DARK_OAK_LOG, 8.0F);
-        map.put(Blocks.OAK_LOG, 5.0F);
+        map.put(Blocks.OAK_LOG, 50.0F);
         map.put(Blocks.SPRUCE_LOG, 10.0F);
         map.put(Blocks.JUNGLE_LOG, 20.0F);
         map.put(Blocks.ACACIA_SAPLING, 5.0F);

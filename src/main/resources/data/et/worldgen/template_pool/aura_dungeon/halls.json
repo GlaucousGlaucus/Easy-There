@@ -1,66 +1,66 @@
 {
-  "name": "et:aura_dungeon/start_pool",
+  "name": "et:aura_dungeon/halls",
   "fallback": "minecraft:empty",
   "elements": [
     {
-      "weight": 20,
+      "weight": 1,
+      "element": {
+        "location": "et:halls/dungeon_corridor_four_way",
+        "processors": "et:main",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "location": "et:halls/dungeon_corridor_four_way_trap",
+        "processors": "et:main",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 1,
       "element": {
         "location": "et:dungeon_corridor_size_small",
-        "processors": "minecraft:empty",
+        "processors": "et:main",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
     },
     {
-      "weight": 20,
+      "weight": 1,
       "element": {
         "location": "et:dungeon_corridor_trapped_a_size_small",
-        "processors": "minecraft:empty",
+        "processors": "et:main",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
     },
     {
-      "weight": 20,
+      "weight": 1,
       "element": {
         "location": "et:dungeon_corridor_trapped_b_size_small",
-        "processors": "minecraft:empty",
+        "processors": "et:main",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
     },
     {
-      "weight": 30,
+      "weight": 1,
       "element": {
-        "location": "et:dungeon_corridor_corner_a",
-        "processors": "minecraft:empty",
+        "location": "et:halls/dungeon_corridor_1x2",
+        "processors": "et:main",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
     },
     {
-      "weight": 20,
+      "weight": 1,
       "element": {
-        "location": "et:dungeon_corridor_corner_b",
-        "processors": "minecraft:empty",
-        "projection": "rigid",
-        "element_type": "minecraft:single_pool_element"
-      }
-    },
-    {
-      "weight": 20,
-      "element": {
-        "location": "et:dungeon_end_a",
-        "processors": "minecraft:empty",
-        "projection": "rigid",
-        "element_type": "minecraft:single_pool_element"
-      }
-    },
-    {
-      "weight": 100,
-      "element": {
-        "location": "et:dungeon_entrance",
-        "processors": "minecraft:empty",
+        "location": "et:halls/dungeon_corridor_2x2",
+        "processors": "et:main",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }

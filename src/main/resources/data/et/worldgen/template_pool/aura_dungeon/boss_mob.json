@@ -1,0 +1,15 @@
+{
+  "name": "et:aura_dungeon/boss_mob",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "et:mobs/boss_aura",
+        "processors": "et:main",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

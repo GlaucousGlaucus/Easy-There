@@ -23,6 +23,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.FlatLevelSource;
 import net.minecraft.world.level.levelgen.StructureSettings;
@@ -48,8 +49,11 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.nexorel.et.Reference.MODID;
+
 @Mod("et")
 public class EasyThere {
+    // TODO One day correct the spelling of the legendary chest loot table
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
 
@@ -89,11 +93,15 @@ public class EasyThere {
         event.enqueueWork(() -> {
             StructureInit.setupStructures();
             ETConfiguredStructures.registerConfiguredStructures();
+            ProcessorInit.init();
         });
     }
 
     public void biomeModification(final BiomeLoadingEvent event) {
-        event.getGeneration().getStructures().add(() -> ETConfiguredStructures.CONFIGURED_AURA_DUNGEON);
+        Biome.BiomeCategory category = event.getCategory();
+        if (category.equals(Biome.BiomeCategory.PLAINS)) {
+            event.getGeneration().getStructures().add(() -> ETConfiguredStructures.CONFIGURED_AURA_DUNGEON);
+        }
     }
 
     private static Method GETCODEC_METHOD;
@@ -110,8 +118,8 @@ public class EasyThere {
                 LOGGER.error("Was unable to check if " + serverWorld.dimension().location() + " is using Terraforged's ChunkGenerator.");
             }
 
-            if (serverWorld.getChunkSource().getGenerator() instanceof FlatLevelSource &&
-                    serverWorld.dimension().equals(Level.OVERWORLD)) {
+            if ((serverWorld.getChunkSource().getGenerator() instanceof FlatLevelSource &&
+                    serverWorld.dimension().equals(Level.OVERWORLD))) {
                 return;
             }
             Map<StructureFeature<?>, StructureFeatureConfiguration> tempMap = new HashMap<>(serverWorld.getChunkSource().generator.getSettings().structureConfig());
@@ -123,8 +131,10 @@ public class EasyThere {
     private static final QuestionManager manager = new QuestionManager();
 
     public void reload(AddReloadListenerEvent event) {
-        LOGGER.info("FIRED");
         event.addListener(manager);
+        LOGGER.info(MODID + ": Reloading!");
+        LOGGER.info(manager.getName());
+        LOGGER.info(MODID + ": Reload Complete");
     }
 
     public static QuestionManager getQNAManager() {

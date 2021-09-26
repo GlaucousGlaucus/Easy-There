@@ -1,12 +1,12 @@
 {
-  "name": "et:aura_dungeon/puzzle_pool",
+  "name": "et:aura_dungeon/boss",
   "fallback": "minecraft:empty",
   "elements": [
     {
-      "weight": 100,
+      "weight": 50,
       "element": {
-        "location": "et:dungeon_entrance",
-        "processors": "minecraft:empty",
+        "location": "et:rooms/boss_room",
+        "processors": "et:main",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
