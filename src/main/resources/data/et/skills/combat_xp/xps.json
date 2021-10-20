@@ -1,0 +1,280 @@
+{
+  "values": [
+    {
+      "Mob": "minecraft:bat",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:bee",
+      "Level": 5
+    },
+    {
+      "Mob": "minecraft:blaze",
+      "Level": 5
+    },
+    {
+      "Mob": "minecraft:cat",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:cave_spider",
+      "Level": 3
+    },
+    {
+      "Mob": "minecraft:chicken",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:cod",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:cow",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:creeper",
+      "Level": 3
+    },
+    {
+      "Mob": "minecraft:dolphin",
+      "Level": 4
+    },
+    {
+      "Mob": "minecraft:donkey",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:drowned",
+      "Level": 5
+    },
+    {
+      "Mob": "minecraft:elder_guardian",
+      "Level": 8
+    },
+    {
+      "Mob": "minecraft:ender_dragon",
+      "Level": 100
+    },
+    {
+      "Mob": "minecraft:enderman",
+      "Level": 5
+    },
+    {
+      "Mob": "minecraft:endermite",
+      "Level": 2
+    },
+    {
+      "Mob": "minecraft:evoker",
+      "Level": 8
+    },
+    {
+      "Mob": "minecraft:fox",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:ghast",
+      "Level": 6
+    },
+    {
+      "Mob": "minecraft:guardian",
+      "Level": 4
+    },
+    {
+      "Mob": "minecraft:hoglin",
+      "Level": 5
+    },
+    {
+      "Mob": "minecraft:horse",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:husk",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:illusioner",
+      "Level": 6
+    },
+    {
+      "Mob": "minecraft:iron_golem",
+      "Level": 4
+    },
+    {
+      "Mob": "minecraft:llama",
+      "Level": 2
+    },
+    {
+      "Mob": "minecraft:magma_cube",
+      "Level": 5
+    },
+    {
+      "Mob": "minecraft:mule",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:mooshroom",
+      "Level": 5
+    },
+    {
+      "Mob": "minecraft:ocelot",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:panda",
+      "Level": 4
+    },
+    {
+      "Mob": "minecraft:parrot",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:phantom",
+      "Level": 5
+    },
+    {
+      "Mob": "minecraft:pig",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:piglin",
+      "Level": 10
+    },
+    {
+      "Mob": "minecraft:piglin_brute",
+      "Level": 15
+    },
+    {
+      "Mob": "minecraft:pillager",
+      "Level": 9
+    },
+    {
+      "Mob": "minecraft:polar_bear",
+      "Level": 5
+    },
+    {
+      "Mob": "minecraft:pufferfish",
+      "Level": 3
+    },
+    {
+      "Mob": "minecraft:rabbit",
+      "Level": 2
+    },
+    {
+      "Mob": "minecraft:ravager",
+      "Level": 12
+    },
+    {
+      "Mob": "minecraft:salmon",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:sheep",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:shulker",
+      "Level": 7
+    },
+    {
+      "Mob": "minecraft:silverfish",
+      "Level": 3
+    },
+    {
+      "Mob": "minecraft:skeleton",
+      "Level": 4
+    },
+    {
+      "Mob": "minecraft:skeleton_horse",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:slime",
+      "Level": 3
+    },
+    {
+      "Mob": "minecraft:snow_golem",
+      "Level": 3
+    },
+    {
+      "Mob": "minecraft:spider",
+      "Level": 4
+    },
+    {
+      "Mob": "minecraft:squid",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:stray",
+      "Level": 6
+    },
+    {
+      "Mob": "minecraft:strider",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:trader_llama",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:tropical_fish",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:turtle",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:vex",
+      "Level": 4
+    },
+    {
+      "Mob": "minecraft:villager",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:vindicator",
+      "Level": 7
+    },
+    {
+      "Mob": "minecraft:wandering_trader",
+      "Level": 2
+    },
+    {
+      "Mob": "minecraft:witch",
+      "Level": 5
+    },
+    {
+      "Mob": "minecraft:wither",
+      "Level": 55
+    },
+    {
+      "Mob": "minecraft:wither_skeleton",
+      "Level": 9
+    },
+    {
+      "Mob": "minecraft:wolf",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:zoglin",
+      "Level": 4
+    },
+    {
+      "Mob": "minecraft:zombie",
+      "Level": 4
+    },
+    {
+      "Mob": "minecraft:zombie_horse",
+      "Level": 1
+    },
+    {
+      "Mob": "minecraft:zombie_villager",
+      "Level": 4
+    },
+    {
+      "Mob": "minecraft:zombified_piglin",
+      "Level": 7
+    }
+  ]
+}

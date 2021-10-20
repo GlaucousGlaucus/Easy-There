@@ -4,9 +4,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -14,23 +15,21 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class VenomProtectionTalismanItem extends TalismanItem {
+public class NightVisionTalisman extends TalismanItem {
 
-    boolean flag = false;
-
-    public VenomProtectionTalismanItem() {
-        this(0, 0, 0, 0, 100);
+    public NightVisionTalisman() {
+        this(100, 10, 5, 100, 0);
     }
 
-    public VenomProtectionTalismanItem(double accuracy, double agility, double strength, double fortune, int cc) {
+    public NightVisionTalisman(double accuracy, double agility, double strength, double fortune, int cc) {
         super(accuracy, agility, strength, fortune, cc);
     }
 
-
     @Override
     protected void SpecialBuffs(Level world, Entity entity) {
-        if (entity instanceof LivingEntity livingEntity) {
-            livingEntity.removeEffect(MobEffects.POISON);
+        if (entity instanceof Player player) {
+            MobEffectInstance instance = new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 1, true, false);
+            player.addEffect(instance);
         }
     }
 
@@ -43,9 +42,10 @@ public class VenomProtectionTalismanItem extends TalismanItem {
             textComponentList.add(new TextComponent(ChatFormatting.WHITE + "Agility" + " \u2668 " + ChatFormatting.WHITE + this.getAgility()));
             textComponentList.add(new TextComponent(ChatFormatting.DARK_RED + "Strength" + " \u2694 " + ChatFormatting.WHITE + this.getStrength()));
             textComponentList.add(new TextComponent(ChatFormatting.GREEN + "Fortune" + " \u2618 " + ChatFormatting.WHITE + this.getFortune()));
-            textComponentList.add(new TextComponent(ChatFormatting.BLUE + "Crit Chance" + " \u2623 " + ChatFormatting.WHITE + this.getCc()));
+            textComponentList.add(new TextComponent(ChatFormatting.BLUE + "Crit Chance" + " \u2623 " + this.getCc()));
         } else {
-            textComponentList.add(new TextComponent(ChatFormatting.GREEN + "Gain immunity from Poison"));
+            textComponentList.add(new TextComponent(ChatFormatting.AQUA + "Gives Night Vision While Active"));
         }
     }
+
 }

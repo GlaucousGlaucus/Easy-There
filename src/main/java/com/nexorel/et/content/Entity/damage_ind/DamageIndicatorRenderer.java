@@ -31,7 +31,7 @@ public class DamageIndicatorRenderer extends EntityRenderer<DamageIndicatorEntit
 
     @Override
     public void render(DamageIndicatorEntity entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
-        if (entity.age > 0) {
+        if (entity.age > 1) {
             Font fontRenderer = this.getFont();
             matrixStack.pushPose();
             double d = Math.sqrt(this.entityRenderDispatcher.distanceToSqr(entity.getX(), entity.getY(), entity.getZ()));
@@ -43,7 +43,7 @@ public class DamageIndicatorRenderer extends EntityRenderer<DamageIndicatorEntit
             matrixStack.scale(-scale, -scale, scale);
             matrixStack.scale(anim + anim1, anim, anim);
             float damage_number = entity.getDamage();
-            StringBuilder text = getDamageText(damage_number, entity.wasCrit(), entity.getTargetAlive());
+            StringBuilder text = getDamageText(damage_number, entity.wasCrit(), entity.getTargetAlive(), entity.WasBlocked());
             float f1 = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
             int j = (int) (f1 * 255.0F) << 25;
             matrixStack.translate((-fontRenderer.width(text.toString()) / 2f) + 0.5f, 0, 0);
@@ -52,18 +52,22 @@ public class DamageIndicatorRenderer extends EntityRenderer<DamageIndicatorEntit
         }
     }
 
-    private StringBuilder getDamageText(float damage_number, boolean wasCrit, boolean isAlive) {
+    private StringBuilder getDamageText(float damage_number, boolean wasCrit, boolean isAlive, boolean wasBlocked) {
         StringBuilder text = new StringBuilder();
-        ChatFormatting dmg_type_txt = wasCrit ? ChatFormatting.DARK_RED : ChatFormatting.RED;
-        ChatFormatting dmg_type_dmg = wasCrit ? ChatFormatting.GOLD : ChatFormatting.YELLOW;
-        String sword_or_skull = isAlive ? "\u2694" : "\u2620";
+        ChatFormatting dmg_type_txt = wasBlocked ? ChatFormatting.WHITE : wasCrit ? ChatFormatting.DARK_RED : ChatFormatting.RED;
+        ChatFormatting dmg_type_dmg = wasBlocked ? ChatFormatting.DARK_AQUA : wasCrit ? ChatFormatting.GOLD : ChatFormatting.YELLOW;
+        String icon = wasBlocked ? "\u262e" : isAlive ? "\u2694" : "\u2620";
         text.append(dmg_type_txt);
-        text.append(sword_or_skull).append(" ");
+        text.append(icon).append(" ");
         text.append(ChatFormatting.RESET);
         text.append(dmg_type_dmg);
-        text.append(df.format(damage_number));
+        if (wasBlocked) {
+            text.append("00.00");
+        } else {
+            text.append(df.format(damage_number));
+        }
         text.append(dmg_type_txt);
-        text.append(" ").append(sword_or_skull);
+        text.append(" ").append(icon);
         return text;
     }
 }

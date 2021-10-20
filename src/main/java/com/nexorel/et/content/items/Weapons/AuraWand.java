@@ -2,6 +2,8 @@ package com.nexorel.et.content.items.Weapons;
 
 import com.nexorel.et.capabilities.skills.CombatSkill.CombatSkill;
 import com.nexorel.et.capabilities.skills.CombatSkill.CombatSkillCapability;
+import com.nexorel.et.capabilities.skills.Stats.Stats;
+import com.nexorel.et.capabilities.skills.Stats.StatsCapability;
 import com.nexorel.et.content.items.IWandTiers;
 import com.nexorel.et.util.CombatHelper;
 import net.minecraft.ChatFormatting;
@@ -91,11 +93,12 @@ public class AuraWand extends Item {
             for (Entity target : entities) {
                 if (target instanceof LivingEntity && !(target instanceof Player)) {
                     CombatSkill combatSkill = player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
+                    Stats stats = player.getCapability(StatsCapability.STATS_CAP).orElse(null);
                     float final_dmg = CombatHelper.calculate_damage_PT((LivingEntity) target, combatSkill, this.tier.getAttackDamageBonus());
-                    boolean flag = combatSkill.canCrit();
-                    final_dmg = flag ? (float) (final_dmg * 1.5) : final_dmg;
+                    boolean canCrit = stats.canCrit();
+                    final_dmg = canCrit ? (float) (final_dmg * 1.5) : final_dmg;
                     target.hurt(DamageSource.MAGIC, final_dmg);
-                    CombatHelper.summon_damage_indicator((LivingEntity) target, final_dmg, flag);
+                    CombatHelper.summon_damage_indicator((LivingEntity) target, final_dmg, canCrit, false);
                 }
             }
         } else {
@@ -110,11 +113,12 @@ public class AuraWand extends Item {
             for (Entity target : entities) {
                 if (target instanceof LivingEntity && !(target instanceof Player)) {
                     CombatSkill combatSkill = player.getCapability(CombatSkillCapability.COMBAT_CAP).orElse(null);
+                    Stats stats = player.getCapability(StatsCapability.STATS_CAP).orElse(null);
                     float final_dmg = CombatHelper.calculate_damage_PT((LivingEntity) target, combatSkill, this.tier.getAttackDamageBonus());
-                    boolean flag = combatSkill.canCrit();
-                    final_dmg = flag ? (float) (final_dmg * 1.5) : final_dmg;
+                    boolean canCrit = stats.canCrit();
+                    final_dmg = canCrit ? (float) (final_dmg * 1.5) : final_dmg;
                     target.hurt(DamageSource.MAGIC, final_dmg);
-                    CombatHelper.summon_damage_indicator((LivingEntity) target, final_dmg, flag);
+                    CombatHelper.summon_damage_indicator((LivingEntity) target, final_dmg, canCrit, false);
                 }
             }
         }

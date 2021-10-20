@@ -8,11 +8,11 @@ public class SomeFunctions {
         return random.nextInt((max - min) + 1) + min;
     }
 
-    public static float generateRandomFloatBetweenRange(int min, int max, Random random) {
+    public static float generateRandomFloatBetweenRange(float min, float max, Random random) {
         return min + (max - min) * random.nextFloat();
     }
 
-    public static double generateRandomDoubleBetweenRange(int min, int max, Random random) {
+    public static double generateRandomDoubleBetweenRange(double min, double max, Random random) {
         return min + (max - min) * random.nextDouble();
     }
 
@@ -31,5 +31,4 @@ public class SomeFunctions {
         double xFraction = (x - x1) / (x2 - x1);
         return y1 + xFraction * (y2 - y1);
     }
-
 }

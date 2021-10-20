@@ -1,14 +1,14 @@
 package com.nexorel.et.capabilities.skills.Stats;
 
-import com.nexorel.et.Network.CombatSkillPacket;
 import com.nexorel.et.Network.EasyTherePacketHandler;
+import com.nexorel.et.Network.StatsPacket;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 
 public class Stats {
 
     private double accuracy;
-    private double agility; /*Chance to not trigger traps*/
+    private double agility;
     private double strength;
     private double fortune;
     private int crit_chance;
@@ -72,6 +72,15 @@ public class Stats {
         nbt.putDouble("fortune", this.getFortune());
         nbt.putDouble("strength", this.getStrength());
         nbt.putInt("crit_chance", this.getCrit_chance());
-        EasyTherePacketHandler.sendDataToClient(new CombatSkillPacket(nbt), playerEntity);
+        EasyTherePacketHandler.sendDataToClient(new StatsPacket(nbt), playerEntity);
     }
+
+    public boolean canCrit() {
+        return Math.random() < ((float) this.crit_chance / 100);
+    }
+
+    public void addCC(double amount) {
+        this.crit_chance += amount;
+    }
+
 }

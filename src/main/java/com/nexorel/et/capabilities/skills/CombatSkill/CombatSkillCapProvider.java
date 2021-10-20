@@ -30,7 +30,7 @@ public class CombatSkillCapProvider implements ICapabilitySerializable<CompoundT
         } else {
             CompoundTag tag = new CompoundTag();
             tag.putDouble("xp", combat_skill.getXp());
-            tag.putInt("crit_chance", combat_skill.getCrit_chance());
+//            tag.putInt("crit_chance", combat_skill.getCrit_chance());
             return tag;
         }
     }
@@ -38,7 +38,7 @@ public class CombatSkillCapProvider implements ICapabilitySerializable<CompoundT
     @Override
     public void deserializeNBT(CompoundTag nbt) {
         if (CombatSkillCapability.COMBAT_CAP != null) {
-            combat_skill.setCrit_chance(nbt.getInt("crit_chance"));
+//            combat_skill.setCrit_chance(nbt.getInt("crit_chance"));
             combat_skill.setXp(nbt.getDouble("xp"));
         }
     }

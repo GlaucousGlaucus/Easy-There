@@ -31,7 +31,6 @@ public class CombatSkillPacket {
             if (Minecraft.getInstance().player != null) {
                 ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> Minecraft.getInstance().player.getCapability(CombatSkillCapability.COMBAT_CAP).ifPresent(combatSkill -> {
                     combatSkill.setXp(msg.nbt.getDouble("xp"));
-                    combatSkill.setCrit_chance(msg.nbt.getInt("crit_chance"));
                 })));
             }
             ctx.get().setPacketHandled(true);

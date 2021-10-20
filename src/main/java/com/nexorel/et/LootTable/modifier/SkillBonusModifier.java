@@ -1,10 +1,8 @@
 package com.nexorel.et.LootTable.modifier;
 
 import com.google.gson.JsonObject;
-import com.nexorel.et.capabilities.skills.FarmingSkill.FarmingSkill;
-import com.nexorel.et.capabilities.skills.FarmingSkill.FarmingSkillCapability;
-import com.nexorel.et.capabilities.skills.MiningSkill.MiningSkill;
-import com.nexorel.et.capabilities.skills.MiningSkill.MiningSkillCapability;
+import com.nexorel.et.capabilities.skills.Stats.Stats;
+import com.nexorel.et.capabilities.skills.Stats.StatsCapability;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
@@ -36,22 +34,19 @@ public class SkillBonusModifier extends LootModifier {
         BlockState targetState = context.getParamOrNull(LootContextParams.BLOCK_STATE);
         if (player != null && targetState != null) {
             Block target_block = targetState.getBlock();
-            MiningSkill miningSkill = player.getCapability(MiningSkillCapability.MINING_CAP).orElse(null);
-            FarmingSkill farmingSkill = player.getCapability(FarmingSkillCapability.FARMING_CAP).orElse(null);
+            Stats stats = player.getCapability(StatsCapability.STATS_CAP).orElse(null);
+            double fortune = stats.getFortune();
             if (target_block.getTags().contains(new ResourceLocation("forge", "ores"))) {
-                generatedLoot.forEach(itemStack -> {
-                    int double_drops = context.getRandom().nextFloat() < miningSkill.getLevel() * 0.05F ? itemStack.getCount() * 2 : itemStack.getCount();
-                    itemStack.setCount(double_drops);
-                });
-            } else if (target_block.getTags().contains(BlockTags.CROPS.getName())) {
-                if (target_block instanceof CropBlock cropBlock) {
-                    if (cropBlock.isMaxAge(targetState)) {
-                        generatedLoot.forEach(itemStack -> {
-                            int bonus = (int) (itemStack.getCount() * Math.ceil((double) farmingSkill.getLevel() / 2));
-                            int drops = context.getRandom().nextFloat() < farmingSkill.getLevel() * 0.05F ? bonus : itemStack.getCount();
-                            itemStack.setCount(drops);
-                        });
-                    }
+                for (ItemStack itemStack : generatedLoot) {
+                    int double_drops = context.getRandom().nextFloat() < (fortune / 100) ? itemStack.getCount() * 2 : itemStack.getCount();
+                    int triple_drops = context.getRandom().nextFloat() + 1 < (fortune / 100) ? itemStack.getCount() * 3 : double_drops;
+                    itemStack.setCount(triple_drops);
+                }
+            } else if (target_block.getTags().contains(BlockTags.CROPS.getName()) && (target_block instanceof CropBlock cropBlock && cropBlock.isMaxAge(targetState))) {
+                for (ItemStack itemStack : generatedLoot) {
+                    int double_drops = context.getRandom().nextFloat() < (fortune / 100) ? itemStack.getCount() * 2 : itemStack.getCount();
+                    int triple_drops = context.getRandom().nextFloat() + 1 < (fortune / 100) ? itemStack.getCount() * 3 : double_drops;
+                    itemStack.setCount(triple_drops);
                 }
             }
         }

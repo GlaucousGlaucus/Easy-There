@@ -40,7 +40,7 @@ public class FarmingSkill implements ISkills {
         xp = points;
     }
 
-    public void shareData(ServerPlayer playerEntity) {
+    public void deliverDataToClient(ServerPlayer playerEntity) {
         CompoundTag nbt = new CompoundTag();
         nbt.putDouble("xp", this.xp);
         EasyTherePacketHandler.sendDataToClient(new FarmingSkillPacket(nbt), playerEntity);

@@ -2,7 +2,6 @@ package com.nexorel.et.content.skills;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -51,24 +50,21 @@ public class SkillScreen extends Screen {
     public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         int relX = (this.width - WIDTH) / 2;
         int relY = (this.height - HEIGHT) / 2;
-//        long time = Util.getMillis();
-//        EasyThere.LOGGER.info(time);
-        long Time = Util.getMillis();
 
         this.renderBackground(matrixStack);
-        renderInside(matrixStack, mouseX, mouseY, relX, relY, partialTicks, Time);
+        renderInside(matrixStack, mouseX, mouseY, relX, relY);
         renderWindow(matrixStack, relX, relY);
-        renderTooltips(matrixStack, relX, relY, mouseX, mouseY, partialTicks);
+        renderTooltips(matrixStack, relX, relY);
     }
 
-    private void renderInside(PoseStack matrixStack, int mouseX, int mouseY, int x, int y, float partialTicks, long Time) {
+    private void renderInside(PoseStack matrixStack, int mouseX, int mouseY, int x, int y) {
         SkillTabGUI skillTabGUI = this.skillTabGUI;
         if (skillTabGUI == null) {
             fill(matrixStack, x + 9, y + 18, x + 9 + 234, y + 18 + 113, -16777216);
         } else {
             matrixStack.pushPose();
             matrixStack.translate((float) (x + 9), (float) (y + 18), 0.0F);
-            skillTabGUI.drawContents(matrixStack, mouseX, mouseY, partialTicks, Time);
+            skillTabGUI.drawContents(matrixStack, mouseX, mouseY);
             matrixStack.popPose();
             RenderSystem.depthFunc(515);
             RenderSystem.disableDepthTest();
@@ -85,9 +81,9 @@ public class SkillScreen extends Screen {
         this.font.draw(matrixStack, "Skills", (float) (relX + 8), (float) (relY + 6), 4210752);
     }
 
-    public void renderTooltips(PoseStack matrixStack, int x, int y, int mouseX, int mouseY, float partialTicks) {
+    public void renderTooltips(PoseStack matrixStack, int x, int y) {
         matrixStack.translate((float) (x + 9), (float) (y + 18), 0.0F);
-        this.skillTabGUI.drawTooltips(matrixStack, x, y, mouseX, mouseY, partialTicks);
+        this.skillTabGUI.drawTooltips(matrixStack, x, y);
     }
 
     @Override
@@ -122,6 +118,10 @@ public class SkillScreen extends Screen {
 
         public String getName() {
             return this.name;
+        }
+
+        public ItemStack getRenderStack() {
+            return this.renderStack;
         }
 
         public void drawIcon(ItemRenderer itemRenderer, int x, int y) {

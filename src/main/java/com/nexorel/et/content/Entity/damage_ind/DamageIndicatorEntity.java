@@ -17,6 +17,7 @@ public class DamageIndicatorEntity extends Entity implements IEntityAdditionalSp
     private float damage = 100;
     private boolean wasCrit;
     private boolean targetAlive;
+    private boolean wasBlocked;
     public float t = -1;
     public float t1 = -1;
     public float t2 = -1;
@@ -27,11 +28,12 @@ public class DamageIndicatorEntity extends Entity implements IEntityAdditionalSp
         this.noPhysics = true;
     }
 
-    public DamageIndicatorEntity(Level world, float damage, boolean wasCrit, boolean targetAlive) {
+    public DamageIndicatorEntity(Level world, float damage, boolean wasCrit, boolean targetAlive, boolean wasBlocked) {
         super(EntityInit.DMG_IND.get(), world);
         this.damage = damage;
         this.wasCrit = wasCrit;
         this.targetAlive = targetAlive;
+        this.wasBlocked = wasBlocked;
     }
 
     @Override
@@ -58,6 +60,10 @@ public class DamageIndicatorEntity extends Entity implements IEntityAdditionalSp
         return this.wasCrit;
     }
 
+    public boolean WasBlocked() {
+        return this.wasBlocked;
+    }
+
     public boolean getTargetAlive() {
         return this.targetAlive;
     }
@@ -73,6 +79,7 @@ public class DamageIndicatorEntity extends Entity implements IEntityAdditionalSp
         this.damage = nbt.getFloat("damage");
         this.wasCrit = nbt.getBoolean("was_crit");
         this.targetAlive = nbt.getBoolean("target_alive");
+        this.wasBlocked = nbt.getBoolean("blocked");
     }
 
     @Override
@@ -81,6 +88,7 @@ public class DamageIndicatorEntity extends Entity implements IEntityAdditionalSp
         nbt.putFloat("damage", this.damage);
         nbt.putBoolean("was_crit", this.wasCrit);
         nbt.putBoolean("target_alive", this.targetAlive);
+        nbt.putBoolean("blocked", this.wasBlocked);
     }
 
     @Override
@@ -102,6 +110,7 @@ public class DamageIndicatorEntity extends Entity implements IEntityAdditionalSp
         this.damage = additionalData.readFloat();
         this.wasCrit = additionalData.readBoolean();
         this.targetAlive = additionalData.readBoolean();
+        this.wasBlocked = additionalData.readBoolean();
     }
 
     @Override

@@ -40,7 +40,7 @@ public class SkillButtonWidget extends GuiComponent {
         this.skillScreen = skillScreen;
     }
 
-    public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks, long Time) {
+    public void renderButton(PoseStack matrixStack, int mouseX, int mouseY) {
         RenderSystem.setShaderTexture(0, SkillScreen.SKILL_ASSETS_LOC);
         int relX = (skillScreen.width - 252) / 2;
         int relY = (skillScreen.height - 139) / 2;
@@ -242,8 +242,6 @@ public class SkillButtonWidget extends GuiComponent {
         Minecraft.getInstance().font.draw(matrixStack, bars.toString(), X + 35, Y + 45, xp_percent != -1 ? getXp_percent_color(xp_percent) : 0x00ff11); //-5592406
         Minecraft.getInstance().font.draw(matrixStack, "XP: ", X + 35, Y + 65, 0x0fff7); //-5592406
         Minecraft.getInstance().font.draw(matrixStack, Double.toString((double) Math.round(combatSkill.getXp() * 100) / 100), X + 55, Y + 65, 0x77ff00); //-5592406
-        Minecraft.getInstance().font.draw(matrixStack, "Crit Chance: ", X + 35, Y + 80, 0x0fff7); //-5592406
-        Minecraft.getInstance().font.draw(matrixStack, combatSkill.getCrit_chance() + " %", X + 35 + Minecraft.getInstance().font.width("Crit Chance: "), Y + 80, 0x77ff00); //-5592406
         if (xp_percent == -1) {
             String hex = String.format("%02x%02x%02x", r, g, b);
             int Hex = Integer.parseInt(hex, 16);

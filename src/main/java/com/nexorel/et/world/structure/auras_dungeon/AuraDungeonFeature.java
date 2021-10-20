@@ -89,8 +89,9 @@ public class AuraDungeonFeature extends StructureFeature<NoneFeatureConfiguratio
                     center,
                     this,
                     this.random,
-                    false,
-                    false, heightAccessor);
+                    false, // Keep false | Special boundry for villages
+                    false, // Place at height map, places structure at top of land
+                    heightAccessor);
 
             Vec3i structureCenter = this.pieces.get(0).getBoundingBox().getCenter();
             int xOffset = center.getX() - structureCenter.getX();

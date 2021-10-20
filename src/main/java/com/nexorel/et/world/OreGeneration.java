@@ -2,6 +2,7 @@ package com.nexorel.et.world;
 
 import com.google.common.collect.ImmutableList;
 import com.nexorel.et.Registries.BlockInit;
+import com.nexorel.et.setup.ETConfig;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -69,21 +70,21 @@ public class OreGeneration {
         ORE_MAGENTA_ROSE_LOLLNIC_BLOCK_TARGET_LIST = ImmutableList.of(OreConfiguration.target(OreConfiguration.Predicates.DEEPSLATE_ORE_REPLACEABLES, BlockInit.MAGENTA_ROSE_LOLLNIC_BLOCK.get().defaultBlockState()));
         ORE_JADE_PETAOGOPITE_BLOCK_TARGET_LIST = ImmutableList.of(OreConfiguration.target(OreConfiguration.Predicates.DEEPSLATE_ORE_REPLACEABLES, BlockInit.JADE_PETAOGOPITE_BLOCK.get().defaultBlockState()));
 
-        AGRIYELITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_AGRIYELITE_BLOCK_TARGET_LIST, 8)).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared().count(8);
-        AQUOMITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_AQUOMITE_BLOCK_TARGET_LIST, 8)).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared().count(8);
-        GOLD_ALMAO_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_GOLD_ALMAO_BLOCK_TARGET_LIST, 8)).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared().count(8);
-        ORANGE_RED_TEMARELITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_ORANGE_RED_TEMARELITE_BLOCK_TARGET_LIST, 8)).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared().count(8);
-        CRYOPHANITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_CRYOPHANITE_BLOCK_TARGET_LIST, 8)).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared().count(8);
-        PEACH_EKANESIA_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_PEACH_EKANESIA_BLOCK_TARGET_LIST, 8)).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared().count(8);
-        CRIMSON_PECTENE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_CRIMSON_PECTENE_BLOCK_TARGET_LIST, 8)).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared().count(8);
-        BLUE_VIOLET_AEGIDONYX_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_BLUE_VIOLET_AEGIDONYX_BLOCK_TARGET_LIST, 8)).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared().count(8);
-        ELECTRIC_BLUE_CYPBERITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_ELECTRIC_BLUE_CYPBERITE_BLOCK_TARGET_LIST, 8)).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared().count(8);
-        TWINKLING_BREADITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_TWINKLING_BREADITE_BLOCK_TARGET_LIST, 8)).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared().count(8);
-        SALMON_LINADINGERITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_SALMON_LINADINGERITE_BLOCK_TARGET_LIST, 8)).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared().count(8);
-        BLUE_RAPMONY_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_BLUE_RAPMONY_BLOCK_TARGET_LIST, 8)).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared().count(8);
-        VIOLET_TUNORADOITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_VIOLET_TUNORADOITE_BLOCK_TARGET_LIST, 8)).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared().count(8);
-        MAGENTA_ROSE_LOLLNIC_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_MAGENTA_ROSE_LOLLNIC_BLOCK_TARGET_LIST, 8)).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared().count(8);
-        JADE_PETAOGOPITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_JADE_PETAOGOPITE_BLOCK_TARGET_LIST, 8)).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared().count(8);
+        AGRIYELITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_AGRIYELITE_BLOCK_TARGET_LIST, ETConfig.COMMON.AGRIYELITE_ORE_SIZE.get())).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared();
+        AQUOMITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_AQUOMITE_BLOCK_TARGET_LIST, ETConfig.COMMON.AQUOMITE_ORE_SIZE.get())).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared();
+        GOLD_ALMAO_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_GOLD_ALMAO_BLOCK_TARGET_LIST, ETConfig.COMMON.GOLD_ALMAO_ORE_SIZE.get())).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared();
+        ORANGE_RED_TEMARELITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_ORANGE_RED_TEMARELITE_BLOCK_TARGET_LIST, ETConfig.COMMON.ORANGE_RED_TEMARELITE_ORE_SIZE.get())).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared();
+        CRYOPHANITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_CRYOPHANITE_BLOCK_TARGET_LIST, ETConfig.COMMON.CRYOPHANITE_ORE_SIZE.get())).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared();
+        PEACH_EKANESIA_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_PEACH_EKANESIA_BLOCK_TARGET_LIST, ETConfig.COMMON.PEACH_EKANESIA_ORE_SIZE.get())).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared();
+        CRIMSON_PECTENE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_CRIMSON_PECTENE_BLOCK_TARGET_LIST, ETConfig.COMMON.CRIMSON_PECTENE_ORE_SIZE.get())).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared();
+        BLUE_VIOLET_AEGIDONYX_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_BLUE_VIOLET_AEGIDONYX_BLOCK_TARGET_LIST, ETConfig.COMMON.BLUE_VIOLET_AEGIDONYX_ORE_SIZE.get())).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared();
+        ELECTRIC_BLUE_CYPBERITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_ELECTRIC_BLUE_CYPBERITE_BLOCK_TARGET_LIST, ETConfig.COMMON.ELECTRIC_BLUE_CYPBERITE_ORE_SIZE.get())).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared();
+        TWINKLING_BREADITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_TWINKLING_BREADITE_BLOCK_TARGET_LIST, ETConfig.COMMON.TWINKLING_BREADITE_ORE_SIZE.get())).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared();
+        SALMON_LINADINGERITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_SALMON_LINADINGERITE_BLOCK_TARGET_LIST, ETConfig.COMMON.SALMON_LINADINGERITE_ORE_SIZE.get())).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared();
+        BLUE_RAPMONY_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_BLUE_RAPMONY_BLOCK_TARGET_LIST, ETConfig.COMMON.BLUE_RAPMONY_ORE_SIZE.get())).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared();
+        VIOLET_TUNORADOITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_VIOLET_TUNORADOITE_BLOCK_TARGET_LIST, ETConfig.COMMON.VIOLET_TUNORADOITE_ORE_SIZE.get())).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared();
+        MAGENTA_ROSE_LOLLNIC_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_MAGENTA_ROSE_LOLLNIC_BLOCK_TARGET_LIST, ETConfig.COMMON.MAGENTA_ROSE_LOLLNIC_ORE_SIZE.get())).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared();
+        JADE_PETAOGOPITE_BLOCK = Feature.ORE.configured(new OreConfiguration(ORE_JADE_PETAOGOPITE_BLOCK_TARGET_LIST, ETConfig.COMMON.JADE_PETAOGOPITE_ORE_SIZE.get())).rangeUniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(15)).squared();
 
         Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MODID, "agriyelite_block"), AGRIYELITE_BLOCK);
         Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(MODID, "aquomite_block"), AQUOMITE_BLOCK);

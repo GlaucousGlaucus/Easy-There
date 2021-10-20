@@ -1,5 +1,6 @@
 package com.nexorel.et.util;
 
+import com.nexorel.et.EasyThere;
 import com.nexorel.et.capabilities.chunk.SkillChunkCap;
 import com.nexorel.et.capabilities.events.XPGainEvent;
 import com.nexorel.et.capabilities.skills.CombatSkill.CombatSkill;
@@ -9,7 +10,6 @@ import com.nexorel.et.capabilities.skills.MiningSkill.MiningSkill;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -24,10 +24,8 @@ import java.util.Map;
 public class XPAssignHelper {
 
     public static void assignCombatXP(LivingEntity target, CombatSkill combatSkill, Player player, Level world) {
-        Map<EntityType<?>, Float> xps = CombatSkill.getCombatXp();
-        float xp;
-        if (xps.get(target.getType()) != null) {
-            xp = xps.get(target.getType());
+        if (EasyThere.getCombatXpManager().getAllXps().containsKey(target.getType())) {
+            float xp = CombatHelper.getCombatXpForMob(target.getType());
             MinecraftForge.EVENT_BUS.post(new XPGainEvent(player, combatSkill, xp));
         } else {
             int mob_level = CombatSkill.getMobLevel(target);
@@ -40,9 +38,8 @@ public class XPAssignHelper {
     public static void assignForagingXP(Block target, ForagingSkill foragingSkill, Player player, Level level) {
         if (player.isCreative()) return;
         Map<Block, Float> xps = ForagingSkill.getForagingXp();
-        float xp;
         if (xps.get(target) != null) {
-            xp = xps.get(target);
+            float xp = xps.get(target);
             xp = (float) (xp + (xp * (foragingSkill.getLevel() * 0.05)));
             MinecraftForge.EVENT_BUS.post(new XPGainEvent(player, foragingSkill, xp));
         }
@@ -52,9 +49,8 @@ public class XPAssignHelper {
     public static void assignFarmingXP(Block target, FarmingSkill farmingSkill, Player player, Level world) {
         if (player.isCreative()) return;
         Map<Block, Float> xps = FarmingSkill.getFarmingXp();
-        float xp;
         if (xps.get(target) != null) {
-            xp = xps.get(target);
+            float xp = xps.get(target);
             xp = (float) (xp + (xp * (farmingSkill.getLevel() * 0.05)));
             MinecraftForge.EVENT_BUS.post(new XPGainEvent(player, farmingSkill, xp));
         }

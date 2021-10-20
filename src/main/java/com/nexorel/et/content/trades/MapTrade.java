@@ -44,7 +44,7 @@ public class MapTrade implements VillagerTrades.ItemListing {
                 MapItem.renderBiomePreviewMap(serverlevel, itemstack);
                 MapItemSavedData.addTargetDecoration(itemstack, blockpos, "+", this.destinationType);
                 itemstack.setHoverName(new TranslatableComponent("filled_map." + this.destination.getFeatureName().toLowerCase(Locale.ROOT)));
-                return new MerchantOffer(new ItemStack(Items.EMERALD, this.emeraldCost), new ItemStack(Items.COMPASS), itemstack, this.maxUses, this.villagerXp, 0.2F);
+                return new MerchantOffer(new ItemStack(Items.EMERALD, this.emeraldCost), itemstack, this.maxUses, this.villagerXp, 0.2F);
             } else {
                 return null;
             }

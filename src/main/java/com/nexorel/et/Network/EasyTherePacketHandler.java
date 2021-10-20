@@ -48,6 +48,12 @@ public class EasyTherePacketHandler {
                 QuestionPacket::encodeMsg,
                 QuestionPacket::decodeMsg,
                 QuestionPacket.Handler::handle);
+        INSTANCE.registerMessage(
+                id++,
+                StatsPacket.class,
+                StatsPacket::encodeMsg,
+                StatsPacket::decodeMsg,
+                StatsPacket.Handler::handle);
     }
 
     public static void sendDataToServer(Object msg) {

@@ -14,15 +14,13 @@ import java.util.Map;
 public class CombatSkill implements ISkills {
 
     private double xp;
-    private int crit_chance;
 
     public CombatSkill() {
-        this(0, 0);
+        this(0);
     }
 
-    public CombatSkill(double points, int crit_chance) {
+    public CombatSkill(double points) {
         this.xp = points;
-        this.crit_chance = crit_chance;
     }
 
     public static int getMobLevel(LivingEntity mob) {
@@ -31,15 +29,12 @@ public class CombatSkill implements ISkills {
         return Math.max(mob_level, 1);
     }
 
-    public boolean canCrit() {
-        return Math.random() < ((float) this.crit_chance / 100);
-    }
-
     public static float getCombatXPForMob(int mob_level) {
         return (float) (mob_level * 6.25);
     }
 
     public static Map<EntityType<?>, Float> getCombatXp() {
+        // TODO: Replace hardcoded combat xp with json files
         Map<EntityType<?>, Float> map = Maps.newLinkedHashMap();
         map.put(EntityType.BAT, getCombatXPForMob(1));
         map.put(EntityType.BEE, getCombatXPForMob(1));
@@ -77,7 +72,7 @@ public class CombatSkill implements ISkills {
         map.put(EntityType.PIG, getCombatXPForMob(1));
         map.put(EntityType.PIGLIN, getCombatXPForMob(10));
 //        map.put(EntityType.PIGLIN_BRUTE, getCombatXPForMob(15));
-        map.put(EntityType.PIGLIN_BRUTE, (float) 10);
+        map.put(EntityType.PIGLIN_BRUTE, 250.0F);
         map.put(EntityType.PILLAGER, getCombatXPForMob(9));
         map.put(EntityType.POLAR_BEAR, getCombatXPForMob(5));
         map.put(EntityType.PUFFERFISH, getCombatXPForMob(3));
@@ -127,26 +122,14 @@ public class CombatSkill implements ISkills {
         return this.xp;
     }
 
-    public int getCrit_chance() {
-        return this.crit_chance;
-    }
-
     public void setXp(double points) {
         xp = points;
     }
 
-    public void setCrit_chance(int cc) {
-        crit_chance = cc;
-    }
 
-    public void addCC(double amount) {
-        this.crit_chance += amount;
-    }
-
-    public void shareData(ServerPlayer playerEntity) {
+    public void deliverDataToClient(ServerPlayer playerEntity) {
         CompoundTag nbt = new CompoundTag();
         nbt.putDouble("xp", this.xp);
-        nbt.putInt("crit_chance", this.crit_chance);
         EasyTherePacketHandler.sendDataToClient(new CombatSkillPacket(nbt), playerEntity);
     }
 

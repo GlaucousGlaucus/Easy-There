@@ -7,9 +7,11 @@ import com.nexorel.et.capabilities.AttachCap;
 import com.nexorel.et.capabilities.chunk.SkillChunkCap;
 import com.nexorel.et.capabilities.interaction.Interactions;
 import com.nexorel.et.capabilities.skills.CombatSkill.CombatSkillCapability;
+import com.nexorel.et.capabilities.skills.CombatSkill.CombatXPManager;
 import com.nexorel.et.capabilities.skills.FarmingSkill.FarmingSkillCapability;
 import com.nexorel.et.capabilities.skills.ForagingSkill.ForagingSkillCapability;
 import com.nexorel.et.capabilities.skills.MiningSkill.MiningSkillCapability;
+import com.nexorel.et.capabilities.skills.Stats.StatsCapability;
 import com.nexorel.et.content.Entity.boss.aura.AuraEntity;
 import com.nexorel.et.content.blocks.dungeon.puzzles.quiz.QuestionManager;
 import com.nexorel.et.setup.ClientSetup;
@@ -48,8 +50,6 @@ import org.apache.logging.log4j.Logger;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.nexorel.et.Reference.MODID;
 
 @Mod("et")
 public class EasyThere {
@@ -128,17 +128,22 @@ public class EasyThere {
         }
     }
 
-    private static final QuestionManager manager = new QuestionManager();
+    private static final QuestionManager QUESTION_MANAGER = new QuestionManager();
+    private static final CombatXPManager COMBAT_XP_MANAGER = new CombatXPManager();
 
     public void reload(AddReloadListenerEvent event) {
-        event.addListener(manager);
-        LOGGER.info(MODID + ": Reloading!");
-        LOGGER.info(manager.getName());
-        LOGGER.info(MODID + ": Reload Complete");
+        event.addListener(QUESTION_MANAGER);
+        event.addListener(COMBAT_XP_MANAGER);
+        LOGGER.info("Loaded {} Q N A S", QUESTION_MANAGER.getAllQuestions().size());
+        LOGGER.info("Loaded {} Combat Xp entries", COMBAT_XP_MANAGER.getAllXps().size());
     }
 
     public static QuestionManager getQNAManager() {
-        return manager;
+        return QUESTION_MANAGER;
+    }
+
+    public static CombatXPManager getCombatXpManager() {
+        return COMBAT_XP_MANAGER;
     }
 
     public void onAttributeCreate(EntityAttributeCreationEvent event) {
@@ -151,6 +156,7 @@ public class EasyThere {
         ForagingSkillCapability.registerCapabilities(event);
         FarmingSkillCapability.registerCapabilities(event);
         SkillChunkCap.registerCapabilities(event);
+        StatsCapability.registerCapabilities(event);
     }
 
     public static final CreativeModeTab EASY_THERE = new CreativeModeTab("easy_there") {

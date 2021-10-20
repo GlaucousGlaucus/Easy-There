@@ -17,6 +17,9 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 import javax.annotation.Nullable;
 
+/**
+ * Removes WaterLogged blocks when structure generates
+ */
 public class AntiWaterProcessor extends StructureProcessor {
 
     public static final AntiWaterProcessor INSTANCE = new AntiWaterProcessor();

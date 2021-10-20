@@ -38,19 +38,12 @@ public class QuestionPacket {
                 Question question = new Question(msg.nbt.getString("q"), msg.nbt.getString("a"));
                 if (player != null) {
                     Level level = player.level;
-                    if (level instanceof ServerLevel && level.getBlockEntity(pos) instanceof QuestionBE be) {
+                    if (level.hasChunkAt(pos) && level instanceof ServerLevel && level.getBlockEntity(pos) instanceof QuestionBE be) {
                         be.setAnswer(answer);
                         be.setQuestion(question);
                         be.setChanged();
                     }
                 }
-                /*DistExecutor.unsafeRunWhenOn(Dist.CLIENT,() -> () -> {
-                    ClientLevel level = Minecraft.getInstance().level;
-                    if (level != null && level.getBlockEntity(pos) instanceof QuestionBE be) {
-                        be.setAnswer(answer);
-                        be.setQuestion(question);
-                    }
-                });*/
             });
             ctx.get().setPacketHandled(true);
         }

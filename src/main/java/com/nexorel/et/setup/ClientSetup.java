@@ -34,7 +34,6 @@ public class ClientSetup {
 
         MenuScreens.register(ContainerInit.GRC.get(), GRS::new);
         MenuScreens.register(ContainerInit.TBC.get(), TalismanBagScreen::new);
-//        MenuScreens.register(ContainerInit.QUESTION_CONTAINER.get(), QuestionScreen::new);
         ClientRegistry.registerKeyBinding(TALISMAN_BAG_KEY);
     }
 

@@ -53,29 +53,8 @@ public class SkillSetCommand {
                                 .then(Commands.literal("farming")
                                         .then(Commands.argument("level", IntegerArgumentType.integer(0, 20))
                                                 .executes(SkillSetCommand::setFarmingSkillLvl)))
-                                .then(Commands.literal("clear_chunk")
-                                        .then(Commands.argument("x", IntegerArgumentType.integer())
-                                                .then(Commands.argument("z", IntegerArgumentType.integer())
-                                                        .executes(SkillSetCommand::resetChunkDataForTest))))
                         );
         dispatcher.register(skill_set_cmd);
-    }
-
-    static int resetChunkDataForTest(CommandContext<CommandSourceStack> commandContext) throws CommandSyntaxException {
-        /*Entity entity = commandContext.getSource().getEntity();
-        if (entity instanceof Player player) {
-            int x = IntegerArgumentType.getInteger(commandContext, "x");
-            int z = IntegerArgumentType.getInteger(commandContext, "z");
-            LevelChunk chunk = player.level.getChunk(x, z);
-            chunk.getCapability(SkillChunkCap.BLOCK_CAP).ifPresent(skillChunk -> {
-                skillChunk.getStoredPos().forEach(skillChunk::removeData);
-                skillChunk.getStoredPos().forEach(pos -> {
-                    LOGGER.debug("CMD POS" + pos);
-                    LOGGER.debug("CMD STATE" + player.level.getBlockState(pos));
-                });
-            });
-        }*/
-        return 1;
     }
 
     static int setFarmingSkillLvl(CommandContext<CommandSourceStack> commandContext) throws CommandSyntaxException {
@@ -89,7 +68,7 @@ public class SkillSetCommand {
                 double target_xp = ((ISkills.calculateFullTargetXp(target_level - 1) + 1));
                 farmingSkill.setXp(target_xp);
             }
-            farmingSkill.shareData((ServerPlayer) player);
+            farmingSkill.deliverDataToClient((ServerPlayer) player);
             Component component = new TextComponent("Skill Level Set to " + ChatFormatting.AQUA + farmingSkill.getLevel() + ChatFormatting.WHITE + " For: " + ChatFormatting.AQUA + "Farming Skill");
             TranslatableComponent text =
                     new TranslatableComponent("chat.type.announcement",
@@ -110,7 +89,7 @@ public class SkillSetCommand {
                 double target_xp = ((ISkills.calculateFullTargetXp(target_level - 1) + 1));
                 foragingSkill.setXp(target_xp);
             }
-            foragingSkill.shareData((ServerPlayer) player);
+            foragingSkill.deliverDataToClient((ServerPlayer) player);
             Component component = new TextComponent("Skill Level Set to " + ChatFormatting.AQUA + foragingSkill.getLevel() + ChatFormatting.WHITE + " For: " + ChatFormatting.AQUA + "Foraging Skill");
             TranslatableComponent text =
                     new TranslatableComponent("chat.type.announcement",
@@ -131,7 +110,7 @@ public class SkillSetCommand {
                 double target_xp = ((ISkills.calculateFullTargetXp(target_level - 1) + 1));
                 miningSkill.setXp(target_xp);
             }
-            miningSkill.shareData((ServerPlayer) player);
+            miningSkill.deliverDataToClient((ServerPlayer) player);
             Component component = new TextComponent("Skill Level Set to " + ChatFormatting.AQUA + miningSkill.getLevel() + ChatFormatting.WHITE + " For: " + ChatFormatting.AQUA + "Mining Skill");
             TranslatableComponent text =
                     new TranslatableComponent("chat.type.announcement",
@@ -152,7 +131,7 @@ public class SkillSetCommand {
                 double target_xp = ((ISkills.calculateFullTargetXp(target_level - 1) + 1));
                 combatSkill.setXp(target_xp);
             }
-            combatSkill.shareData((ServerPlayer) player);
+            combatSkill.deliverDataToClient((ServerPlayer) player);
             Component component = new TextComponent("Skill Level Set to " + ChatFormatting.AQUA + combatSkill.getLevel() + ChatFormatting.WHITE + " For: " + ChatFormatting.AQUA + "Combat Skill");
             TranslatableComponent text =
                     new TranslatableComponent("chat.type.announcement",

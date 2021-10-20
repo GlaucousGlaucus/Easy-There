@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.nexorel.et.content.skills.widget.SkillButtonWidget;
+import com.nexorel.et.content.skills.widget.StatsWidget;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -22,11 +23,13 @@ public class SkillTabGUI extends GuiComponent {
     private final int h = 113;
     private boolean centered;
     public final List<SkillButtonWidget> widgets = Lists.newArrayList();
+    public final StatsWidget statsWidget;
     private final SkillScreen skillScreen;
     private float fade;
 
     public SkillTabGUI(SkillScreen skillScreen) {
         this.skillScreen = skillScreen;
+        this.statsWidget = new StatsWidget(this.skillScreen, (this.skillScreen.width - 252) / 2 + 120, ((this.skillScreen.height - 139) / 2) + 50);
     }
 
     public void init() {
@@ -38,10 +41,10 @@ public class SkillTabGUI extends GuiComponent {
         }
     }
 
-    public void drawContents(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks, long Time) {
+    public void drawContents(PoseStack matrixStack, int mouseX, int mouseY) {
         if (!this.centered) {
-            this.scrollX = (w / 2) - (a) / 2;
-            this.scrollY = (h / 2) - (b) / 2;
+            this.scrollX = (double) (w / 2) - (double) (a) / 2;
+            this.scrollY = (double) (h / 2) - (double) (b) / 2;
             this.centered = true;
         }
         matrixStack.pushPose();
@@ -74,12 +77,18 @@ public class SkillTabGUI extends GuiComponent {
 
         matrixStack.translate(-(float) (x + 9), -(float) (y + 18), 0.0F);
 
+        int X = (this.skillScreen.width - 252) / 2 + i + 120;
+        int Y = ((this.skillScreen.height - 139) / 2) + j + (50);
+
         this.widgets.forEach((widget) -> {
             int m = this.widgets.indexOf(widget);
             widget.setX((this.skillScreen.width - 252) / 2 + i + 75);
             widget.setY(((this.skillScreen.height - 139) / 2) + (j + (m * 35) + 30));
-            widget.renderButton(matrixStack, mouseX, mouseY, partialTicks, Time);
+            widget.renderButton(matrixStack, mouseX, mouseY);
         });
+        this.statsWidget.setX(X);
+        this.statsWidget.setY(Y);
+        this.statsWidget.renderButton(matrixStack, mouseX, mouseY);
 
         matrixStack.translate(-(float) (x + 9), -(float) (y + 18), 0.0F);
 
@@ -93,20 +102,22 @@ public class SkillTabGUI extends GuiComponent {
         matrixStack.popPose();
     }
 
-    public void drawTooltips(PoseStack matrixStack, int RelX, int RelY, int mouseX, int mouseY, float partialTicks) {
+    public void drawTooltips(PoseStack matrixStack, int RelX, int RelY) {
         matrixStack.pushPose();
         matrixStack.translate(0.0F, 0.0F, 200.0F);
         fill(matrixStack, 0, 0, 234, 113, Mth.floor(this.fade * 255.0F) << 24);
         matrixStack.translate(-(float) (RelX + 9), -(float) (RelY + 18), 0.0F);
         boolean flag = false;
-        int i = Mth.floor(this.scrollX);
-        int j = Mth.floor(this.scrollY);
         for (SkillButtonWidget widget : this.widgets) {
             if (widget.isSelected) {
                 flag = true;
                 widget.animateAndRender(matrixStack);
                 break;
             }
+        }
+        if (this.statsWidget.isSelected) {
+            flag = true;
+            this.statsWidget.animateAndRender(matrixStack);
         }
 
         matrixStack.popPose();

@@ -62,18 +62,9 @@ public class TalismanBagItem extends Item {
         return super.finishUsingItem(stack, world, entity);
     }
 
-    public int getOverallCC(ItemStack stack) {
-        CompoundTag nbt = stack.getTag();
-        if (nbt != null) {
-            return nbt.getInt("cc");
-        }
-        return 0;
-    }
-
     @Override
     public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean isSelected) {
         super.inventoryTick(stack, world, entity, slot, isSelected);
-//        AtomicInteger cc = new AtomicInteger();
         if (stack.getItem() instanceof TalismanBagItem) {
             stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
                 int slots = h.getSlots();
@@ -81,12 +72,10 @@ public class TalismanBagItem extends Item {
                     ItemStack search_stack = h.getStackInSlot(i);
                     if (search_stack.getItem() instanceof TalismanItem) {
                         ((TalismanItem) search_stack.getItem()).getSpecialBuffs(world, entity);
-//                        cc.addAndGet(((TalismanItem) search_stack.getItem()).getCc());
                     }
                 }
             });
         }
-//        stack.getOrCreateTag().putInt("cc", cc.get());
     }
 
     @Override

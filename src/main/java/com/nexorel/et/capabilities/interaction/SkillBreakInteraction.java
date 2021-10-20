@@ -38,7 +38,7 @@ public class SkillBreakInteraction {
             XPAssignHelper.assignMiningXP(event.getState().getBlock(), miningSkill, player, player.level);
             if (player instanceof ServerPlayer serverPlayer) {
                 if (!serverPlayer.level.isClientSide) {
-                    serverPlayer.getCapability(MiningSkillCapability.MINING_CAP).ifPresent(miningSkill1 -> miningSkill.shareData(serverPlayer));
+                    serverPlayer.getCapability(MiningSkillCapability.MINING_CAP).ifPresent(miningSkill1 -> miningSkill.deliverDataToClient(serverPlayer));
                 }
             }
         }
@@ -54,7 +54,7 @@ public class SkillBreakInteraction {
                         XPAssignHelper.assignForagingXP(target_block, foragingSkill, player, player.level);
                     }
                 });
-                serverPlayer.getCapability(ForagingSkillCapability.FORAGING_CAP).ifPresent(skill -> foragingSkill.shareData(serverPlayer));
+                serverPlayer.getCapability(ForagingSkillCapability.FORAGING_CAP).ifPresent(skill -> foragingSkill.deliverDataToClient(serverPlayer));
             }
         }
     }
@@ -70,7 +70,7 @@ public class SkillBreakInteraction {
                             XPAssignHelper.assignFarmingXP(target_block, farmingSkill, player, player.level);
                         }
                     });
-                    serverPlayer.getCapability(FarmingSkillCapability.FARMING_CAP).ifPresent(skill -> farmingSkill.shareData(serverPlayer));
+                    serverPlayer.getCapability(FarmingSkillCapability.FARMING_CAP).ifPresent(skill -> farmingSkill.deliverDataToClient(serverPlayer));
                 }
             }
         }

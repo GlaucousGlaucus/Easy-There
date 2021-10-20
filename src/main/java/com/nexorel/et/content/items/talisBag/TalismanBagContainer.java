@@ -1,7 +1,9 @@
 package com.nexorel.et.content.items.talisBag;
 
+import com.google.common.util.concurrent.AtomicDouble;
 import com.nexorel.et.Registries.ContainerInit;
 import com.nexorel.et.content.items.Talismans.TalismanItem;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -83,13 +85,27 @@ public class TalismanBagContainer extends AbstractContainerMenu {
         this.itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
             this.itemStack.getOrCreateTag().put("inv", ((ItemStackHandler) h).serializeNBT());
             int slots = this.inventory.getSlots();
+            AtomicDouble accuracy = new AtomicDouble();
+            AtomicDouble agility = new AtomicDouble();
+            AtomicDouble strength = new AtomicDouble();
+            AtomicDouble fortune = new AtomicDouble();
             AtomicInteger cc = new AtomicInteger();
             for (int i = 0; i < slots; i++) {
                 ItemStack search_stack = h.getStackInSlot(i);
-                if (search_stack.getItem() instanceof TalismanItem)
+                if (search_stack.getItem() instanceof TalismanItem) {
+                    accuracy.addAndGet(((TalismanItem) search_stack.getItem()).getAccuracy());
+                    agility.addAndGet(((TalismanItem) search_stack.getItem()).getAgility());
+                    strength.addAndGet(((TalismanItem) search_stack.getItem()).getStrength());
+                    fortune.addAndGet(((TalismanItem) search_stack.getItem()).getFortune());
                     cc.addAndGet(((TalismanItem) search_stack.getItem()).getCc());
+                }
             }
-            this.itemStack.getOrCreateTag().putInt("cc", cc.get());
+            CompoundTag tag = this.itemStack.getOrCreateTag();
+            tag.putDouble("accuracy", accuracy.get());
+            tag.putDouble("agility", agility.get());
+            tag.putDouble("strength", strength.get());
+            tag.putDouble("fortune", fortune.get());
+            tag.putInt("cc", cc.get());
         });
     }
 

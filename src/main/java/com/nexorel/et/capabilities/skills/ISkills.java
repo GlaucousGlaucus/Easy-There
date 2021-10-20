@@ -62,6 +62,6 @@ public interface ISkills {
 
     double getXp();
 
-    void shareData(ServerPlayer playerEntity);
+    void deliverDataToClient(ServerPlayer playerEntity);
 
 }

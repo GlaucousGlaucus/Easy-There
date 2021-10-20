@@ -5,6 +5,7 @@ import com.nexorel.et.capabilities.skills.CombatSkill.CombatSkillCapProvider;
 import com.nexorel.et.capabilities.skills.FarmingSkill.FarmingSkillCapProvider;
 import com.nexorel.et.capabilities.skills.ForagingSkill.ForagingSkillCapProvider;
 import com.nexorel.et.capabilities.skills.MiningSkill.MiningSkillCapProvider;
+import com.nexorel.et.capabilities.skills.Stats.StatsCapProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -22,6 +23,7 @@ public class AttachCap {
             event.addCapability(new ResourceLocation("et:mining_skill_cap"), new MiningSkillCapProvider());
             event.addCapability(new ResourceLocation("et:foraging_skill_cap"), new ForagingSkillCapProvider());
             event.addCapability(new ResourceLocation("et:farming_skill_cap"), new FarmingSkillCapProvider());
+            event.addCapability(new ResourceLocation("et:stats_cap"), new StatsCapProvider());
         }
     }
 
